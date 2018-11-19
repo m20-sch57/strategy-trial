@@ -1,0 +1,31 @@
+# definition of user
+
+class User:
+    def __init__(self, Id: int, username: str, password: str, submissions: list, results: Result):
+        self.id = Id # id of user
+        self.username = username # username of user
+        self.password = password # password of user
+        self.submissions = submissions # list of user's ids of submissions
+        self.results = results # list results of user's strategies
+
+# definition of problem
+
+class Problem:
+    def __init__(self, Id: int, name: str, rules: Rules, Type: str, start_time: int, end_time: int, submissions: list, standings: list):
+        self.id = Id # id of problem
+        self.name = name # name of problem
+        self.rules = rules # description of rules, interaction with strategy
+        self.type = Type # type (running/upsolving)
+        self.start_time = start_time # time when users can send strategies
+        self.end_time = end_time # time when users stop sending strategies, time in milliseconds from 01.01.1970
+        self.submissions = submissions #list of strategies' ids (startegies that will play with each other, selected by user)
+        self.standings = standings # standings: list of results of all strategies
+
+class Rules:
+#TODO DEFINE RULES
+
+class Result:
+    def __init__(self, sub_id: int, text: str):
+        self.sub_id = sub_id # id of submission
+        self.text = text # text with result
+
