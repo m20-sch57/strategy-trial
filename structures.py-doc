@@ -35,12 +35,12 @@ class Result:
 
 # defination of submission
 
-#TODO CHECK
-
 class Submission:
-    def __init__(self, Id: int, user_id: int, prob_id: int, path: str):
+    def __init__(self, Id: int, user_id: int, prob_id: int, path: str, Type: str, result: Result):
         self.id = Id # id of submission
         self.user_id = user_id # id of owner
         self.prob_id = prob_id # id of problem that it solves
         self.path = path # path on server tothis strategy
+        self.type = Type # type of strategy (e.g. main or nonmain)
+        self.result = result # result of strategy
 
