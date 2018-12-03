@@ -22,10 +22,25 @@ class Problem:
         self.standings = standings # standings: list of results of all strategies
 
 class Rules:
-#TODO DEFINE RULES
+    def __init__(self, prob_id: int, game_path: str, strategy_path: str, text: str):
+        self.prob_id = prob_id # id of problem
+        self.game_path = game_path # path on server to the class game that discribes interacting user's strategy with judge
+        self.strategy_path = strategy_path # path on server to place where all strategies for this problem are stored
+        self.text = text # text needed to be published
 
 class Result:
     def __init__(self, sub_id: int, text: str):
         self.sub_id = sub_id # id of submission
         self.text = text # text with result
+
+# defination of submission
+
+#TODO CHECK
+
+class Submission:
+    def __init__(self, Id: int, user_id: int, prob_id: int, path: str):
+        self.id = Id # id of submission
+        self.user_id = user_id # id of owner
+        self.prob_id = prob_id # id of problem that it solves
+        self.path = path # path on server tothis strategy
 
