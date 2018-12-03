@@ -34,7 +34,7 @@ class Problem:
 
 class Rules:
     def __init__(self, ProbId: int, GamePath, text: str):
-        self.probId = prob_id # id of problem
+        self.probId = ProbId # id of problem
         self.gamePath = GamePath # path on server to the class game that discribes interacting user's strategy with judge(TODO may be not needed)
         self.text = text # text needed to be published
 
