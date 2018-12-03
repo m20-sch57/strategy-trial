@@ -10,9 +10,6 @@ class Storage:
 		self.problems = []
 		self.submissions = []
 
-	def save():
-		pass
-
 	def get(self, id, listOfObjects):
 		return listOfObjects[id]
 
