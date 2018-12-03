@@ -1,12 +1,12 @@
 # definition of user
 
 class User:
-    def __init__(self, Id: int, username: str, password: str, submissions: list, results: Result):
+    def __init__(self, Id: int, username: str, password: str, submissions: list, results: dict):
         self.id = Id # id of user
         self.username = username # username of user
         self.password = password # password of user
         self.submissions = submissions # list of user's ids of submissions
-        self.results = results # list results of user's strategies
+        self.results = results # dict prob_id into result of user's strategies
 
 # definition of problem
 
@@ -15,17 +15,16 @@ class Problem:
         self.id = Id # id of problem
         self.name = name # name of problem
         self.rules = rules # description of rules, interaction with strategy
-        self.type = Type # type (running/upsolving)
+        self.type = Type # type (running/upsolving/testing)
         self.start_time = start_time # time when users can send strategies
         self.end_time = end_time # time when users stop sending strategies, time in milliseconds from 01.01.1970
         self.submissions = submissions #list of strategies' ids (startegies that will play with each other, selected by user)
-        self.standings = standings # standings: list of results of all strategies
+        self.standings = standings # standings: sortedby score list of results of all strategies
 
 class Rules:
     def __init__(self, prob_id: int, game_path: str, strategy_path: str, text: str):
         self.prob_id = prob_id # id of problem
-        self.game_path = game_path # path on server to the class game that discribes interacting user's strategy with judge
-        self.strategy_path = strategy_path # path on server to place where all strategies for this problem are stored
+        self.game_path = game_path # path on server to the class game that discribes interacting user's strategy with judge(TODO may be not needed)
         self.text = text # text needed to be published
 
 class Result:
@@ -40,7 +39,6 @@ class Submission:
         self.id = Id # id of submission
         self.user_id = user_id # id of owner
         self.prob_id = prob_id # id of problem that it solves
-        self.path = path # path on server tothis strategy
         self.type = Type # type of strategy (e.g. main or nonmain)
         self.result = result # result of strategy
 
