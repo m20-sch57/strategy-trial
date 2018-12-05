@@ -1,0 +1,17 @@
+/home - главная страница, общая шапка (ссылка на /home, /problemset, /settings, /sing_up, /submissions, /logout или /login)
+/problemset - страница с ссылками на задачи
+/settings - настройки (язык (версия 2?); смена пароля, если уже login)
+/login - понятно
+/sign_up - понятно
+/logout - понятно
+/problem/"id_problem"/statement - условие задачи (текст, класс game)
+/problem/"id_problem"/submit - отправление стратегии (ссылка на кнопке "Submit")
+/problem/"id_problem"/submissions - посылки по этой задаче
+/submissions - все посылки
+______________________________________________________________________
+Для админа:
+/add_user - добавить пользователя
+/edit_user/"id_user" - изменить пользователя (например, забанить)
+/users_list - список пользователей (с сылками на /edit_user/"id_user")
+/add_task (/add_problem ?) - добавить задачу
+/edit_task/"id_problem" (/edit_problem ?) - изменить задачу
