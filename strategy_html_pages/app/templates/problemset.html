@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-	{% for task in problems %}
-	<a href=/{{ "problemset" + "/" + task }}> <b>{{ task }}</b></a>
-	{% endfor %}
+    {% for task in problems %}
+    <a href=/{{ "problemset" + "/" + task }}> <b>{{ task }}</b></a>
+    {% endfor %}
 {% endblock %}
