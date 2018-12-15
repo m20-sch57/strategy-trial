@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect
 from app import app
-from app.forms import LoginForm
+from app.forms import LoginForm, SignUp
 @app.route("/")
 @app.route("/home")
 def home():
@@ -36,6 +36,10 @@ def logout():
 @app.route("/sign_up")
 def sign_up():
     form = SignUp()
+    if form.validate_on_submit():
+        flash('Login requested for user {}, remember_me = {}'.format(form.username.data, form.remember_me.data))
+        return redirect('/home')
+    return render_template('sign_up.html', title = "Sign Up", form = form)
     """TODO return!!!!"""
 
 """#??? and other like /problem/"id_problem"/statement, submit, submissions
