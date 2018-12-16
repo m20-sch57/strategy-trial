@@ -46,7 +46,6 @@ class Rules:
 
 class Result:
     def __init__(self, SubId: int, Verdict: StratrgyVerdict, Score: int):
-        self.subId = SubId # id of submission
         self.verdict = Verdict # is this strategy working correct, or it gets TL, WA or RE?
         self.score = Score # points, which the strategy has got
 
