@@ -1,4 +1,4 @@
-from gameStuff import StratrgyVerdict
+from gameStuff import StrategyVerdict
 from gameStuff import TurnState
 from gameStuff import Result
 import os
@@ -19,17 +19,18 @@ def runStrategy(game, strategy, gameState, playerId: int):
 	partialGameState = game.gameStateRep(gameState, playerId)
 	signal.signal(signal.SIGALRM, handler)
 	signal.alarm(game.TimeLimit)
-	result = [gameStuff.StrategyVerdict.Ok]
+	result = [StrategyVerdict.Ok]
+
 	try:
 		turn = strategy.Strategy(partialGameState, playerId)
 	except TimeoutError:
-		result[0] = [gameStuff.StrategyVerdict.TimeLimitExceeded]
+		result[0] = [StrategyVerdict.TimeLimitExceeded]
 	except Exception:
-		result[0] = [gameStuff.StrategyVerdict.Failed]
+		result[0] = [StrategyVerdict.Failed]
 	finally:
 		signal.alarm(0)
 
-	if (result[0] == gameStuff.StrategyVerdict.Ok):
+	if (result[0] == StrategyVerdict.Ok):
 		result.append(turn)
 
 	return result
@@ -37,9 +38,9 @@ def runStrategy(game, strategy, gameState, playerId: int):
 PlayesCount = 2
 
 def strategyFailResults(game, strategyId : int, verdict) -> list:
-	results = [Result() * PlayesCount]
-	for result in results:
-		result.score = game.MaxScore
+	results = [Result() for i in range(PlayesCount)]
+	for i in range(len(results)):
+		results[i].score = game.MaxScore
 	results[strategyId].score = 0
 	results[strategyId].verdict = verdict
 	return results
@@ -63,10 +64,19 @@ def run(gamePath: str, classesPath: str, strategyPathes : list) -> list:
 		if (turnResult[0] == TurnState.Incorrect):
 			return strategyFailResults(game, whoseTurn, StrategyVerdict.Incorrect)
 
-		if (turnResult == TurnState.Last):
+		if (turnResult[0] == TurnState.Last):
 			return turnResult[1]
 
 		fullGameState = turnResult[1]
 		whoseTurn = turnResult[2]
 
-	return [Result() * PlayesCount]
+	return [Result() for i in range(PlayesCount)]
+
+if __name__ == '__main__':
+	gamePath = input()
+	classesPath = input()
+	st1 = input()
+	st2 = input()
+	res = run(gamePath, classesPath, [st1, st2])
+	for x in res:
+		print(x)

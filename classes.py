@@ -1,5 +1,5 @@
 class GameState:
-    a = ['...', '...', '...'];
+    pass
 
 class Turn:
     def __init__(self, r, c):
