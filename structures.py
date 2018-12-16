@@ -1,4 +1,6 @@
 from enum import Enum
+from gameStuff import StrategyVerdict
+from gameStuff import Result
 
 class ProblemState(Enum):
     Running = 0
@@ -8,12 +10,6 @@ class ProblemState(Enum):
 class StrategyState(Enum):
     Main = 0
     NonMain = 1
-
-class StratrgyVerdict(Enum):
-	Ok = 0
-	IncorrectTurn = 1
-	TimeLimitExceeded = 2
-	Failed = 3
 
 # definition of user
 
@@ -43,11 +39,6 @@ class Rules:
         self.probId = ProbId # id of problem
         self.gamePath = GamePath # path on server to the class game that discribes interacting user's strategy with judge(TODO may be not needed)
         self.text = text # text needed to be published
-
-class Result:
-    def __init__(self, SubId: int, Verdict: StratrgyVerdict, Score: int):
-        self.verdict = Verdict # is this strategy working correct, or it gets TL, WA or RE?
-        self.score = Score # points, which the strategy has got
 
 # defination of submission
 
