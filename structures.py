@@ -21,6 +21,12 @@ class User:
         self.submissions = submissions # list of user's ids of submissions
         self.results = results # dict prob_id into result of user's strategies
 
+class Rules:
+    def __init__(self, ProbId: int, GamePath, text: str):
+        self.probId = ProbId # id of problem
+        self.gamePath = GamePath # path on server to the class game that discribes interacting user's strategy with judge(TODO may be not needed)
+        self.text = text # text needed to be published
+
 # definition of problem
 
 class Problem:
@@ -33,12 +39,6 @@ class Problem:
         self.endTime = EndTime # time when users stop sending strategies, time in milliseconds from 01.01.1970
         self.submissions = submissions #list of strategies' ids (startegies that will play with each other, selected by user)
         self.standings = standings # standings: sortedby score list of results of all strategies
-
-class Rules:
-    def __init__(self, ProbId: int, GamePath, text: str):
-        self.probId = ProbId # id of problem
-        self.gamePath = GamePath # path on server to the class game that discribes interacting user's strategy with judge(TODO may be not needed)
-        self.text = text # text needed to be published
 
 # defination of submission
 

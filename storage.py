@@ -7,6 +7,7 @@ class Storage:
 	def __init__(self, path):
 		self.load(path)
 		self.users = []
+		self.map = {}
 		self.problems = []
 		self.submissions = []
 
@@ -29,7 +30,12 @@ class Storage:
 	def getSubmission(self, id):
 		return self.get(id, submissions)
 
+	def getUserByName(self, username):
+		id = self.map[username]
+		return self.getUser(id)
+
 	def saveUser(self, user):
+		self.map[user.username] = user.id
 		self.save(user, users)
 
 	def saveProblem(self, problem):
