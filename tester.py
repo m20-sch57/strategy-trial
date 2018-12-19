@@ -5,6 +5,7 @@ from gameStuff import StrategyVerdict
 from gameStuff import Result
 from commonFunctions import printToFile
 import os
+import judge
 
 def rewriteTmp():
 	os.system("rm -r tmp")
@@ -33,5 +34,5 @@ def testStrategies(storage, id1, id2):
 
 	loadSubmission(sub1, "0.py")
 	loadSubmission(sub2, "1.py")
-
-	
+	results = judge.run("tmp/game.py", "tmp/classes.py", ["tmp/0.py", "tmp/1.py"])
+	return results
