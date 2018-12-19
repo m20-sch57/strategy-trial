@@ -14,9 +14,11 @@ def rewriteTmp():
 def loadProblem(storage, id):
 	problem = storage.getProblem(id)
 	sources = problem.rules.sources
+	print("sources")
+	print(sources)
 	for source in sources:
 		path = "tmp/" + source[0]
-		printToFile(path, source[1])
+		printToFile(source[1], path)
 
 def loadSubmission(submission, filename):
 	printToFile(filename, submission.code)

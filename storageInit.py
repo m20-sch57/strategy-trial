@@ -18,17 +18,17 @@ def init():
 
 if (__name__ == '__main__'):
 	import tester
-	import demoApi
+	import demoAPI
 
 	storage = init()
 	while (True):
 		query = input().split()
 		if (query[0] == 'add'):
 			path = query[1]
-			addStrategyByPath(storage, path)
+			demoAPI.addStrategyByPath(storage, path)
 		if (query[0] == 'get'):
 			id = int(query[1])
-			print(getStrategyCode(storage, id))
+			print(demoAPI.getStrategyCode(storage, id))
 		if (query[0] == 'test'):
 			id1 = int(query[1])
 			id2 = int(query[2])

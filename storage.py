@@ -16,7 +16,7 @@ class Storage:
 
 	def save(self, obj, listOfObjects):
 		if (obj.id == -1):
-			obj.id = len(obj)
+			obj.id = len(listOfObjects)
 			listOfObjects.append(obj)
 		else:
 			listOfObjects[obj.id] = obj

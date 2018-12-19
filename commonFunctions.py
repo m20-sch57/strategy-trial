@@ -1,6 +1,6 @@
 def readFile(path):
     with open(path, 'r') as myfile:
-        data = myfile.read()
+        data = str(myfile.read())
         return data
 
 def printToFile(text: str, path: str):
