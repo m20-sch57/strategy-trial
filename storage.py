@@ -22,13 +22,13 @@ class Storage:
 			listOfObjects[obj.id] = obj
 
 	def getUser(self, id):
-		return self.get(id, users)
+		return self.get(id, self.users)
 
 	def getProblem(self, id):
-		return self.get(id, problems)
+		return self.get(id, self.problems)
 
 	def getSubmission(self, id):
-		return self.get(id, submissions)
+		return self.get(id, self.submissions)
 
 	def getUserByName(self, username):
 		id = self.map[username]
@@ -36,10 +36,10 @@ class Storage:
 
 	def saveUser(self, user):
 		self.map[user.username] = user.id
-		self.save(user, users)
+		self.save(user, self.users)
 
 	def saveProblem(self, problem):
-		self.save(problem, problems)
+		self.save(problem, self.problems)
 
 	def saveSubmission(self, submission):
-		self.save(submission, submissions)
+		self.save(submission, self.submissions)
