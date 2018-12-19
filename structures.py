@@ -22,9 +22,9 @@ class User:
         self.results = results # dict prob_id into result of user's strategies
 
 class Rules:
-    def __init__(self, ProbId: int, GamePath, text: str):
+    def __init__(self, ProbId: int, Sources, text: str):
         self.probId = ProbId # id of problem
-        self.gamePath = GamePath # path on server to the class game that discribes interacting user's strategy with judge(TODO may be not needed)
+        self.sources = Sources #list of ["name.py", code: str]
         self.text = text # text needed to be published
 
 # definition of problem
@@ -43,10 +43,11 @@ class Problem:
 # defination of submission
 
 class Submission:
-    def __init__(self, Id: int, UserId: int, ProbId: int, path: str, ttype: StrategyState, result: Result):
+    def __init__(self, Id: int, UserId: int, ProbId: int, Code: str, ttype: StrategyState, result: Result):
         self.id = Id # id of submission
         self.userId = UserId # id of owner
         self.probId = ProbId # id of problem that it solves
+        self.code = Code
         self.type = ttype # type of strategy (e.g. main or nonmain)
         self.result = result # result of strategy
 
