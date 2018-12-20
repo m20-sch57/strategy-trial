@@ -14,3 +14,7 @@ def addStrategyByPath(path: str):
 def getStrategyCode(id: int):
 	submisson = storage.getSubmission(id)
 	return submisson.code
+
+def judge(id1: int, id2: int):
+	result = tester.testStrategies(id1, id2)
+	return result
