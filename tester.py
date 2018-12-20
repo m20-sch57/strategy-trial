@@ -4,6 +4,7 @@ from gameStuff import TurnState
 from gameStuff import StrategyVerdict
 from gameStuff import Result
 from commonFunctions import printToFile
+from gameStuff import InvocationResult
 import os
 import judge
 
@@ -21,7 +22,7 @@ def loadProblem(id):
 def loadSubmission(submission, filename):
 	printToFile(submission.code, filename)
 
-def testStrategies(id1, id2):
+def testStrategies(id1, id2, saveLogs = False):
 	rewriteTmp()
 	sub1 = storage.getSubmission(id1)
 	sub2 = storage.getSubmission(id2)
@@ -34,5 +35,5 @@ def testStrategies(id1, id2):
 
 	loadSubmission(sub1, "tmp/0.py")
 	loadSubmission(sub2, "tmp/1.py")
-	results = judge.run("game.py", "classes.py", ["0.py", "1.py"])
-	return results
+	invocationResult = judge.run("game.py", "classes.py", ["0.py", "1.py"], saveLogs)
+	return invocationResult

@@ -21,3 +21,6 @@ class Result:
 	
 	def __str__(self):
 		return str(self.verdict) + " " + str(self.score)
+
+class InvocationResult:
+	pass

@@ -10,6 +10,23 @@ class FullGameState:
 	def __init__(self):
 		self.a = [['.', '.', '.'], ['.', '.', '.'], ['.', '.', '.']]
 
+class Logs:
+	def __init__(self):
+		self.text = ''
+
+	def unexpectedVerdict(self, playerId, verdict):
+		self.text += 'Strategy ' + str(playerId) + ' got ' + str(verdict) + '\n'
+
+	def update(self, a):
+		self.text += '\n'
+		for i in range(FieldSize):
+			for j in range(FieldSize):
+				self.text += a[i][j]
+			self.text += '\n'
+
+	def show(self):
+		return self.text
+
 def gameStateRep(full: FullGameState, playerId: int) -> GameState:
 	result = GameState()
 	result.a = full.a
@@ -46,11 +63,13 @@ def check(full: FullGameState):
 
 	return '.';
 
-def makeTurn(gameState: FullGameState, playerId: int, turn: Turn) -> list:
+def makeTurn(gameState: FullGameState, playerId: int, turn: Turn, logs = None) -> list:
 	charList = ['X', 'O']
-	if (gameState.a[turn.r][turn.c] != '.'):
+	if (turn.r < 0 or turn.r >= FieldSize or turn.c < 0 or turn.c >= FieldSize or gameState.a[turn.r][turn.c] != '.'):
 		return [TurnState.Incorrect, gameState, nextPlayer(playerId)]
 	gameState.a[turn.r][turn.c] = charList[playerId]
+	if (logs is not None):
+		logs.update(gameState.a)
 	winner = check(gameState)
 	if (winner == '.'):
 		dot = 0
