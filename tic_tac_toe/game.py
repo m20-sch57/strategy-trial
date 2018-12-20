@@ -7,7 +7,8 @@ TimeLimit = 1
 TurnLimit = 100
 
 class FullGameState:
-	a = [['.', '.', '.'], ['.', '.', '.'], ['.', '.', '.']]
+	def __init__(self):
+		self.a = [['.', '.', '.'], ['.', '.', '.'], ['.', '.', '.']]
 
 def gameStateRep(full: FullGameState, playerId: int) -> GameState:
 	result = GameState()

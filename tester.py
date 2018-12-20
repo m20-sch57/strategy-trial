@@ -14,14 +14,12 @@ def rewriteTmp():
 def loadProblem(id):
 	problem = storage.getProblem(id)
 	sources = problem.rules.sources
-	print("sources")
-	print(sources)
 	for source in sources:
 		path = "tmp/" + source[0]
 		printToFile(source[1], path)
 
 def loadSubmission(submission, filename):
-	printToFile(filename, submission.code)
+	printToFile(submission.code, filename)
 
 def testStrategies(id1, id2):
 	rewriteTmp()
@@ -34,7 +32,7 @@ def testStrategies(id1, id2):
 	problemId = sub1.probId
 	loadProblem(problemId)
 
-	loadSubmission(sub1, "0.py")
-	loadSubmission(sub2, "1.py")
+	loadSubmission(sub1, "tmp/0.py")
+	loadSubmission(sub2, "tmp/1.py")
 	results = judge.run("game.py", "classes.py", ["0.py", "1.py"])
 	return results

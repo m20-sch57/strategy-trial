@@ -17,10 +17,12 @@ def init():
 if (__name__ == '__main__'):
 	import tester
 	import demoAPI
+	import sys
 
 	init()
-	while (True):
-		query = input().split()
+	lst = sys.stdin.readlines()
+	for line in lst:
+		query = line.split()
 		if (query[0] == 'add'):
 			path = query[1]
 			demoAPI.addStrategyByPath(path)
