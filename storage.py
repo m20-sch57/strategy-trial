@@ -43,3 +43,5 @@ class Storage:
 
 	def saveSubmission(self, submission):
 		self.save(submission, self.submissions)
+
+storage = Storage("")

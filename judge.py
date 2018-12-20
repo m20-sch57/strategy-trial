@@ -3,6 +3,9 @@ from gameStuff import TurnState
 from gameStuff import Result
 import os
 
+import sys
+sys.path.append("tmp")
+
 def importPath(path: str):
 	path = os.path.splitext(path)[0]
 	return __import__(path)

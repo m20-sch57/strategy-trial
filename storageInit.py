@@ -11,27 +11,25 @@ def init():
 	TicTacToeRules = Rules(0, [["game.py", TicTacToeGame], ["classes.py", TicTacToeClasses]], "")
 	TicTacToe = Problem(-1, "Tic Tac Toe", TicTacToeRules, ProblemState.Running, 0, 0, [], [])
 
-	storage = Storage("")
 	storage.saveUser(root)
 	storage.saveProblem(TicTacToe)
-	return storage
 
 if (__name__ == '__main__'):
 	import tester
 	import demoAPI
 
-	storage = init()
+	init()
 	while (True):
 		query = input().split()
 		if (query[0] == 'add'):
 			path = query[1]
-			demoAPI.addStrategyByPath(storage, path)
+			demoAPI.addStrategyByPath(path)
 		if (query[0] == 'get'):
 			id = int(query[1])
-			print(demoAPI.getStrategyCode(storage, id))
+			print(demoAPI.getStrategyCode(id))
 		if (query[0] == 'test'):
 			id1 = int(query[1])
 			id2 = int(query[2])
-			result = tester.testStrategies(storage, id1, id2)
+			result = tester.testStrategies(id1, id2)
 			print(result[0])
 			print(result[1])

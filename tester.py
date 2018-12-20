@@ -1,5 +1,5 @@
 from structures import *
-from storage import *
+from storage import storage
 from gameStuff import TurnState
 from gameStuff import StrategyVerdict
 from gameStuff import Result
@@ -11,7 +11,7 @@ def rewriteTmp():
 	os.system("rm -r tmp")
 	os.system("mkdir tmp")
 
-def loadProblem(storage, id):
+def loadProblem(id):
 	problem = storage.getProblem(id)
 	sources = problem.rules.sources
 	print("sources")
@@ -23,7 +23,7 @@ def loadProblem(storage, id):
 def loadSubmission(submission, filename):
 	printToFile(filename, submission.code)
 
-def testStrategies(storage, id1, id2):
+def testStrategies(id1, id2):
 	rewriteTmp()
 	sub1 = storage.getSubmission(id1)
 	sub2 = storage.getSubmission(id2)
@@ -32,9 +32,9 @@ def testStrategies(storage, id1, id2):
 		raise Exception('Trying to judge two strategies for different problems')
 
 	problemId = sub1.probId
-	loadProblem(storage, problemId)
+	loadProblem(problemId)
 
 	loadSubmission(sub1, "0.py")
 	loadSubmission(sub2, "1.py")
-	results = judge.run("tmp/game.py", "tmp/classes.py", ["tmp/0.py", "tmp/1.py"])
+	results = judge.run("game.py", "classes.py", ["0.py", "1.py"])
 	return results
