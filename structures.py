@@ -1,6 +1,7 @@
 from enum import Enum
 from gameStuff import StrategyVerdict
 from gameStuff import Result
+import json
 
 class ProblemState(Enum):
     Running = 0
@@ -10,6 +11,10 @@ class ProblemState(Enum):
 class StrategyState(Enum):
     Main = 0
     NonMain = 1
+
+def jsonParser(s):
+    s = s.replace("'", "\"")
+    return json.loads(s)
 
 # definition of user
 
@@ -21,11 +26,15 @@ class User:
         self.submissions = submissions # list of user's ids of submissions
         self.results = results # dict prob_id into result of user's strategies
 
+def createUsersTable(cursor):
+    cursor.execute('''CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, username TEXT, password TEXT, submissions TEXT,
+        results TEXT''')
+
 class Rules:
-    def __init__(self, ProbId: int, Sources, text: str):
+    def __init__(self, ProbId: int, Sources, statement: str):
         self.probId = ProbId # id of problem
         self.sources = Sources #list of ["name.py", code: str]
-        self.text = text # text needed to be published
+        self.statement = statement # text needed to be published
 
 # definition of problem
 
@@ -40,6 +49,11 @@ class Problem:
         self.submissions = submissions #list of strategies' ids (startegies that will play with each other, selected by user)
         self.standings = standings # standings: sortedby score list of results of all strategies
 
+def createProblemsTable(cursor):
+    cursor.execute('''CREATE TABLE IF NOT EXISTS problems (id integer PRIMARY KEY, name TEXT, sources TEXT, statement TEXT,
+        type integer, startTime integer, endTime integer, submissions TEXT, standings TEXT''')
+
+
 # defination of submission
 
 class Submission:
@@ -51,3 +65,6 @@ class Submission:
         self.type = ttype # type of strategy (e.g. main or nonmain)
         self.result = result # result of strategy
 
+def createSubmissionsTable(cursor):
+    cursor.execute('''CREATE TABLE IF NOT EXISTS submissions (id integer PRIMARY KEY, userId integer, probId integer,
+        code TEXT, type integer, result TEXT''')

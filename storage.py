@@ -1,15 +1,16 @@
 import structures
+import sqlite3
+
+DatabasePath = 'database.db'
 
 class Storage:
-	def load(self, path):
-		pass
-
-	def __init__(self, path):
-		self.load(path)
-		self.users = []
-		self.map = {}
-		self.problems = []
-		self.submissions = []
+	def __init__(self):
+		self.connection = sqlite3.connect(DatabasePath)
+		self.cursor = self.connection.cursor()
+		structures.createUsersTable(self.cursor)
+		structures.createProblemsTable(self.cursor)
+		structures.createSubmissionsTable(self.cursor)
+		self.connection.commit()
 
 	def get(self, id, listOfObjects):
 		return listOfObjects[id]
