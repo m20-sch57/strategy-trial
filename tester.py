@@ -35,5 +35,5 @@ def testStrategies(id1, id2, saveLogs = False):
 
 	loadSubmission(sub1, "tmp/0.py")
 	loadSubmission(sub2, "tmp/1.py")
-	invocationResult = judge.run("game.py", "classes.py", ["0.py", "1.py"], saveLogs)
+	invocationResult = judge.run("game.py", "classes.py", ["0.py", "1.py"], saveLogs = saveLogs)
 	return invocationResult

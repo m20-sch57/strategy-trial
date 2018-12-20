@@ -26,7 +26,7 @@ def runStrategy(game, strategy, gameState, playerId: int, logs):
 	result = [StrategyVerdict.Ok]
 
 	try:
-		turn = strategy.Strategy(partialGameState, playerId, logs)
+		turn = strategy.Strategy(partialGameState, playerId)
 	except TimeoutError:
 		result[0] = [StrategyVerdict.TimeLimitExceeded]
 	except Exception:
@@ -38,7 +38,7 @@ def runStrategy(game, strategy, gameState, playerId: int, logs):
 		result.append(turn)
 	else:
 		if (logs is not None):
-			logs.unexpectedVerdict(result[0])
+			logs.unexpectedVerdict(playerId, result[0])
 
 	return result
 
@@ -68,15 +68,15 @@ def run(gamePath: str, classesPath: str, strategyPathes : list, saveLogs = False
 	whoseTurn = 0
 
 	for i in range(game.TurnLimit):
-		turnList = runStrategy(game, strategies[whoseTurn], fullGameState, whoseTurn)
+		turnList = runStrategy(game, strategies[whoseTurn], fullGameState, whoseTurn, logs)
 		if (turnList[0] != StrategyVerdict.Ok):
 			result.results = strategyFailResults(game, whoseTurn, turnList[0])
 			return result
 		
-		turnResult = game.makeTurn(fullGameState, whoseTurn, turnList[1])
+		turnResult = game.makeTurn(fullGameState, whoseTurn, turnList[1], logs)
 		if (turnResult[0] == TurnState.Incorrect):
 			result.results = strategyFailResults(game, whoseTurn, StrategyVerdict.Incorrect)
-			logs.unexpectedVerdict(StrategyVerdict.Incorrect)
+			logs.unexpectedVerdict(whoseTurn, StrategyVerdict.Incorrect)
 			return result
 
 		if (turnResult[0] == TurnState.Last):

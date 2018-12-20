@@ -32,7 +32,7 @@ if (__name__ == '__main__'):
 		if (query[0] == 'test'):
 			id1 = int(query[1])
 			id2 = int(query[2])
-			invocationResult = tester.testStrategies(id1, id2)
+			invocationResult = demoAPI.judge(id1, id2)
 			print(invocationResult.results[0])
 			print(invocationResult.results[1])
 			print(invocationResult.logs.show())

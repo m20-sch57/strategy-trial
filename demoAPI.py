@@ -16,5 +16,5 @@ def getStrategyCode(id: int):
 	return submisson.code
 
 def judge(id1: int, id2: int):
-	invocationResult = tester.testStrategies(id1, id2, True)
+	invocationResult = tester.testStrategies(id1, id2, saveLogs = True)
 	return invocationResult
