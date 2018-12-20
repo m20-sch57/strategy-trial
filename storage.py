@@ -12,15 +12,10 @@ class Storage:
 		structures.createSubmissionsTable(self.cursor)
 		self.connection.commit()
 
-	def get(self, id, listOfObjects):
-		return listOfObjects[id]
-
-	def save(self, obj, listOfObjects):
+	def updateId(self, obj, tableName):
+		size = self.cursor.execute('''SELECT COUNT * FROM ''' + tableName)
 		if (obj.id == -1):
-			obj.id = len(listOfObjects)
-			listOfObjects.append(obj)
-		else:
-			listOfObjects[obj.id] = obj
+			obj.id = obj.id = size
 
 	def getUser(self, id):
 		return self.get(id, self.users)

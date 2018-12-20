@@ -27,8 +27,7 @@ class User:
         self.results = results # dict prob_id into result of user's strategies
 
 def createUsersTable(cursor):
-    cursor.execute('''CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, username TEXT, password TEXT, submissions TEXT,
-        results TEXT''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, username TEXT, password TEXT, submissions TEXT, results TEXT''')
 
 class Rules:
     def __init__(self, ProbId: int, Sources, statement: str):
@@ -50,8 +49,7 @@ class Problem:
         self.standings = standings # standings: sortedby score list of results of all strategies
 
 def createProblemsTable(cursor):
-    cursor.execute('''CREATE TABLE IF NOT EXISTS problems (id integer PRIMARY KEY, name TEXT, sources TEXT, statement TEXT,
-        type integer, startTime integer, endTime integer, submissions TEXT, standings TEXT''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS problems (id integer PRIMARY KEY, name TEXT, sources TEXT, statement TEXT, type integer, startTime integer, endTime integer, submissions TEXT, standings TEXT''')
 
 
 # defination of submission
@@ -66,5 +64,4 @@ class Submission:
         self.result = result # result of strategy
 
 def createSubmissionsTable(cursor):
-    cursor.execute('''CREATE TABLE IF NOT EXISTS submissions (id integer PRIMARY KEY, userId integer, probId integer,
-        code TEXT, type integer, result TEXT''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS submissions (id integer PRIMARY KEY, userId integer, probId integer, code TEXT, type integer, result TEXT''')
