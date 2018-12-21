@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, make_response, request
 from app import app
 from app.forms import LoginForm, SignUp
-from storage import Storage
+#from storage import Storage
 
 @app.route("/")
 @app.route("/home")
