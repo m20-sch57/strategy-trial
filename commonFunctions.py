@@ -1,3 +1,5 @@
+import json
+
 def readFile(path):
     with open(path, 'r') as myfile:
         data = str(myfile.read())
@@ -8,5 +10,7 @@ def printToFile(text: str, path: str):
         file.write(text)
 
 def jsonParser(s):
+    print("PARSING")
+    print(s)
     s = s.replace("'", "\"")
     return json.loads(s)

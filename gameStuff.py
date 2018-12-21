@@ -1,12 +1,12 @@
-from enum import Enum
+from enum import IntEnum
 from commonFunctions import jsonParser
 
-class TurnState(Enum):
+class TurnState(IntEnum):
 	Correct = 0
 	Incorrect = 1
 	Last = 2
 
-class StrategyVerdict(Enum):
+class StrategyVerdict(IntEnum):
 	Ok = 0
 	IncorrectTurn = 1
 	TimeLimitExceeded = 2

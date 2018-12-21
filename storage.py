@@ -11,33 +11,47 @@ class Storage:
 		structures.createProblemsTable(self.cursor)
 		structures.createSubmissionsTable(self.cursor)
 		self.connection.commit()
+		self.usersCnt = 0
+		self.problemsCnt = 0
+		self.submissionsCnt = 0
 
 	def updateId(self, obj, tableName):
-		size = self.cursor.execute('''SELECT COUNT * FROM ''' + tableName)
-		if (obj.id == -1):
-			obj.id = obj.id = size
+		#TODO: change to sql query
+		if (tableName == 'users'):
+			obj.id = self.usersCnt
+			self.usersCnt += 1
+		if (tableName == 'problems'):
+			obj.id = self.problemsCnt
+			self.problemsCnt += 1
+		if (tableName == 'submissions'):
+			obj.id = self.submissionsCnt
+			self.submissionsCnt += 1
 
 	def getUser(self, id):
-		return self.get(id, self.users)
+		return structures.getUser(self.cursor, id)
 
 	def getProblem(self, id):
-		return self.get(id, self.problems)
+		return structures.getProblem(self.cursor, id)
 
 	def getSubmission(self, id):
-		return self.get(id, self.submissions)
+		return structures.getSubmission(self.cursor, id)
 
 	def getUserByName(self, username):
-		id = self.map[username]
-		return self.getUser(id)
+		return structures.getUserByName(self.cursor, username)
 
 	def saveUser(self, user):
-		self.map[user.username] = user.id
-		self.save(user, self.users)
+		self.updateId(user, 'users')
+		user.save(self.cursor)
+		self.connection.commit()
 
 	def saveProblem(self, problem):
-		self.save(problem, self.problems)
+		self.updateId(problem, 'problems')
+		problem.save(self.cursor)
+		self.connection.commit()
 
 	def saveSubmission(self, submission):
-		self.save(submission, self.submissions)
+		self.updateId(submission, 'submissions')
+		submission.save(self.cursor)
+		self.connection.commit()
 
-storage = Storage("")
+storage = Storage()

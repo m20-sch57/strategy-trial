@@ -1,15 +1,16 @@
-from enum import Enum
+from enum import IntEnum
 from gameStuff import StrategyVerdict
 from gameStuff import Result
 from gameStuff import resultFromStr
+from commonFunctions import jsonParser
 import json
 
-class ProblemState(Enum):
+class ProblemState(IntEnum):
     Running = 0
     Upsolving = 1
     Testing = 2
 
-class StrategyState(Enum):
+class StrategyState(IntEnum):
     Main = 0
     NonMain = 1
 
@@ -19,7 +20,6 @@ def saveList(cursor, tableName, lst):
     cursor.execute('DELETE FROM ' + tableName + ' WHERE id=?', [lst[0]])
     strArr = '(' + '?, ' * (len(lst) - 1) + '?)'
     cursor.execute('INSERT INTO ' + tableName + ' VALUES ' + strArr, lst)
-    cursor.commit()
 
 def getFromDatabase(cursor, tableName, id):
     cursor.execute('SELECT * FROM ' + tableName + ' WHERE id=?', [id])
@@ -37,6 +37,7 @@ class User:
         return [self.id, self.username, self.password, str(self.submissions), str(self.results)]
 
     def save(self, cursor):
+        lst = self.getList()
         saveList(cursor, 'users', self.getList())
 
 def userFromList(lst):
@@ -52,7 +53,7 @@ def getUserByUsername(cursor, username):
     return userFromList(lst)
 
 def createUsersTable(cursor):
-    cursor.execute('''CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, username TEXT, password TEXT, submissions TEXT, results TEXT''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, username TEXT, password TEXT, submissions TEXT, results TEXT)''')
 
 class Rules:
     def __init__(self, ProbId: int, Sources, statement: str):
@@ -73,23 +74,22 @@ class Problem:
         self.submissions = submissions #list of strategies' ids (startegies that will play with each other, selected by user)
         self.standings = standings # standings: sortedby score list of results of all strategies
 
-        def getList(self):
-            return [self.id, self.name, str(self.rules.sources), self.rules.statement, int(self.type),
-            int(self.type), self.startTime, self.endTime, str(self.submissions), str(self.standings)]
+    def getList(self):
+        return [self.id, self.name, json.dumps(self.rules.sources), self.rules.statement, int(self.type),
+        self.startTime, self.endTime, str(self.submissions), str(self.standings)]
 
-        def save(self, cursor):
-            saveList(cursor, 'problems', self.getList())
+    def save(self, cursor):
+        saveList(cursor, 'problems', self.getList())
 
 def problemFromList(lst):
-    return Problem(lst[0], lst[1], Result(lst[0], jsonParser(lst[2]), jsonParser(lst[3])),
-        lst[4], lst[6], lst[6], jsonParser(lst[7]), jsonParser(lst[8]))
+    return Problem(lst[0], lst[1], Result(lst[0], json.loads(lst[2]), lst[3]), ProblemState(lst[4]), lst[6], lst[6], jsonParser(lst[7]), jsonParser(lst[8]))
 
 def getProblem(cursor, id):
     lst = getFromDatabase(cursor, 'problems', id)
     return problemFromList(lst)
 
 def createProblemsTable(cursor):
-    cursor.execute('''CREATE TABLE IF NOT EXISTS problems (id integer PRIMARY KEY, name TEXT, sources TEXT, statement TEXT, type integer, startTime integer, endTime integer, submissions TEXT, standings TEXT''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS problems (id integer PRIMARY KEY, name TEXT, sources TEXT, statement TEXT, type integer, startTime integer, endTime integer, submissions TEXT, standings TEXT)''')
 
 
 # defination of submission
@@ -103,18 +103,19 @@ class Submission:
         self.type = ttype # type of strategy (e.g. main or nonmain)
         self.result = result # result of strategy
 
-        def getList(self):
-            return [self.id, self.userId, self.probId, self.code, int(self.type), str(self.result)]
+    def getList(self):
+        return [self.id, self.userId, self.probId, self.code, int(self.type), str(self.result)]
 
-        def save(self):
-            saveList(cursor, 'submissions', self.getList())
+    def save(self, cursor):
+        saveList(cursor, 'submissions', self.getList())
 
 def submissionFromList(lst):
-    return Submission(lst[0], lst[1], lst[2], lst[3], lst[4], resultFromStr(lst[5]))
+    return Submission(lst[0], lst[1], lst[2], lst[3], StrategyState(lst[4]), resultFromStr(lst[5]))
 
 def getSubmission(cursor, id):
     lst = getFromDatabase(cursor, 'submissions', id)
     return submissionFromList(lst)
 
 def createSubmissionsTable(cursor):
-    cursor.execute('''CREATE TABLE IF NOT EXISTS submissions (id integer PRIMARY KEY, userId integer, probId integer, code TEXT, type integer, result TEXT''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS submissions (id integer PRIMARY KEY, userId integer, probId integer, code TEXT, type integer, result TEXT)''')
+
