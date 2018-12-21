@@ -10,7 +10,5 @@ def printToFile(text: str, path: str):
         file.write(text)
 
 def jsonParser(s):
-    print("PARSING")
-    print(s)
     s = s.replace("'", "\"")
     return json.loads(s)

@@ -82,7 +82,7 @@ class Problem:
         saveList(cursor, 'problems', self.getList())
 
 def problemFromList(lst):
-    return Problem(lst[0], lst[1], Result(lst[0], json.loads(lst[2]), lst[3]), ProblemState(lst[4]), lst[6], lst[6], jsonParser(lst[7]), jsonParser(lst[8]))
+    return Problem(lst[0], lst[1], Rules(lst[0], json.loads(lst[2]), lst[3]), ProblemState(lst[4]), lst[6], lst[6], jsonParser(lst[7]), jsonParser(lst[8]))
 
 def getProblem(cursor, id):
     lst = getFromDatabase(cursor, 'problems', id)
