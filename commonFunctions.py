@@ -6,3 +6,7 @@ def readFile(path):
 def printToFile(text: str, path: str):
     with open(path, 'w') as file:
         file.write(text)
+
+def jsonParser(s):
+    s = s.replace("'", "\"")
+    return json.loads(s)

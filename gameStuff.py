@@ -1,4 +1,5 @@
 from enum import Enum
+from commonFunctions import jsonParser
 
 class TurnState(Enum):
 	Correct = 0
@@ -20,7 +21,12 @@ class Result:
 		self.score = Score # points, which the strategy has got
 	
 	def __str__(self):
-		return str(self.verdict) + " " + str(self.score)
+		dictionary = {'verdict' : int(self.verdict), 'score' : self.score}
+		return str(dictionary)
+
+def resultFromStr(s: str):
+	dictionary = jsonParser(s)
+	return Result(dictionary['verdict'], dictionary['score'])
 
 class InvocationResult:
 	pass
