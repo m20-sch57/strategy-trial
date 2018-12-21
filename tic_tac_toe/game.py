@@ -57,7 +57,7 @@ def check(full: FullGameState):
 	if (winner != '.'):
 		return winner
 
-	winner = lineCheck(full.a, FieldSize - 1, FieldSize - 1, -1, -1)
+	winner = lineCheck(full.a, 0, FieldSize - 1, 1, -1)
 	if (winner != '.'):
 		return winner
 
