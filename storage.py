@@ -11,21 +11,24 @@ class Storage:
 		structures.createProblemsTable(self.cursor)
 		structures.createSubmissionsTable(self.cursor)
 		self.connection.commit()
-		self.usersCnt = 0
-		self.problemsCnt = 0
-		self.submissionsCnt = 0
+
+	def getSize(self, tableName):
+		self.cursor.execute('SELECT * COUNT FROM ' + tableName)
+		size = self.cursor.fetchone()
+
+	def getUsersCount(self):
+		return getSize('users')
+
+	def getProblemsCount(self):
+		return getSize('problems')
+
+	def getSubmissionsCount(self):
+		return getSize('submissions')
 
 	def updateId(self, obj, tableName):
-		#TODO: change to sql query
-		if (tableName == 'users'):
-			obj.id = self.usersCnt
-			self.usersCnt += 1
-		if (tableName == 'problems'):
-			obj.id = self.problemsCnt
-			self.problemsCnt += 1
-		if (tableName == 'submissions'):
-			obj.id = self.submissionsCnt
-			self.submissionsCnt += 1
+		if (obj.id == -1):
+			size = self.getSize(tableName)
+			obj.id = size
 
 	def getUser(self, id):
 		return structures.getUser(self.cursor, id)
