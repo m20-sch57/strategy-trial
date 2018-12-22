@@ -60,6 +60,15 @@ def showTestPage():
 
     return res
 
+@app.route("/source")
+def showSource():
+    id = request.args.get('id')
+    if (id == None):
+        return "..."
+
+    res = '<span style="white-space: pre-line">' + demoAPI.getStrategyCode(id) + '</span>'
+
+    return res
 
     """TODO return!!!!"""
 
