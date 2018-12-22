@@ -1,20 +1,23 @@
 from structures import *
 from commonFunctions import readFile
-from storage import *
 import os
+
+if (__name__ == '__main__'):
+	os.system('rm database.db')
+
+from storage import *
 
 def init():
 	root = User(-1, "root", "secret", [], {})
 
-	if (not os.path.isfile("database.db")):
-		TicTacToeGame = readFile("tic_tac_toe/game.py")
-		TicTacToeClasses = readFile("tic_tac_toe/classes.py")
+	TicTacToeGame = readFile("tic_tac_toe/game.py")
+	TicTacToeClasses = readFile("tic_tac_toe/classes.py")
 
-		TicTacToeRules = Rules(0, [["game.py", TicTacToeGame], ["classes.py", TicTacToeClasses]], "")
-		TicTacToe = Problem(-1, "Tic Tac Toe", TicTacToeRules, ProblemState.Running, 0, 0, [], [])
+	TicTacToeRules = Rules(0, [["game.py", TicTacToeGame], ["classes.py", TicTacToeClasses]], "")
+	TicTacToe = Problem(-1, "Tic Tac Toe", TicTacToeRules, ProblemState.Running, 0, 0, [], [])
 
-		storage.saveUser(root)
-		storage.saveProblem(TicTacToe)
+	storage.saveUser(root)
+	storage.saveProblem(TicTacToe)
 
 if (__name__ == '__main__'):
 	import tester

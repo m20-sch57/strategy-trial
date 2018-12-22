@@ -54,6 +54,14 @@ def closePools(pools):
 	for pool in pools:
 		closePool(pool)
 
+def updateLogs(logs, results):
+	if (logs is not None):
+		logs.processResults(results)
+
+def endJudge(pools, logs, results):
+	closePools(pools)
+	updateLogs(logs, results)
+
 def run(gamePath: str, classesPath: str, strategyPathes : list, saveLogs = False) -> InvocationResult:
 	classes = importPath(classesPath)
 	game = importPath(gamePath)
@@ -75,26 +83,26 @@ def run(gamePath: str, classesPath: str, strategyPathes : list, saveLogs = False
 		turnList = runStrategy(game, strategies[whoseTurn], fullGameState, whoseTurn, logs, pools[whoseTurn])
 		if (turnList[0] != StrategyVerdict.Ok):
 			result.results = strategyFailResults(game, whoseTurn, turnList[0])
-			closePools(pools)
+			endJudge(pools, logs, result.results)
 			return result
 		
 		turnResult = game.makeTurn(fullGameState, whoseTurn, turnList[1], logs)
 		if (turnResult[0] == TurnState.Incorrect):
 			result.results = strategyFailResults(game, whoseTurn, StrategyVerdict.Incorrect)
 			logs.unexpectedVerdict(whoseTurn, StrategyVerdict.Incorrect)
-			closePools(pools)
+			endJudge(pools, logs, result.results)
 			return result
 
 		if (turnResult[0] == TurnState.Last):
 			result.results = turnResult[1]
-			closePools(pools)
+			endJudge(pools, logs, result.results)
 			return result
 
 		fullGameState = turnResult[1]
 		whoseTurn = turnResult[2]
 
 	result.results = [Result() for i in range(PlayesCount)]
-	closePools(pools)
+	endJudge(pools, logs, result.results)
 	return result
 
 if __name__ == '__main__':

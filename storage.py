@@ -15,6 +15,7 @@ class Storage:
 	def getSize(self, tableName):
 		self.cursor.execute('SELECT COUNT (*) FROM ' + tableName)
 		size = self.cursor.fetchone()
+		return size[0]
 
 	def getUsersCount(self):
 		return getSize('users')

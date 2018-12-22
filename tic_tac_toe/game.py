@@ -14,8 +14,8 @@ class Logs:
 	def __init__(self):
 		self.text = ''
 
-	def unexpectedVerdict(self, playerId, verdict):
-		self.text += 'Strategy ' + str(playerId) + ' got ' + str(verdict) + '\n'
+	def processResults(self, results):
+		pass
 
 	def update(self, a):
 		self.text += '\n'
