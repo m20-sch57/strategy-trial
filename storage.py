@@ -13,7 +13,7 @@ class Storage:
 		self.connection.commit()
 
 	def getSize(self, tableName):
-		self.cursor.execute('SELECT * COUNT FROM ' + tableName)
+		self.cursor.execute('SELECT COUNT (*) FROM ' + tableName)
 		size = self.cursor.fetchone()
 
 	def getUsersCount(self):
