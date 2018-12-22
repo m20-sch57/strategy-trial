@@ -53,6 +53,8 @@ def showTestPage():
     if (id1 == None or id2 == None):
         return "..."
 
+    res = ''
+
     invocationResult = demoAPI.judge(id1, id2)
     res += str(invocationResult.results[0]) + '\n'
     res += str(invocationResult.results[1]) + '\n'

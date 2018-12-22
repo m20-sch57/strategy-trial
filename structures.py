@@ -113,7 +113,6 @@ def submissionFromList(lst):
     return Submission(lst[0], lst[1], lst[2], lst[3], StrategyState(lst[4]), resultFromStr(lst[5]))
 
 def getSubmission(cursor, id):
-    print("getSubmission", id)
     lst = getFromDatabase(cursor, 'submissions', id)
     return submissionFromList(lst)
 

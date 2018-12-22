@@ -11,28 +11,30 @@ def importPath(path: str):
 	path = os.path.splitext(path)[0]
 	return __import__(path)
 
+import time
+import multiprocessing as mp
+
+def notTL(pool):
+	pool.close()
+	pool.join()
+
 def runStrategy(game, strategy, gameState, playerId: int, logs):
-	import signal
-
-	class TimeoutError(Exception):
-		pass
-
-	def handler(signum, frame):
-		raise TimeoutError()
-
 	partialGameState = game.gameStateRep(gameState, playerId)
-	signal.signal(signal.SIGALRM, handler)
-	signal.alarm(game.TimeLimit)
 	result = [StrategyVerdict.Ok]
 
+	pool = mp.Pool(processes = 1)
+	func = pool.apply_async(strategy.Strategy, args = (partialGameState, playerId))
+
 	try:
-		turn = strategy.Strategy(partialGameState, playerId)
-	except TimeoutError:
+		turn = func.get(timeout = game.TimeLimit)
+	except mp.TimeoutError:
+		pool.terminate()
 		result[0] = [StrategyVerdict.TimeLimitExceeded]
 	except Exception:
+		notTL(pool)
 		result[0] = [StrategyVerdict.Failed]
-	finally:
-		signal.alarm(0)
+	else:
+		notTL(pool)
 
 	if (result[0] == StrategyVerdict.Ok):
 		result.append(turn)
