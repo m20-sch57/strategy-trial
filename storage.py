@@ -5,7 +5,7 @@ DatabasePath = 'database.db'
 
 class Storage:
 	def __init__(self):
-		self.connection = sqlite3.connect(DatabasePath)
+		self.connection = sqlite3.connect(DatabasePath, check_same_thread=False)
 		self.cursor = self.connection.cursor()
 		structures.createUsersTable(self.cursor)
 		structures.createProblemsTable(self.cursor)
