@@ -56,11 +56,10 @@ def showTestPage():
     res = ''
 
     invocationResult = demoAPI.judge(id1, id2)
-    res += str(invocationResult.results[0]) + '\n'
-    res += str(invocationResult.results[1]) + '\n'
     res += invocationResult.logs.show()
 
     return res
+
 
     """TODO return!!!!"""
 
