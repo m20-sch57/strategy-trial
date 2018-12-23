@@ -52,12 +52,8 @@ def showTestPage():
     if (id1 == None or id2 == None):
         return "..."
 
-    res = ''
-
     invocationResult = demoAPI.judge(id1, id2)
-    res += invocationResult.logs.show()
-
-    return res
+    return invocationResult.logs.show()
 
 @app.route("/source")
 def showSource():
