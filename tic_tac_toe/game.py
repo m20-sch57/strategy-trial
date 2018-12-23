@@ -7,7 +7,25 @@ TimeLimit = 1
 TurnLimit = 100
 
 class FullGameState:
-	a = [['.', '.', '.'], ['.', '.', '.'], ['.', '.', '.']]
+	def __init__(self):
+		self.a = [['.', '.', '.'], ['.', '.', '.'], ['.', '.', '.']]
+
+class Logs:
+	def __init__(self):
+		self.text = ''
+
+	def processResults(self, results):
+		pass
+
+	def update(self, a):
+		self.text += '\n'
+		for i in range(FieldSize):
+			for j in range(FieldSize):
+				self.text += a[i][j]
+			self.text += '\n'
+
+	def show(self):
+		return self.text
 
 def gameStateRep(full: FullGameState, playerId: int) -> GameState:
 	result = GameState()
@@ -39,17 +57,19 @@ def check(full: FullGameState):
 	if (winner != '.'):
 		return winner
 
-	winner = lineCheck(full.a, FieldSize - 1, FieldSize - 1, -1, -1)
+	winner = lineCheck(full.a, 0, FieldSize - 1, 1, -1)
 	if (winner != '.'):
 		return winner
 
 	return '.';
 
-def makeTurn(gameState: FullGameState, playerId: int, turn: Turn) -> list:
+def makeTurn(gameState: FullGameState, playerId: int, turn: Turn, logs = None) -> list:
 	charList = ['X', 'O']
-	if (gameState.a[turn.r][turn.c] != '.'):
+	if (turn.r < 0 or turn.r >= FieldSize or turn.c < 0 or turn.c >= FieldSize or gameState.a[turn.r][turn.c] != '.'):
 		return [TurnState.Incorrect, gameState, nextPlayer(playerId)]
 	gameState.a[turn.r][turn.c] = charList[playerId]
+	if (logs is not None):
+		logs.update(gameState.a)
 	winner = check(gameState)
 	if (winner == '.'):
 		dot = 0

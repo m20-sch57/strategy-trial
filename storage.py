@@ -1,45 +1,61 @@
 import structures
+import sqlite3
+
+DatabasePath = 'database.db'
 
 class Storage:
-	def load(self, path):
-		pass
+	def __init__(self):
+		self.connection = sqlite3.connect(DatabasePath, check_same_thread=False)
+		self.cursor = self.connection.cursor()
+		structures.createUsersTable(self.cursor)
+		structures.createProblemsTable(self.cursor)
+		structures.createSubmissionsTable(self.cursor)
+		self.connection.commit()
 
-	def __init__(self, path):
-		self.load(path)
-		self.users = []
-		self.map = {}
-		self.problems = []
-		self.submissions = []
+	def getSize(self, tableName):
+		self.cursor.execute('SELECT COUNT (*) FROM ' + tableName)
+		size = self.cursor.fetchone()
+		return size[0]
 
-	def get(self, id, listOfObjects):
-		return listOfObjects[id]
+	def getUsersCount(self):
+		return getSize('users')
 
-	def save(self, obj, listOfObjects):
+	def getProblemsCount(self):
+		return getSize('problems')
+
+	def getSubmissionsCount(self):
+		return getSize('submissions')
+
+	def updateId(self, obj, tableName):
 		if (obj.id == -1):
-			obj.id = len(obj)
-			listOfObjects.append(obj)
-		else:
-			listOfObjects[obj.id] = obj
+			size = self.getSize(tableName)
+			obj.id = size
 
 	def getUser(self, id):
-		return self.get(id, users)
+		return structures.getUser(self.cursor, id)
 
 	def getProblem(self, id):
-		return self.get(id, problems)
+		return structures.getProblem(self.cursor, id)
 
 	def getSubmission(self, id):
-		return self.get(id, submissions)
+		return structures.getSubmission(self.cursor, id)
 
 	def getUserByName(self, username):
-		id = self.map[username]
-		return self.getUser(id)
+		return structures.getUserByName(self.cursor, username)
 
 	def saveUser(self, user):
-		self.map[user.username] = user.id
-		self.save(user, users)
+		self.updateId(user, 'users')
+		user.save(self.cursor)
+		self.connection.commit()
 
 	def saveProblem(self, problem):
-		self.save(problem, problems)
+		self.updateId(problem, 'problems')
+		problem.save(self.cursor)
+		self.connection.commit()
 
 	def saveSubmission(self, submission):
-		self.save(submission, submissions)
+		self.updateId(submission, 'submissions')
+		submission.save(self.cursor)
+		self.connection.commit()
+
+storage = Storage()

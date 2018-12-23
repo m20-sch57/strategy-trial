@@ -1,15 +1,28 @@
-from enum import Enum
+from enum import IntEnum
+from commonFunctions import jsonParser
 
-class TurnState(Enum):
+class TurnState(IntEnum):
 	Correct = 0
 	Incorrect = 1
 	Last = 2
 
-class StrategyVerdict(Enum):
+verdictStringDictionary = {}
+
+class StrategyVerdict(IntEnum):
 	Ok = 0
 	IncorrectTurn = 1
 	TimeLimitExceeded = 2
 	Failed = 3
+
+	def __str__(self):
+		return verdictStringDictionary[self]
+
+verdictStringDictionary = {
+	StrategyVerdict.Ok : 'OK',
+	StrategyVerdict.IncorrectTurn : 'Incorrect turn',
+	StrategyVerdict.TimeLimitExceeded : 'Time limit exceeded',
+	StrategyVerdict.Failed : 'Failed'
+}
 
 def nextPlayer(playerId: int) -> int:
 	return 1 - playerId
@@ -20,4 +33,12 @@ class Result:
 		self.score = Score # points, which the strategy has got
 	
 	def __str__(self):
-		return str(self.verdict) + " " + str(self.score)
+		dictionary = {'verdict' : int(self.verdict), 'score' : self.score}
+		return str(dictionary)
+
+def resultFromStr(s: str):
+	dictionary = jsonParser(s)
+	return Result(dictionary['verdict'], dictionary['score'])
+
+class InvocationResult:
+	pass
