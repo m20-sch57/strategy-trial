@@ -56,10 +56,11 @@ def createUsersTable(cursor):
     cursor.execute('''CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, username TEXT, password TEXT, submissions TEXT, results TEXT)''')
 
 class Rules:
-    def __init__(self, ProbId: int, Sources, Templates, statement: str):
+    def __init__(self, ProbId: int, Sources, Templates, Static, statement: str):
         self.probId = ProbId # id of problem
         self.sources = Sources #list of ["name.py", code: str]
         self.templates = Templates #list of ["template.html", code: str]
+        self.static = Static #...
         self.statement = statement # text needed to be published
 
 # definition of problem
@@ -76,21 +77,21 @@ class Problem:
         self.standings = standings # standings: sortedby score list of results of all strategies
 
     def getList(self):
-        return [self.id, self.name, json.dumps(self.rules.sources), json.dumps(self.rules.templates), self.rules.statement, int(self.type),
+        return [self.id, self.name, json.dumps(self.rules.sources), json.dumps(self.rules.templates), json.dumps(self.rules.static), self.rules.statement, int(self.type),
         self.startTime, self.endTime, str(self.submissions), str(self.standings)]
 
     def save(self, cursor):
         saveList(cursor, 'problems', self.getList())
 
 def problemFromList(lst):
-    return Problem(lst[0], lst[1], Rules(lst[0], json.loads(lst[2]), json.loads(lst[3]), lst[4]), ProblemState(lst[5]), lst[6], lst[7], jsonParser(lst[8]), jsonParser(lst[9]))
+    return Problem(lst[0], lst[1], Rules(lst[0], json.loads(lst[2]), json.loads(lst[3]), json.loads(lst[4]), lst[5]), ProblemState(lst[6]), lst[7], lst[8], jsonParser(lst[9]), jsonParser(lst[10]))
 
 def getProblem(cursor, id):
     lst = getFromDatabase(cursor, 'problems', id)
     return problemFromList(lst)
 
 def createProblemsTable(cursor):
-    cursor.execute('''CREATE TABLE IF NOT EXISTS problems (id integer PRIMARY KEY, name TEXT, sources TEXT, templates TEXT, statement TEXT, type integer, startTime integer, endTime integer, submissions TEXT, standings TEXT)''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS problems (id integer PRIMARY KEY, name TEXT, sources TEXT, templates TEXT, static TEXT, statement TEXT, type integer, startTime integer, endTime integer, submissions TEXT, standings TEXT)''')
 
 
 # defination of submission

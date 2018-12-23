@@ -16,6 +16,10 @@ def rewriteTemplateTmp():
 	os.system("rm -r app/templates/tmp")
 	os.system("mkdir app/templates/tmp")
 
+def rewriteStaticTmp():
+	os.system("rm -r app/static/tmp")
+	os.system("mkdir app/static/tmp")
+
 def loadProblem(id, saveLogs):
 	problem = storage.getProblem(id)
 	sources = problem.rules.sources
@@ -28,6 +32,11 @@ def loadProblem(id, saveLogs):
 		for template in problem.rules.templates:
 			path = "app/templates/tmp/" + template[0]
 			printToFile(template[1], path)
+		rewriteStaticTmp()
+		for static in problem.rules.static:
+			path = "app/static/tmp/" + static[0]
+			printToFile(static[1], path)
+
 
 def loadSubmission(submission, filename):
 	printToFile(submission.code, filename)
