@@ -3,6 +3,14 @@
 		<title>ЛОГИ</title>
 	</head>
 	<body>
-		<p>ЛОЛ</p>
+		{% for state in fieldLog %}
+			{% for line in state %}
+				<p>
+				{% for c in line %}
+					{{ c }}
+				{% endfor %}
+				</p>
+			{% endfor %}
+		{% endfor %}
 	</body>
 </html>

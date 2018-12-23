@@ -1,5 +1,7 @@
 from classes import *
 from gameStuff import *
+from app import app
+from flask import render_template
 
 FieldSize = 3
 MaxScore = 100
@@ -12,20 +14,21 @@ class FullGameState:
 
 class Logs:
 	def __init__(self):
-		self.text = ''
+		self.fieldLog = []
 
 	def processResults(self, results):
 		pass
 
 	def update(self, a):
-		self.text += '\n'
-		for i in range(FieldSize):
-			for j in range(FieldSize):
-				self.text += a[i][j]
-			self.text += '\n'
+		b = a.copy()
+		self.fieldLog.append(b)
 
 	def show(self):
-		return self.text
+		for i in self.fieldLog:
+			print(hex(id(i)))
+		with app.app_context():
+			data = render_template("tmp/logs.html.j2", fieldLog = self.fieldLog)
+		return data
 
 def gameStateRep(full: FullGameState, playerId: int) -> GameState:
 	result = GameState()
@@ -67,7 +70,15 @@ def makeTurn(gameState: FullGameState, playerId: int, turn: Turn, logs = None) -
 	charList = ['X', 'O']
 	if (turn.r < 0 or turn.r >= FieldSize or turn.c < 0 or turn.c >= FieldSize or gameState.a[turn.r][turn.c] != '.'):
 		return [TurnState.Incorrect, gameState, nextPlayer(playerId)]
-	gameState.a[turn.r][turn.c] = charList[playerId]
+	if (len(logs.fieldLog)):
+		print("---------------------------????????????")
+		print(logs.fieldLog[0])
+		print(gameState.a)
+		print(hex(id(logs.fieldLog[0])))
+		print(hex(id(gameState.a)))
+		gameState.a[turn.r][turn.c] = charList[playerId]
+		print(logs.fieldLog[0])
+		print(gameState.a)
 	if (logs is not None):
 		logs.update(gameState.a)
 	winner = check(gameState)
