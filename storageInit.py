@@ -2,10 +2,10 @@ from structures import *
 from commonFunctions import readFile
 import os
 
-if (__name__ == '__main__'):
-	os.system('rm database.db')
+os.system('rm database.db')
 
 from storage import *
+import demoAPI
 
 def init():
 	root = User(-1, "root", "secret", [], {})
@@ -20,9 +20,11 @@ def init():
 	storage.saveUser(root)
 	storage.saveProblem(TicTacToe)
 
+	demoAPI.addStrategyByPath("tic_tac_toe/strategies/st1.py")
+	demoAPI.addStrategyByPath("tic_tac_toe/strategies/st2.py")
+
 if (__name__ == '__main__'):
 	import tester
-	import demoAPI
 	import sys
 
 	init()
