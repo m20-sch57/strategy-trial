@@ -1,6 +1,7 @@
 from flask import render_template, flash, redirect, make_response, request
 from app import app
 from app.forms import LoginForm, SignUp, Submit
+import demoAPI, demoAPI
 
 @app.route("/")
 @app.route("/home")
@@ -43,6 +44,31 @@ def sign_up():
         flash('Login requested for user {}, remember_me = {}'.format(form.username.data, form.remember_me.data))
         return redirect('/home')
     return render_template('sign_up.html', title = "Sign Up", form = form)
+
+@app.route("/test")
+def showTestPage():
+    id1 = request.args.get('id1')
+    id2 = request.args.get('id2')
+    if (id1 == None or id2 == None):
+        return "..."
+
+    res = ''
+
+    invocationResult = demoAPI.judge(id1, id2)
+    res += invocationResult.logs.show()
+
+    return res
+
+@app.route("/source")
+def showSource():
+    id = request.args.get('id')
+    if (id == None):
+        return "..."
+
+    res = '<span style="white-space: pre-line">' + demoAPI.getStrategyCode(id) + '</span>'
+
+    return res
+
     """TODO return!!!!"""
 
 """#??? and other like /problem/"id_problem"/statement, submit, submissions
