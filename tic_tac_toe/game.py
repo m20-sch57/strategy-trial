@@ -25,7 +25,7 @@ class Logs:
 			self.text += '\n'
 
 	def show(self):
-		return self.text
+		return render_template("templates/logs.html.j2", text = self.text)
 
 def gameStateRep(full: FullGameState, playerId: int) -> GameState:
 	result = GameState()
