@@ -15,4 +15,7 @@ class SignUp(FlaskForm):
     password = PasswordField('Password*', validators = [DataRequired()])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign Up')
-    #TODO name, secondname, username, password, submit
+
+class Submit(FlaskForm):
+    textfield = StringField("Your code", validators = [DataRequired()])
+    submit = SubmitField('Submit')

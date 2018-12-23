@@ -1,7 +1,6 @@
 from flask import render_template, flash, redirect, make_response, request
 from app import app
-from app.forms import LoginForm, SignUp
-from storage import Storage
+from app.forms import LoginForm, SignUp, Submit
 
 @app.route("/")
 @app.route("/home")
@@ -55,6 +54,15 @@ def statement():
 @app.route("/submissions")
 def submissions():
     return render_template('submissions.html')
+
+@app.route("/submit")
+def submit():
+    form = Submit()
+    if form.validate_on_submit():
+        flash('Login requested for user {}, remember_me = {}'.format(form.username.data, form.remember_me.data))
+        return redirect('/home')
+    return render_template('submit.html', title = "Send Task", form = form)
+
 #__________________________________
 #for admin
 #__________________________________
