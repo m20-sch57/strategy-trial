@@ -2,6 +2,7 @@ from classes import *
 from gameStuff import *
 from app import app
 from flask import render_template
+from copy import deepcopy
 
 FieldSize = 3
 MaxScore = 100
@@ -20,7 +21,7 @@ class Logs:
 		pass
 
 	def update(self, a):
-		b = a.copy()
+		b = deepcopy(a)
 		self.fieldLog.append(b)
 
 	def show(self):
@@ -70,15 +71,7 @@ def makeTurn(gameState: FullGameState, playerId: int, turn: Turn, logs = None) -
 	charList = ['X', 'O']
 	if (turn.r < 0 or turn.r >= FieldSize or turn.c < 0 or turn.c >= FieldSize or gameState.a[turn.r][turn.c] != '.'):
 		return [TurnState.Incorrect, gameState, nextPlayer(playerId)]
-	if (len(logs.fieldLog)):
-		print("---------------------------????????????")
-		print(logs.fieldLog[0])
-		print(gameState.a)
-		print(hex(id(logs.fieldLog[0])))
-		print(hex(id(gameState.a)))
-		gameState.a[turn.r][turn.c] = charList[playerId]
-		print(logs.fieldLog[0])
-		print(gameState.a)
+	gameState.a[turn.r][turn.c] = charList[playerId]
 	if (logs is not None):
 		logs.update(gameState.a)
 	winner = check(gameState)

@@ -1,16 +1,17 @@
 <html>
 	<head>
 		<title>ЛОГИ</title>
+		<link rel="stylesheet" href="styles.css">
 	</head>
 	<body>
 		{% for state in fieldLog %}
 			{% for line in state %}
-				<p>
 				{% for c in line %}
 					{{ c }}
 				{% endfor %}
-				</p>
+				<br>
 			{% endfor %}
+			<br>
 		{% endfor %}
 	</body>
 </html>
