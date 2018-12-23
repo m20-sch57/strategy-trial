@@ -1,5 +1,7 @@
 from classes import *
 from gameStuff import *
+from app import app
+from flask import render_template
 
 FieldSize = 3
 MaxScore = 100
@@ -25,7 +27,9 @@ class Logs:
 			self.text += '\n'
 
 	def show(self):
-		return self.text
+		with app.app_context():
+			data = render_template("tmp/logs.html.j2", text = self.text)
+		return data
 
 def gameStateRep(full: FullGameState, playerId: int) -> GameState:
 	result = GameState()
