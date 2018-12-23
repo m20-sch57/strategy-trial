@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <h1>Select problem</h1>
     {% for task in problems %}
     <a href=/{{ "problemset" + "/" + task }}> <b>{{ task }}</b></a>
     {% endfor %}

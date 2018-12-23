@@ -2,6 +2,7 @@ from flask import render_template, flash, redirect, make_response, request
 from app import app
 from app.forms import LoginForm, SignUp, Submit
 import demoAPI, demoAPI
+list_problems = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"]
 
 @app.route("/")
 @app.route("/home")
@@ -11,13 +12,14 @@ def home():
 
 @app.route("/problemset")
 def problemset():
-    title = "ST Problems"
-    problems = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"]
-    return render_template('problemset.html', problems = problems, title = title)
+    title = "Problems"
+    return render_template('problemset.html', problems = list_problems, title = title)
 
-@app.route("/problemset/A")
-def problemset_A():
-    return render_template('problemset.html')
+@app.route("/problemset/<task_id>")
+def problemset_id(task_id):
+    if task_id not in list_problems:
+        return redirect('/home')
+    return render_template('problemset_id.html', task_id = task_id)
 
 @app.route("/settings")
 def settings():
@@ -29,7 +31,6 @@ def login():
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
-        flash('Login requested for user {}, remember_me = {}'.format(form.username.data, form.remember_me.data))
         return redirect('/home')
     return render_template('login.html', title = "Sign In", form = form)
 
@@ -37,11 +38,15 @@ def login():
 def logout():
     return render_template('logout.html')
 
-@app.route("/sign_up")
+@app.route("/sign_up", methods = ["GET", "POST"])
 def sign_up():
     form = SignUp()
     if form.validate_on_submit():
-        flash('Login requested for user {}, remember_me = {}'.format(form.username.data, form.remember_me.data))
+        name = form.name.data
+        secondname = form.secondname.data
+        username = form.username.data
+        password = form.password.data
+        remember_me = form.remember_me.data
         return redirect('/home')
     return render_template('sign_up.html', title = "Sign Up", form = form)
 
@@ -83,7 +88,6 @@ def submissions():
 def submit():
     form = Submit()
     if form.validate_on_submit():
-        flash('Login requested for user {}, remember_me = {}'.format(form.username.data, form.remember_me.data))
         return redirect('/home')
     return render_template('submit.html', title = "Send a task", form = form)
 
