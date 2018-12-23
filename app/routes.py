@@ -66,9 +66,6 @@ def showSource():
     if (id == None):
         return "..."
 
-    print(demoAPI.getStrategyCode(id))
-    res = '<code><span style="white-space: pre-line">' + demoAPI.getStrategyCode(id) + '</span></code>'
-
     return render_template('source.html.j2', id = id, code = demoAPI.getStrategyCode(id))
 
     """TODO return!!!!"""
