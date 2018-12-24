@@ -31,7 +31,7 @@ def strategy_tester():
     if form.validate_on_submit():
         id1 = form.id1.data
         id2 = form.id2.data
-        return redirect('/home')
+        return redirect('/test?id1=' + str(id1) + '&id2=' + str(id2))
     return render_template('strategy_tester.html', title = "Strategy Tester", form = form)
 
 @app.route("/login", methods = ["GET", "POST"])
