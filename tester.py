@@ -52,7 +52,10 @@ def testStrategies(id1, id2, saveLogs = False):
 	problemId = sub1.probId
 	loadProblem(problemId, saveLogs)
 
-	loadSubmission(sub1, "tmp/0.py")
-	loadSubmission(sub2, "tmp/1.py")
-	invocationResult = judge.run("game.py", "classes.py", ["0.py", "1.py"], saveLogs = saveLogs)
+	filename1 = str(id1) + ".py"
+	filename2 = str(id2) + ".py"
+
+	loadSubmission(sub1, "tmp/" + filename1)
+	loadSubmission(sub2, "tmp/" + filename2)
+	invocationResult = judge.run("game.py", "classes.py", [filename1, filename2], saveLogs = saveLogs)
 	return invocationResult

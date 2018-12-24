@@ -44,4 +44,4 @@ if (__name__ == '__main__'):
 			invocationResult = demoAPI.judge(id1, id2)
 			print(invocationResult.results[0])
 			print(invocationResult.results[1])
-			print(invocationResult.logs.show())
+			#print(invocationResult.logs.show())
