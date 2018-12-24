@@ -20,3 +20,8 @@ class SignUp(FlaskForm):
 class Submit(FlaskForm):
     textfield = StringField("Your code", widget = TextArea())
     submit = SubmitField('Submit')
+
+class StrategyTester(FlaskForm):
+    id1 = StringField("First ID", validators = [DataRequired()])
+    id2 = StringField("Second ID", validators = [DataRequired()])
+    submit = SubmitField('Submit')
