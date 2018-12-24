@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, make_response, request
 from app import app
-from app.forms import LoginForm, SignUp, Submit
-import demoAPI, demoAPI
+from app.forms import LoginForm, SignUp, Submit, StrategyTester
+import demoAPI
 list_problems = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"]
 
 @app.route("/")
@@ -24,6 +24,15 @@ def problemset_id(task_id):
 @app.route("/settings")
 def settings():
     return render_template('settings.html')
+
+@app.route("/strategy_tester", methods = ["GET", "POST"])
+def strategy_tester():
+    form = StrategyTester()
+    if form.validate_on_submit():
+        id1 = form.id1.data
+        id2 = form.id2.data
+        return redirect('/home')
+    return render_template('strategy_tester.html', title = "Strategy Tester", form = form)
 
 @app.route("/login", methods = ["GET", "POST"])
 def login():
@@ -80,10 +89,12 @@ def statement():
 def submissions():
     return render_template('submissions.html')
 
-@app.route("/submit")
+@app.route("/submit", methods = ["GET", "POST"])
 def submit():
     form = Submit()
     if form.validate_on_submit():
+        text_code = form.textfield.data
+        demoAPI.addStrategy(text_code)
         return redirect('/home')
     return render_template('submit.html', title = "Send a task", form = form)
 
