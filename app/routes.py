@@ -19,13 +19,13 @@ def problemset():
 def problemset_id(task_id):
     if task_id not in list_problems:
         return redirect('/home')
-    return render_template('problemset_id.html', task_id = task_id)
+    return render_template('problemset_id.html', title = task_id, task_id = task_id)
 
 @app.route("/settings")
 def settings():
     return render_template('settings.html')
 
-@app.route("/login", methods=["GET", "POST"])
+@app.route("/login", methods = ["GET", "POST"])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
