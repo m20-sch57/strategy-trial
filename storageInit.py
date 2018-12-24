@@ -13,8 +13,9 @@ def init():
 	TicTacToeGame = readFile("tic_tac_toe/game.py")
 	TicTacToeClasses = readFile("tic_tac_toe/classes.py")
 	TicTacToeLogsTemplate = readFile("tic_tac_toe/templates/logs.html.j2")
+	TicTacToeCss = readFile("tic_tac_toe/static/style.css")
 
-	TicTacToeRules = Rules(0, [["game.py", TicTacToeGame], ["classes.py", TicTacToeClasses], ["templates/logs.html.j2", TicTacToeLogsTemplate]], "")
+	TicTacToeRules = Rules(0, [["game.py", TicTacToeGame], ["classes.py", TicTacToeClasses]], [["logs.html.j2", TicTacToeLogsTemplate]], [["style.css", TicTacToeCss]], "")
 	TicTacToe = Problem(-1, "Tic Tac Toe", TicTacToeRules, ProblemState.Running, 0, 0, [], [])
 
 	storage.saveUser(root)
