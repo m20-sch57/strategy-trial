@@ -28,15 +28,12 @@ def runStrategy(game, strategy, gameState, playerId: int, logs, pool):
 		turn = func.get(timeout = game.TimeLimit)
 	except mp.TimeoutError:
 		pool.terminate()
-		result[0] = [StrategyVerdict.TimeLimitExceeded]
+		result[0] = StrategyVerdict.TimeLimitExceeded
 	except Exception:
-		result[0] = [StrategyVerdict.Failed]
+		result[0] = StrategyVerdict.Failed
 
 	if (result[0] == StrategyVerdict.Ok):
 		result.append(turn)
-	else:
-		if (logs is not None):
-			logs.unexpectedVerdict(playerId, result[0])
 
 	return result
 
@@ -88,8 +85,7 @@ def run(gamePath: str, classesPath: str, strategyPathes : list, saveLogs = False
 		
 		turnResult = game.makeTurn(fullGameState, whoseTurn, turnList[1], logs)
 		if (turnResult[0] == TurnState.Incorrect):
-			result.results = strategyFailResults(game, whoseTurn, StrategyVerdict.Incorrect)
-			logs.unexpectedVerdict(whoseTurn, StrategyVerdict.Incorrect)
+			result.results = strategyFailResults(game, whoseTurn, StrategyVerdict.IncorrectTurn)
 			endJudge(pools, logs, result.results)
 			return result
 
