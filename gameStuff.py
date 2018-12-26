@@ -13,6 +13,9 @@ class StrategyVerdict(IntEnum):
 	IncorrectTurn = 1
 	TimeLimitExceeded = 2
 	Failed = 3
+	ImportFail = 4
+	PresentationError = 5
+	#TODO: SecurityViolation
 
 	def __str__(self):
 		return verdictStringDictionary[self]
@@ -21,7 +24,9 @@ verdictStringDictionary = {
 	StrategyVerdict.Ok : 'OK',
 	StrategyVerdict.IncorrectTurn : 'Incorrect turn',
 	StrategyVerdict.TimeLimitExceeded : 'Time limit exceeded',
-	StrategyVerdict.Failed : 'Failed'
+	StrategyVerdict.Failed : 'Failed',
+	StrategyVerdict.ImportFail : 'Import failed'
+	StrategyVerdict.PresentationError : 'Presentation Error'
 }
 
 def nextPlayer(playerId: int) -> int:

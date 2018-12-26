@@ -62,14 +62,20 @@ def endJudge(pools, logs, results):
 def run(gamePath: str, classesPath: str, strategyPathes : list, saveLogs = False) -> InvocationResult:
 	classes = importPath(classesPath)
 	game = importPath(gamePath)
-	strategies = []
-	for st in strategyPathes:
-		strategies.append(importPath(st))
 	result = InvocationResult()
 	logs = None
 	if (saveLogs):
 		logs = game.Logs()
 		result.logs = logs
+
+	strategies = []
+	for i in range(len(strategyPathes)):
+		try:
+			strategies.append(importPath(strategyPathes[i]))
+		except Exception:
+			result.results = strategyFailResults(game, i, StrategyVerdict.ImportFail)
+			updateLogs(logs, result.results)
+			return result
 
 	fullGameState = game.FullGameState()
 	whoseTurn = 0
