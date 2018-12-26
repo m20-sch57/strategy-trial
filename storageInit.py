@@ -29,6 +29,8 @@ def init():
 	demoAPI.addStrategyByPath("tic_tac_toe/strategies/st6.py")
 	demoAPI.addStrategyByPath("tic_tac_toe/strategies/st7.py")
 	demoAPI.addStrategyByPath("tic_tac_toe/strategies/st8.py")
+	demoAPI.addStrategyByPath("tic_tac_toe/strategies/st9.py")
+	demoAPI.addStrategyByPath("tic_tac_toe/strategies/st10.py")
 
 if (__name__ == '__main__'):
 	import tester

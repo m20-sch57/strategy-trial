@@ -33,7 +33,10 @@ def runStrategy(game, strategy, gameState, playerId: int, logs, pool):
 		result[0] = StrategyVerdict.Failed
 
 	if (result[0] == StrategyVerdict.Ok):
-		result.append(turn)
+		if (type(turn) is game.Turn):
+			result.append(turn)
+		else:
+			result[0] = StrategyVerdict.PresentationError
 
 	return result
 
@@ -59,6 +62,10 @@ def endJudge(pools, logs, results):
 	closePools(pools)
 	updateLogs(logs, results)
 
+def badStrategy(game, i, verdict, result, logs):
+	result.results = strategyFailResults(game, i, verdict)
+	updateLogs(logs, result.results)
+
 def run(gamePath: str, classesPath: str, strategyPathes : list, saveLogs = False) -> InvocationResult:
 	classes = importPath(classesPath)
 	game = importPath(gamePath)
@@ -73,8 +80,10 @@ def run(gamePath: str, classesPath: str, strategyPathes : list, saveLogs = False
 		try:
 			strategies.append(importPath(strategyPathes[i]))
 		except Exception:
-			result.results = strategyFailResults(game, i, StrategyVerdict.ImportFail)
-			updateLogs(logs, result.results)
+			badStrategy(game, i, StrategyVerdict.ImportFail, result, logs)
+			return result
+		if ("Strategy" not in dir(strategies[i])):
+			badStrategy(game, i, StrategyVerdict.PresentationError, result, logs)
 			return result
 
 	fullGameState = game.FullGameState()

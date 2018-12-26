@@ -25,7 +25,7 @@ verdictStringDictionary = {
 	StrategyVerdict.IncorrectTurn : 'Incorrect turn',
 	StrategyVerdict.TimeLimitExceeded : 'Time limit exceeded',
 	StrategyVerdict.Failed : 'Failed',
-	StrategyVerdict.ImportFail : 'Import failed'
+	StrategyVerdict.ImportFail : 'Import failed',
 	StrategyVerdict.PresentationError : 'Presentation Error'
 }
 
