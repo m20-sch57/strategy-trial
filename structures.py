@@ -13,6 +13,7 @@ class ProblemState(IntEnum):
 class StrategyState(IntEnum):
     Main = 0
     NonMain = 1
+    Failed = 2
 
 # definition of user
 
@@ -21,27 +22,26 @@ def saveList(cursor, tableName, lst):
     strArr = '(' + '?, ' * (len(lst) - 1) + '?)'
     cursor.execute('INSERT INTO ' + tableName + ' VALUES ' + strArr, lst)
 
-def getFromDatabase(cursor, tableName, id):
+def getFromDatabase(cursor, tableName, id: int):
     cursor.execute('SELECT * FROM ' + tableName + ' WHERE id=?', [id])
-    return cursor.fetchone()
+    return cursor.fetchone();
 
 class User:
-    def __init__(self, Id: int, username: str, password: str, submissions: list, results: dict):
+    def __init__(self, Id: int, username: str, password: str, submissions: list):
         self.id = Id # id of user
         self.username = username # username of user
         self.password = password # password of user
         self.submissions = submissions # list of user's ids of submissions
-        self.results = results # dict prob_id into result of user's strategies
 
     def getList(self):
-        return [self.id, self.username, self.password, str(self.submissions), str(self.results)]
+        return [self.id, self.username, self.password, str(self.submissions)]
 
     def save(self, cursor):
         lst = self.getList()
         saveList(cursor, 'users', self.getList())
 
 def userFromList(lst):
-    return User(lst[0], lst[1], lst[2], jsonParser(lst[3]), jsonParser(lst[4]))
+    return User(lst[0], lst[1], lst[2], jsonParser(lst[3]))
 
 def getUser(cursor, id):
     lst = getFromDatabase(cursor, 'users', id)
@@ -53,7 +53,7 @@ def getUserByUsername(cursor, username):
     return userFromList(lst)
 
 def createUsersTable(cursor):
-    cursor.execute('''CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, username TEXT, password TEXT, submissions TEXT, results TEXT)''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, username TEXT, password TEXT, submissions TEXT)''')
 
 class Rules:
     def __init__(self, ProbId: int, Sources, Templates, Static, statement: str):

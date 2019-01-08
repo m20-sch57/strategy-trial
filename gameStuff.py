@@ -17,9 +17,6 @@ class StrategyVerdict(IntEnum):
 	PresentationError = 5
 	#TODO: SecurityViolation
 
-	def __str__(self):
-		return verdictStringDictionary[self]
-
 verdictStringDictionary = {
 	StrategyVerdict.Ok : 'OK',
 	StrategyVerdict.IncorrectTurn : 'Incorrect turn',
@@ -42,7 +39,7 @@ class Result:
 		return str(dictionary)
 
 	def goodStr(self, maxScore):
-		res = str(self.score) + "/" + str(maxScore) + " (" + str(self.verdict) + ")"
+		res = str(self.score) + "/" + str(maxScore) + " (" + verdictStringDictionary[self.verdict] + ")"
 		return res
 
 def resultFromStr(s: str):

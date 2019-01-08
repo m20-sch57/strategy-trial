@@ -47,15 +47,18 @@ class Storage:
 		self.updateId(user, 'users')
 		user.save(self.cursor)
 		self.connection.commit()
+		return user.id
 
 	def saveProblem(self, problem):
 		self.updateId(problem, 'problems')
 		problem.save(self.cursor)
 		self.connection.commit()
+		return problem.id
 
 	def saveSubmission(self, submission):
 		self.updateId(submission, 'submissions')
 		submission.save(self.cursor)
 		self.connection.commit()
+		return submission.id
 
 storage = Storage()
