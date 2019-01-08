@@ -28,15 +28,15 @@ def runStrategy(game, strategy, gameState, playerId: int, logs, pool):
 		turn = func.get(timeout = game.TimeLimit)
 	except mp.TimeoutError:
 		pool.terminate()
-		result[0] = [StrategyVerdict.TimeLimitExceeded]
+		result[0] = StrategyVerdict.TimeLimitExceeded
 	except Exception:
-		result[0] = [StrategyVerdict.Failed]
+		result[0] = StrategyVerdict.Failed
 
 	if (result[0] == StrategyVerdict.Ok):
-		result.append(turn)
-	else:
-		if (logs is not None):
-			logs.unexpectedVerdict(playerId, result[0])
+		if (type(turn) is game.Turn):
+			result.append(turn)
+		else:
+			result[0] = StrategyVerdict.PresentationError
 
 	return result
 
@@ -62,17 +62,29 @@ def endJudge(pools, logs, results):
 	closePools(pools)
 	updateLogs(logs, results)
 
+def badStrategy(game, i, verdict, result, logs):
+	result.results = strategyFailResults(game, i, verdict)
+	updateLogs(logs, result.results)
+
 def run(gamePath: str, classesPath: str, strategyPathes : list, saveLogs = False) -> InvocationResult:
 	classes = importPath(classesPath)
 	game = importPath(gamePath)
-	strategies = []
-	for st in strategyPathes:
-		strategies.append(importPath(st))
 	result = InvocationResult()
 	logs = None
 	if (saveLogs):
 		logs = game.Logs()
 		result.logs = logs
+
+	strategies = []
+	for i in range(len(strategyPathes)):
+		try:
+			strategies.append(importPath(strategyPathes[i]))
+		except Exception:
+			badStrategy(game, i, StrategyVerdict.ImportFail, result, logs)
+			return result
+		if ("Strategy" not in dir(strategies[i])):
+			badStrategy(game, i, StrategyVerdict.PresentationError, result, logs)
+			return result
 
 	fullGameState = game.FullGameState()
 	whoseTurn = 0
@@ -88,8 +100,7 @@ def run(gamePath: str, classesPath: str, strategyPathes : list, saveLogs = False
 		
 		turnResult = game.makeTurn(fullGameState, whoseTurn, turnList[1], logs)
 		if (turnResult[0] == TurnState.Incorrect):
-			result.results = strategyFailResults(game, whoseTurn, StrategyVerdict.Incorrect)
-			logs.unexpectedVerdict(whoseTurn, StrategyVerdict.Incorrect)
+			result.results = strategyFailResults(game, whoseTurn, StrategyVerdict.IncorrectTurn)
 			endJudge(pools, logs, result.results)
 			return result
 
