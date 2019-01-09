@@ -34,4 +34,8 @@ def init():
 
 if (__name__ == '__main__'):
 	init()
+
+	user = storage.getUserByName("root")
+	print(user.password)
+
 	demoAPI.tournament()

@@ -47,8 +47,8 @@ def getUser(cursor, id):
     lst = getFromDatabase(cursor, 'users', id)
     return userFromList(lst)
 
-def getUserByUsername(cursor, username):
-    cursor.execute('SELECT * FROM ' + tableName + ' WHERE username=?', [username])
+def getUserByName(cursor, username):
+    cursor.execute('SELECT * FROM users WHERE username=?', [username])
     lst = cursor.fetchone()
     return userFromList(lst)
 
