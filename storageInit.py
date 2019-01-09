@@ -8,7 +8,7 @@ from storage import *
 import demoAPI
 
 def init():
-	root = User(-1, "root", "secret", [], {})
+	root = User(-1, "root", "secret", [])
 
 	TicTacToeGame = readFile("tic_tac_toe/game.py")
 	TicTacToeClasses = readFile("tic_tac_toe/classes.py")
@@ -21,35 +21,21 @@ def init():
 	storage.saveUser(root)
 	storage.saveProblem(TicTacToe)
 
-	demoAPI.addStrategyByPath("tic_tac_toe/strategies/st1.py")
-	demoAPI.addStrategyByPath("tic_tac_toe/strategies/st2.py")
-	demoAPI.addStrategyByPath("tic_tac_toe/strategies/st3.py")
-	demoAPI.addStrategyByPath("tic_tac_toe/strategies/st4.py")
-	demoAPI.addStrategyByPath("tic_tac_toe/strategies/st5.py")
-	demoAPI.addStrategyByPath("tic_tac_toe/strategies/st6.py")
-	demoAPI.addStrategyByPath("tic_tac_toe/strategies/st7.py")
-	demoAPI.addStrategyByPath("tic_tac_toe/strategies/st8.py")
-	demoAPI.addStrategyByPath("tic_tac_toe/strategies/st9.py")
-	demoAPI.addStrategyByPath("tic_tac_toe/strategies/st10.py")
+	demoAPI.addMainStrategyByPath("tic_tac_toe/strategies/st1.py")
+	demoAPI.addMainStrategyByPath("tic_tac_toe/strategies/st2.py")
+	demoAPI.addMainStrategyByPath("tic_tac_toe/strategies/st3.py")
+	demoAPI.addMainStrategyByPath("tic_tac_toe/strategies/st4.py")
+	demoAPI.addMainStrategyByPath("tic_tac_toe/strategies/st5.py")
+	demoAPI.addMainStrategyByPath("tic_tac_toe/strategies/st6.py")
+	demoAPI.addMainStrategyByPath("tic_tac_toe/strategies/st7.py")
+	demoAPI.addMainStrategyByPath("tic_tac_toe/strategies/st8.py")
+	demoAPI.addMainStrategyByPath("tic_tac_toe/strategies/st9.py")
+	demoAPI.addMainStrategyByPath("tic_tac_toe/strategies/st10.py")
 
 if (__name__ == '__main__'):
-	import tester
-	import sys
-
 	init()
-	lst = sys.stdin.readlines()
-	for line in lst:
-		query = line.split()
-		if (query[0] == 'add'):
-			path = query[1]
-			demoAPI.addStrategyByPath(path)
-		if (query[0] == 'get'):
-			id = int(query[1])
-			print(demoAPI.getStrategyCode(id))
-		if (query[0] == 'test'):
-			id1 = int(query[1])
-			id2 = int(query[2])
-			invocationResult = demoAPI.judge(id1, id2)
-			print(invocationResult.results[0])
-			print(invocationResult.results[1])
-			#print(invocationResult.logs.show())
+
+	user = storage.getUserByName("root")
+	print(user.password)
+
+	demoAPI.tournament()

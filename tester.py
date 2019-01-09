@@ -20,8 +20,7 @@ def rewriteStaticTmp():
 	os.system("rm -r app/static/tmp")
 	os.system("mkdir app/static/tmp")
 
-def loadProblem(id, saveLogs):
-	problem = storage.getProblem(id)
+def loadProblem(problem, saveLogs):
 	sources = problem.rules.sources
 	for source in sources:
 		path = "tmp/" + source[0]
@@ -37,8 +36,11 @@ def loadProblem(id, saveLogs):
 			path = "app/static/tmp/" + static[0]
 			printToFile(static[1], path)
 
+def getFilename(submission):
+	return str(submission.id) + ".py"
 
-def loadSubmission(submission, filename):
+def loadSubmission(submission):
+	filename = "tmp/" + getFilename(submission)
 	printToFile(submission.code, filename)
 
 def testStrategies(id1, id2, saveLogs = False):
@@ -50,12 +52,56 @@ def testStrategies(id1, id2, saveLogs = False):
 		raise Exception('Trying to judge two strategies for different problems')
 
 	problemId = sub1.probId
-	loadProblem(problemId, saveLogs)
+	problem = storage.getProblem(id)
+	loadProblem(problem, saveLogs)
 
-	filename1 = str(id1) + ".py"
-	filename2 = str(id2) + ".py"
-
-	loadSubmission(sub1, "tmp/" + filename1)
-	loadSubmission(sub2, "tmp/" + filename2)
-	invocationResult = judge.run("game.py", "classes.py", [filename1, filename2], saveLogs = saveLogs)
+	loadSubmission(sub1)
+	loadSubmission(sub2)
+	invocationResult = judge.run("game.py", "classes.py", [getFilename(sub1), getFilename(sub2)], saveLogs = saveLogs)
 	return invocationResult
+
+def resultsMerge(result1: Result, result2: Result):
+	if (result2.verdict != StrategyVerdict.Ok):
+		result1.verdict = result2.verdict
+		result1.score = 0
+	else:
+		result1.score += result2.score
+
+def doubleMerge(old_result1, old_result2, result1, result2):
+	if (result1.verdict != StrategyVerdict.Ok):
+		resultsMerge(old_result1, result1)
+	if (result2.verdict != StrategyVerdict.Ok):
+		resultsMerge(old_result2, result2)
+	if (result1.verdict == StrategyVerdict.Ok and result2.verdict == StrategyVerdict.Ok):
+		resultsMerge(old_result1, result1)
+		resultsMerge(old_result2, result2)
+
+def tournament(problemId: int):
+	rewriteTmp()
+
+	problem = storage.getProblem(problemId)
+	problem.type = ProblemState.Testing
+	storage.saveProblem(problem)
+	loadProblem(problem, False)
+
+	subCnt = len(problem.submissions)
+	subs = [storage.getSubmission(problem.submissions[i]) for i in range(subCnt)]
+	results = [Result() for i in range(subCnt)]
+
+	for i in range(subCnt):
+		loadSubmission(subs[i])
+
+	for i in range(subCnt):
+		for j in range(subCnt):
+			if (i != j and results[i].verdict == StrategyVerdict.Ok and results[j].verdict == StrategyVerdict.Ok):
+				invocationResult = judge.run("game.py", "classes.py", [getFilename(subs[i]), getFilename(subs[j])])
+				doubleMerge(results[i], results[j], invocationResult.results[0], invocationResult.results[1])
+
+	for i in range(subCnt):
+		if (results[i].verdict != StrategyVerdict.Ok):
+			subs[i].type = StrategyState.Failed
+		subs[i].result = results[i]
+		storage.saveSubmission(subs[i])
+
+	problem.type = ProblemState.Upsolving
+	storage.saveProblem(problem)
