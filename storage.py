@@ -62,3 +62,4 @@ class Storage:
 		return submission.id
 
 storage = Storage()
+

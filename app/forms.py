@@ -26,3 +26,4 @@ class StrategyTester(FlaskForm):
     id1 = StringField("First ID", validators = [DataRequired()])
     id2 = StringField("Second ID", validators = [DataRequired()])
     submit = SubmitField('Submit')
+
