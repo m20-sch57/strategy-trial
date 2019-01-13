@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>{{ title }}</h1>
+{#    <h1>{{ title }}</h1>
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
         <p>
@@ -11,5 +11,11 @@
         <p>
             {{ form.submit() }}
         </p>
-    </form>
+    </form>#}
+    {% for subm in subm_list %}
+        <p>
+            <a href=/{{ "submissions/" + subm.id }}>{{subm.id}}</a> {{ subm.prob_name }} {{ subm.result.verdict }} {{ subm.type }}
+        </p>
+    {% endfor %}
 {% endblock %}
+

@@ -5,26 +5,34 @@ import demoAPI
 import storage, structures
 list_problems = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"]
 
+def info() -> list:
+    logged_in = request.cookies.get("logged_in")
+    username = request.cookies.get("username")
+    if logged_in == None:
+        logged_in = '0'
+        username = "Guest"
+    return [logged_in, username]
+
 @app.route("/")
 @app.route("/home")
 def home():
     title = "ST Home Page"
-    return render_template('home.html', title = title, info = [request.cookies.get("logged_in"), request.cookies.get("username")])
+    return render_template('home.html', title = title, info = info())
 
 @app.route("/problemset")
 def problemset():
     title = "Problems"
-    return render_template('problemset.html', problems = list_problems, title = title, info = [request.cookies.get("logged_in"), request.cookies.get("username")])
+    return render_template('problemset.html', problems = list_problems, title = title, info = info())
 
 @app.route("/problemset/<task_id>")
 def problemset_id(task_id):
     if task_id not in list_problems:
         return redirect('/home')
-    return render_template('problemset_id.html', title = task_id, task_id = task_id, info = [request.cookies.get("logged_in"), request.cookies.get("username")])
+    return render_template('problemset_id.html', title = task_id, task_id = task_id, info = info())
 
 @app.route("/settings")
 def settings():
-    return render_template('settings.html')
+    return render_template('settings.html', title = "Settings", info = info())
 
 @app.route("/strategy_tester", methods = ["GET", "POST"])
 def strategy_tester():
@@ -33,7 +41,7 @@ def strategy_tester():
         id1 = form.id1.data
         id2 = form.id2.data
         return redirect('/test?id1=' + str(id1) + '&id2=' + str(id2))
-    return render_template('strategy_tester.html', title = "Strategy Tester", form = form, info = [request.cookies.get("logged_in"), request.cookies.get("username")])
+    return render_template('strategy_tester.html', title = "Strategy Tester", form = form, info = info())
 
 @app.route("/login", methods = ["GET", "POST"])
 def login():
@@ -53,7 +61,7 @@ def login():
 def logout():
     resp = make_response(redirect("/home"))
     resp.set_cookie("logged_in", "0")
-    resp.set_cookie("username", "guest")
+    resp.set_cookie("username", "Guest")
     return resp
 
 @app.route("/sign_up", methods = ["GET", "POST"])
@@ -94,7 +102,7 @@ def showSource():
     if (id == None):
         return "..."
 
-    return render_template('source.html.j2', id = id, code = demoAPI.getStrategyCode(id), info = [request.cookies.get("logged_in"), request.cookies.get("username")])
+    return render_template('source.html.j2', id = id, code = demoAPI.getStrategyCode(id), info = info())
 
     """TODO return!!!!"""
 
@@ -106,7 +114,14 @@ def statement():
 
 @app.route("/submissions")
 def submissions():
-    return render_template('submissions.html', title = "Submissions", info = [request.cookies.get("logged_in"), request.cookies.get("username")])
+    username = info()[1]
+    if username == "Guest":
+        return "..."
+    user = storage.storage.getUserByName(username)
+    lst = [storage.storage.getSubmission(id) for id in user.submissions]
+    for subm in lst:
+        subm.prob_name = storage.storage.getProblem(subm.probId).name
+    return render_template('submissions.html', title = "Submissions", info = info(), subm_list = lst)
 
 @app.route("/submit", methods = ["GET", "POST"])
 def submit():
@@ -115,7 +130,7 @@ def submit():
         text_code = form.textfield.data
         demoAPI.addStrategy(text_code)
         return redirect('/home')
-    return render_template('submit.html', title = "Send a task", form = form, info = [request.cookies.get("logged_in"), request.cookies.get("username")])
+    return render_template('submit.html', title = "Send a task", form = form, info = info())
 
 #__________________________________
 #for admin
@@ -126,21 +141,21 @@ def add_user():
     if request.cookies.get("username") != "root":
         flash("You don't have permission to do this!")
         return redirect("/home")
-    return render_template('add_user.html', title = "Add user", info = [request.cookies.get("logged_in"), request.cookies.get("username")])
+    return render_template('add_user.html', title = "Add user", info = info())
 
 @app.route("/add_problem")
 def add_problem():
     if request.cookies.get("username") != "root":
         flash("You don't have permission to do this!")
         return redirect("/home")
-    return render_template('add_problem.html', title = "Add problem", info = [request.cookies.get("logged_in"), request.cookies.get("username")])
+    return render_template('add_problem.html', title = "Add problem", info = info())
 
 @app.route("/users_list")
 def users_list():
     if request.cookies.get("username") != "root":
         flash("You don't have permission to do this!")
         return redirect("/home")
-    return render_template('users_list.html', title = "Users list", info = [request.cookies.get("logged_in"), request.cookies.get("username")])
+    return render_template('users_list.html', title = "Users list", info = info())
 
 """@app.route("/edit_user/id_user")
 def edit_user():
