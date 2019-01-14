@@ -2,9 +2,6 @@ from structures import *
 from gameStuff import *
 from commonFunctions import readFile
 import os
-
-os.system('rm database.db')
-
 from storage import *
 import demoAPI
 
