@@ -121,6 +121,15 @@ def submissions():
     lst = [storage.storage.getSubmission(id) for id in user.submissions]
     for subm in lst:
         subm.prob_name = storage.storage.getProblem(subm.probId).name
+        subm.id = str(subm.id)
+        subm.userId = str(subm.userId)
+        subm.probId = str(subm.probId)
+        if subm.type == structures.StrategyState.Main:
+            subm.type = "main"
+        elif subm.type == structures.StrategyState.NonMain:
+            subm.type = "non main"
+        else:
+            subm.type = "failed"
     return render_template('submissions.html', title = "Submissions", info = info(), subm_list = lst)
 
 @app.route("/submit", methods = ["GET", "POST"])
