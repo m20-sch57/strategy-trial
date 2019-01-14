@@ -2,28 +2,37 @@ from flask import render_template, flash, redirect, make_response, request
 from app import app
 from app.forms import LoginForm, SignUp, Submit, StrategyTester
 import demoAPI
+import storage, structures
 list_problems = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"]
+
+def info() -> list:
+    logged_in = request.cookies.get("logged_in")
+    username = request.cookies.get("username")
+    if logged_in == None:
+        logged_in = '0'
+        username = "Guest"
+    return [logged_in, username]
 
 @app.route("/")
 @app.route("/home")
 def home():
     title = "ST Home Page"
-    return render_template('home.html', title = title)
+    return render_template('home.html', title = title, info = info())
 
 @app.route("/problemset")
 def problemset():
     title = "Problems"
-    return render_template('problemset.html', problems = list_problems, title = title)
+    return render_template('problemset.html', problems = list_problems, title = title, info = info())
 
 @app.route("/problemset/<task_id>")
 def problemset_id(task_id):
     if task_id not in list_problems:
         return redirect('/home')
-    return render_template('problemset_id.html', title = task_id, task_id = task_id)
+    return render_template('problemset_id.html', title = task_id, task_id = task_id, info = info())
 
 @app.route("/settings")
 def settings():
-    return render_template('settings.html')
+    return render_template('settings.html', title = "Settings", info = info())
 
 @app.route("/strategy_tester", methods = ["GET", "POST"])
 def strategy_tester():
@@ -32,7 +41,7 @@ def strategy_tester():
         id1 = form.id1.data
         id2 = form.id2.data
         return redirect('/test?id1=' + str(id1) + '&id2=' + str(id2))
-    return render_template('strategy_tester.html', title = "Strategy Tester", form = form)
+    return render_template('strategy_tester.html', title = "Strategy Tester", form = form, info = info())
 
 @app.route("/login", methods = ["GET", "POST"])
 def login():
@@ -40,12 +49,20 @@ def login():
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
-        return redirect('/home')
-    return render_template('login.html', title = "Sign In", form = form)
+        if storage.storage.getUserByName(username).password == password:
+            resp = make_response(redirect('/home'))
+            resp.set_cookie("logged_in", '1')
+            resp.set_cookie("username", username)
+            return resp
+        flash("Failed to log in")
+    return render_template('login.html', title = "Sign In", form = form, info = [request.cookies.get("logged_in"), request.cookies.get("username")])
 
 @app.route("/logout")
 def logout():
-    return render_template('logout.html')
+    resp = make_response(redirect("/home"))
+    resp.set_cookie("logged_in", "0")
+    resp.set_cookie("username", "Guest")
+    return resp
 
 @app.route("/sign_up", methods = ["GET", "POST"])
 def sign_up():
@@ -55,9 +72,19 @@ def sign_up():
         secondname = form.secondname.data
         username = form.username.data
         password = form.password.data
-        remember_me = form.remember_me.data
-        return redirect('/home')
-    return render_template('sign_up.html', title = "Sign Up", form = form)
+        passwordRet = form.passwordRet.data
+        if storage.storage.getUserByName(username) == None and password == passwordRet:
+            user = structures.User(storage.storage.getUsersCount(), username, password, [])
+            storage.storage.saveUser(user)
+#        remember_me = form.remember_me.data
+            return redirect('/home')
+        if storage.storage.getUserByName(username) != None:
+            flash("There is a user with this username")
+            print("username")
+        else:
+            flash("Passwords don't match")
+            print("password")
+    return render_template('sign_up.html', title = "Sign Up", form = form, info = [request.cookies.get("logged_in"), request.cookies.get("username")])
 
 @app.route("/test")
 def showTestPage():
@@ -75,7 +102,7 @@ def showSource():
     if (id == None):
         return "..."
 
-    return render_template('source.html.j2', id = id, code = demoAPI.getStrategyCode(id))
+    return render_template('source.html.j2', id = id, code = demoAPI.getStrategyCode(id), info = info())
 
     """TODO return!!!!"""
 
@@ -87,7 +114,23 @@ def statement():
 
 @app.route("/submissions")
 def submissions():
-    return render_template('submissions.html')
+    username = info()[1]
+    if username == "Guest":
+        return "..."
+    user = storage.storage.getUserByName(username)
+    lst = [storage.storage.getSubmission(id) for id in user.submissions]
+    for subm in lst:
+        subm.prob_name = storage.storage.getProblem(subm.probId).name
+        subm.id = str(subm.id)
+        subm.userId = str(subm.userId)
+        subm.probId = str(subm.probId)
+        if subm.type == structures.StrategyState.Main:
+            subm.type = "main"
+        elif subm.type == structures.StrategyState.NonMain:
+            subm.type = "non main"
+        else:
+            subm.type = "failed"
+    return render_template('submissions.html', title = "Submissions", info = info(), subm_list = lst)
 
 @app.route("/submit", methods = ["GET", "POST"])
 def submit():
@@ -96,7 +139,7 @@ def submit():
         text_code = form.textfield.data
         demoAPI.addStrategy(text_code)
         return redirect('/home')
-    return render_template('submit.html', title = "Send a task", form = form)
+    return render_template('submit.html', title = "Send a task", form = form, info = info())
 
 #__________________________________
 #for admin
@@ -104,15 +147,24 @@ def submit():
 
 @app.route("/add_user")
 def add_user():
-    return render_template('add_user.html')
+    if request.cookies.get("username") != "root":
+        flash("You don't have permission to do this!")
+        return redirect("/home")
+    return render_template('add_user.html', title = "Add user", info = info())
 
 @app.route("/add_problem")
 def add_problem():
-    return render_template('add_problem.html')
+    if request.cookies.get("username") != "root":
+        flash("You don't have permission to do this!")
+        return redirect("/home")
+    return render_template('add_problem.html', title = "Add problem", info = info())
 
 @app.route("/users_list")
 def users_list():
-    return render_template('users_list.html')
+    if request.cookies.get("username") != "root":
+        flash("You don't have permission to do this!")
+        return redirect("/home")
+    return render_template('users_list.html', title = "Users list", info = info())
 
 """@app.route("/edit_user/id_user")
 def edit_user():
@@ -121,3 +173,4 @@ def edit_user():
 """@app.route("/edit_problem/id_problem")
 def edit_problem():
     return None"""
+

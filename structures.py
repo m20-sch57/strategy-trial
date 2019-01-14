@@ -50,6 +50,8 @@ def getUser(cursor, id):
 def getUserByName(cursor, username):
     cursor.execute('SELECT * FROM users WHERE username=?', [username])
     lst = cursor.fetchone()
+    if lst == None:
+        return None
     return userFromList(lst)
 
 def createUsersTable(cursor):

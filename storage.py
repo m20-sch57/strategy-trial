@@ -18,13 +18,13 @@ class Storage:
 		return size[0]
 
 	def getUsersCount(self):
-		return getSize('users')
+		return self.getSize('users')
 
 	def getProblemsCount(self):
-		return getSize('problems')
+		return self.getSize('problems')
 
 	def getSubmissionsCount(self):
-		return getSize('submissions')
+		return self.getSize('submissions')
 
 	def updateId(self, obj, tableName):
 		if (obj.id == -1):
@@ -62,3 +62,4 @@ class Storage:
 		return submission.id
 
 storage = Storage()
+
