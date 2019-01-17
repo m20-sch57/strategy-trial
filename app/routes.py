@@ -3,17 +3,34 @@ from app import app
 from app.forms import LoginForm, SignUp, Submit, StrategyTester
 import demoAPI
 import storage, structures
+#вот в таком виде пока нет базы данных словарь с problem
 dict_problems = {
-    "0001": {"Text": "Lorem ipsum...", "Name": "problem1"},
-    "0002": {"Text": "Lorem ipsum dolor...", "Name": "problem2"},
-    "0003": {"Text": "Lorem ipsum dolor...", "Name": "problem3"},
-    "0004": {"Text": "Lorem ipsum dolor...", "Name": "problem4"},
-    "0005": {"Text": "Lorem ipsum dolor...", "Name": "problem5"},
-    "0006": {"Text": "Lorem ipsum dolor...", "Name": "problem6"},
-    "0007": {"Text": "Lorem ipsum dolor...", "Name": "problem7"},
-    "0008": {"Text": "Lorem ipsum dolor...", "Name": "problem8"},
-    "0009": {"Text": "Lorem ipsum dolor...", "Name": "problem9"}
+    "problem_id": {
+        "Name": "problem1", 
+        "Text": "Lorem ipsum...\nlalala\n891829", 
+        "Username": {
+            "Submissions": {
+                "id_of_submission": {
+                    "Text": "code text", 
+                    "Status": "0"}, 
+                "1": {
+                    "Text": "print(2)",
+                    "Status": "1"}
+            }
+        }
+    },
+    "0001": {
+        "Name": "problem2", 
+        "Text": "Lorem ipsum dolor...", 
+        "Username": {
+            "Submissions": {
+                "0": {
+                    "Text": "print(lalala)", 
+                    "Status": "1"}, 
+            }
+        }
     }
+}
 
 list_name_problems = [problem for problem in dict_problems]
 
@@ -40,7 +57,10 @@ def problemset():
 def problemset_id(problem_id):
     if problem_id not in list_name_problems:
         return redirect('/home')
-    return render_template('problemset_id.html', title = dict_problems[problem_id]["Name"], problem_id = problem_id, info = info())
+    problem_name = dict_problems[problem_id]["Name"]
+    dict_problem_id = dict_problems[problem_id]
+    dict_submissions = dict_problems[problem_id]["Username"]["Submissions"]
+    return render_template('problemset_id.html', title = problem_name, problem_name = problem_name, dict_problem_id = dict_problem_id, dict_submissions = dict_submissions, info = info())
 
 @app.route("/settings")
 def settings():
