@@ -18,4 +18,13 @@
             <td><a href=/{{ "submissions" + "/" + submission_id }}> <b>View</b> </td></tr>
         {% endfor %}
     </table>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.selectfile() }}
+        </p>
+        <p>
+            {{ form.submit() }}
+        </p>
+    </form>
 {% endblock %}

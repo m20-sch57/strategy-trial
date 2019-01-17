@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, make_response, request
 from app import app
-from app.forms import LoginForm, SignUp, Submit, StrategyTester
+from app.forms import LoginForm, SignUp, Submit, StrategyTester, ProblemsetID
 import demoAPI
 import storage, structures
 #вот в таком виде пока нет базы данных словарь с problem
@@ -53,14 +53,15 @@ def problemset():
     title = "Problems"
     return render_template('problemset.html', dict_problems = dict_problems, title = title, info = info())
 
-@app.route("/problemset/<problem_id>")
+@app.route("/problemset/<problem_id>", methods = ["GET", "POST"])
 def problemset_id(problem_id):
+    form = ProblemsetID()
     if problem_id not in list_name_problems:
         return redirect('/home')
     problem_name = dict_problems[problem_id]["Name"]
     dict_problem_id = dict_problems[problem_id]
     dict_submissions = dict_problems[problem_id]["Username"]["Submissions"]
-    return render_template('problemset_id.html', title = problem_name, problem_name = problem_name, dict_problem_id = dict_problem_id, dict_submissions = dict_submissions, info = info())
+    return render_template('problemset_id.html', form = form, title = problem_name, problem_name = problem_name, dict_problem_id = dict_problem_id, dict_submissions = dict_submissions, info = info())
 
 @app.route("/settings")
 def settings():
