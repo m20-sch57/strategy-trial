@@ -5,21 +5,22 @@
         {% else %}
         <title>Need Title</title>
         {% endif %}
+        <link rel="stylesheet" href="style1.css"
     </head>
     <body bgcolor="#DCDCDC">
         <div>
-            <font size="5"><b>Stratgy trial:</b></font>
+            <font size="5"><b>Strategy trial:</b></font>
             <a href="/home">Home</a>
             <a href="/problemset">Problemset</a>
 			{% if info[0] == '0' %}
-			<a>{{ info[1] }}</a>
             <a href="/login">Login</a>
             <a href="/sign_up">Sign up</a>
+            <a>{{ info[1] }}</a>
 			{% else %}
-			<a href="/submissions">Submissions</a>
+            <a href="/submissions">Submissions</a>
             <a href="/submit">Send strategy</a>
-			<a href="/settings">{{ info[1] }}</a>
-			<a href="/logout">Log out</a>
+            <a href="/logout">Log out</a>
+            <a href="/settings">{{ info[1] }}</a>
 			{% endif %}
         </div>
         <hr>

@@ -3,7 +3,19 @@ from app import app
 from app.forms import LoginForm, SignUp, Submit, StrategyTester
 import demoAPI
 import storage, structures
-list_problems = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"]
+dict_problems = {
+    "0001": {"Text": "Lorem ipsum...", "Name": "problem1"},
+    "0002": {"Text": "Lorem ipsum dolor...", "Name": "problem2"},
+    "0003": {"Text": "Lorem ipsum dolor...", "Name": "problem3"},
+    "0004": {"Text": "Lorem ipsum dolor...", "Name": "problem4"},
+    "0005": {"Text": "Lorem ipsum dolor...", "Name": "problem5"},
+    "0006": {"Text": "Lorem ipsum dolor...", "Name": "problem6"},
+    "0007": {"Text": "Lorem ipsum dolor...", "Name": "problem7"},
+    "0008": {"Text": "Lorem ipsum dolor...", "Name": "problem8"},
+    "0009": {"Text": "Lorem ipsum dolor...", "Name": "problem9"}
+    }
+
+list_name_problems = [problem for problem in dict_problems]
 
 def info() -> list:
     logged_in = request.cookies.get("logged_in")
@@ -22,13 +34,13 @@ def home():
 @app.route("/problemset")
 def problemset():
     title = "Problems"
-    return render_template('problemset.html', problems = list_problems, title = title, info = info())
+    return render_template('problemset.html', dict_problems = dict_problems, title = title, info = info())
 
-@app.route("/problemset/<task_id>")
-def problemset_id(task_id):
-    if task_id not in list_problems:
+@app.route("/problemset/<problem_id>")
+def problemset_id(problem_id):
+    if problem_id not in list_name_problems:
         return redirect('/home')
-    return render_template('problemset_id.html', title = task_id, task_id = task_id, info = info())
+    return render_template('problemset_id.html', title = problem_id, problem_id = problem_id, info = info())
 
 @app.route("/settings")
 def settings():
@@ -139,7 +151,7 @@ def submit():
         text_code = form.textfield.data
         demoAPI.addStrategy(text_code)
         return redirect('/home')
-    return render_template('submit.html', title = "Send a task", form = form, info = info())
+    return render_template('submit.html', title = "Send your code", form = form, info = info())
 
 #__________________________________
 #for admin
