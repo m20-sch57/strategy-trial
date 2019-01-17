@@ -40,7 +40,7 @@ def problemset():
 def problemset_id(problem_id):
     if problem_id not in list_name_problems:
         return redirect('/home')
-    return render_template('problemset_id.html', title = problem_id, problem_id = problem_id, info = info())
+    return render_template('problemset_id.html', title = dict_problems[problem_id]["Name"], problem_id = problem_id, info = info())
 
 @app.route("/settings")
 def settings():
