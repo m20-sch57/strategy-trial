@@ -1,9 +1,38 @@
 from flask import render_template, flash, redirect, make_response, request
 from app import app
-from app.forms import LoginForm, SignUp, Submit, StrategyTester
+from app.forms import LoginForm, SignUp, Submit, StrategyTester, ProblemsetID
 import demoAPI
 import storage, structures
-list_problems = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"]
+#вот в таком виде пока нет базы данных словарь с problem
+dict_problems = {
+    "problem_id": {
+        "Name": "problem1", 
+        "Text": "Lorem ipsum...\nlalala\n891829", 
+        "Username": {
+            "Submissions": {
+                "id_of_submission": {
+                    "Text": "code text", 
+                    "Status": "0"}, 
+                "1": {
+                    "Text": "print(2)",
+                    "Status": "1"}
+            }
+        }
+    },
+    "0001": {
+        "Name": "problem2", 
+        "Text": "Lorem ipsum dolor...", 
+        "Username": {
+            "Submissions": {
+                "0": {
+                    "Text": "print(lalala)", 
+                    "Status": "1"}, 
+            }
+        }
+    }
+}
+
+list_name_problems = [problem for problem in dict_problems]
 
 def info() -> list:
     logged_in = request.cookies.get("logged_in")
@@ -22,13 +51,17 @@ def home():
 @app.route("/problemset")
 def problemset():
     title = "Problems"
-    return render_template('problemset.html', problems = list_problems, title = title, info = info())
+    return render_template('problemset.html', dict_problems = dict_problems, title = title, info = info())
 
-@app.route("/problemset/<task_id>")
-def problemset_id(task_id):
-    if task_id not in list_problems:
+@app.route("/problemset/<problem_id>", methods = ["GET", "POST"])
+def problemset_id(problem_id):
+    form = ProblemsetID()
+    if problem_id not in list_name_problems:
         return redirect('/home')
-    return render_template('problemset_id.html', title = task_id, task_id = task_id, info = info())
+    problem_name = dict_problems[problem_id]["Name"]
+    dict_problem_id = dict_problems[problem_id]
+    dict_submissions = dict_problems[problem_id]["Username"]["Submissions"]
+    return render_template('problemset_id.html', form = form, title = problem_name, problem_name = problem_name, dict_problem_id = dict_problem_id, dict_submissions = dict_submissions, info = info())
 
 @app.route("/settings")
 def settings():
@@ -139,7 +172,7 @@ def submit():
         text_code = form.textfield.data
         demoAPI.addStrategy(text_code)
         return redirect('/home')
-    return render_template('submit.html', title = "Send a task", form = form, info = info())
+    return render_template('submit.html', title = "Send your code", form = form, info = info())
 
 #__________________________________
 #for admin

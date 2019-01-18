@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, FileField
 from wtforms.validators import DataRequired
 from wtforms.widgets import TextArea
 
@@ -27,3 +27,6 @@ class StrategyTester(FlaskForm):
     id2 = StringField("Second ID", validators = [DataRequired()])
     submit = SubmitField('Submit')
 
+class ProblemsetID(FlaskForm):
+    selectfile = FileField("Select File")
+    submit = SubmitField('Submit')
