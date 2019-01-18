@@ -42,7 +42,7 @@ class User:
         self.id = Id # id of user
         self.username = username # username of user
         self.password = password # password of user
-        self.submissions = submissions # list of user's ids of submissions
+        self.submissions = submissions # dictionary {problemId : list of submissions}
 
     def getList(self):
         return [self.id, self.username, self.password, str(self.submissions)]
