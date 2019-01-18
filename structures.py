@@ -85,7 +85,7 @@ class Problem:
         self.id = Id # id of problem
         self.rules = rules # description of rules, interaction with strategy
         self.submissions = submissions # list of strategies' ids (startegies that will play with each other, selected by user)
-        self.tournaments = standings # standings: sortedby score list of results of all strategies
+        self.tournaments = tournaments # standings: sortedby score list of results of all strategies
 
     def getList(self):
         return [
