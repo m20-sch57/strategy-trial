@@ -18,8 +18,8 @@ class StrategyState(IntEnum):
     NonMain = 1
 
 class UserType(IntEnum):
-	Defalut = 0
-	Admin = 1
+    Defalut = 0
+    Admin = 1
 
 #database functions
 
@@ -40,6 +40,19 @@ def createUsersTable(cursor):
     cursor.execute('''CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, 
         username TEXT, password TEXT, type integer, submissions TEXT)''')
 
+def toJSON(submissions):
+    stringDict = {}
+    for sub in submissions.items():
+        stringDict[str(sub[0])] = sub[1]
+    return json.dumps(stringDict)
+
+def fromJSON(string):
+    stringDict = json.loads(string)
+    res = {}
+    for sub in stringDict.items():
+        res[int(sub[0])] = sub[1]
+    return res
+
 class User:
     def __init__(self, Id, username, password, userType, submissions):
         self.id = Id # id of user
@@ -49,14 +62,21 @@ class User:
         self.submissions = submissions # dictionary {problemId : list of submissions}
 
     def getList(self):
-        return [self.id, self.username, self.password, int(self.type), str(self.submissions)]
+        return [self.id, self.username, self.password, int(self.type), 
+            toJSON(self.submissions)]
 
     def save(self, cursor):
-        lst = self.getList()
         saveList(cursor, 'users', self.getList())
 
+    def print(self):
+        print("id:", self.id)
+        print("name:", self.username)
+        print("password:", self.password)
+        print("type:", self.type)
+        print("submissions:", self.submissions)
+
 def userFromList(lst):
-    return User(lst[0], lst[1], lst[2], UserType(lst[3]), json.dumps(lst[4]))
+    return User(lst[0], lst[1], lst[2], UserType(lst[3]), fromJSON(lst[4]))
 
 def getUser(cursor, id):
     lst = getFromDatabase(cursor, 'users', id)
@@ -101,6 +121,15 @@ class Problem:
     def save(self, cursor):
         saveList(cursor, 'problems', self.getList())
 
+    def print(self):
+        print("id:", self.id)
+        print("name:", self.rules.name)
+        print("sources...")
+        print(self.rules.sources)
+        print("statement:", self.rules.statement)
+        print("submissions:", self.submissions)
+        print("tournaments:", self.tournaments)
+
 def problemFromList(lst):
     return Problem(lst[0], Rules(lst[1], json.loads(lst[2]), json.loads(lst[3]), lst[4]), 
         set(json.loads(lst[5])), json.loads(lst[6]))
@@ -131,6 +160,14 @@ class Submission:
     def save(self, cursor):
         saveList(cursor, 'submissions', self.getList())
 
+    def print(self):
+        print("id:", self.id)
+        print("userId:", self.userId)
+        print("probId:", self.probId)
+        print("code...")
+        print(self.code)
+        print("type:", self.type)
+
 def submissionFromList(lst):
     return Submission(lst[0], lst[1], lst[2], lst[3], StrategyState(lst[4]))
 
@@ -157,6 +194,11 @@ class Tournament:
 
     def save(self, cursor):
         saveList(cursor, 'tournaments', self.getList())
+
+    def print(self):
+        print("id:", self.id)
+        print("time:", self.time)
+        print("standings:", self.standings)
 
 def tournamentFromList(lst):
     return Tournament(lst[0], lst[1], json.loads(lst[2]))

@@ -26,7 +26,7 @@ def changeMainSubmission(userId, subId):
     problem.submissions.insert(subId)
     storage.saveProblem(problem)
 
-def addNewUser(username, password):
+def addUser(username, password):
     newUser = User(-1, username, password, UserType.Defalut, dict())
     idOfNewUser = storage.saveUser(newUser)
     return idOfNewUser
