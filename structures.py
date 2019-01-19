@@ -17,6 +17,9 @@ class StrategyState(IntEnum):
     Main = 0
     NonMain = 1
 
+class UserType(IntEnum):
+	Defalut = 0
+	Admin = 1
 
 #database functions
 
@@ -35,24 +38,25 @@ def getFromDatabase(cursor, tableName, id: int):
 
 def createUsersTable(cursor):
     cursor.execute('''CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, 
-        username TEXT, password TEXT, submissions TEXT)''')
+        username TEXT, password TEXT, type integer, submissions TEXT)''')
 
 class User:
-    def __init__(self, Id, username, password, submissions):
+    def __init__(self, Id, username, password, userType, submissions):
         self.id = Id # id of user
         self.username = username # username of user
         self.password = password # password of user
+        self.type = userType # type of user (Defalut or Admin)
         self.submissions = submissions # dictionary {problemId : list of submissions}
 
     def getList(self):
-        return [self.id, self.username, self.password, str(self.submissions)]
+        return [self.id, self.username, self.password, int(self.type), str(self.submissions)]
 
     def save(self, cursor):
         lst = self.getList()
         saveList(cursor, 'users', self.getList())
 
 def userFromList(lst):
-    return User(lst[0], lst[1], lst[2], json.dumps(lst[3]))
+    return User(lst[0], lst[1], lst[2], UserType(lst[3]), json.dumps(lst[4]))
 
 def getUser(cursor, id):
     lst = getFromDatabase(cursor, 'users', id)
@@ -84,14 +88,14 @@ class Problem:
     def __init__(self, Id, rules, submissions, tournaments):
         self.id = Id # id of problem
         self.rules = rules # description of rules, interaction with strategy
-        self.submissions = submissions # list of strategies' ids (startegies that will play with each other, selected by user)
+        self.submissions = submissions # set of strategies' ids (startegies that will play with each other, selected by user)
         self.tournaments = tournaments # standings: sortedby score list of results of all strategies
 
     def getList(self):
         return [
             self.id, self.rules.name, json.dumps(self.rules.sources),
             json.dumps(self.rules.downloads), self.rules.statement,
-            json.dumps(self.submissions), json.dumps(self.tournaments)
+            json.dumps(list(self.submissions)), json.dumps(self.tournaments)
         ]
 
     def save(self, cursor):
@@ -99,7 +103,7 @@ class Problem:
 
 def problemFromList(lst):
     return Problem(lst[0], Rules(lst[1], json.loads(lst[2]), json.loads(lst[3]), lst[4]), 
-        json.loads(lst[5]), json.loads(lst[6]))
+        set(json.loads(lst[5])), json.loads(lst[6]))
 
 def getProblem(cursor, id):
     lst = getFromDatabase(cursor, 'problems', id)

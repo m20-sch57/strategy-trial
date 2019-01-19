@@ -1,4 +1,4 @@
-from structures import ProblemState, StrategyState
+from structures import ProblemState, StrategyState, UserType
 from structures import User, Rules, Problem, Submission, Tournament
 from commonFunctions import readFile
 import os
@@ -24,12 +24,12 @@ sources = [
 rules = Rules("TicTacToe", sources, [], "...")
 subs = [i for i in range(10)]
 
-TicTacToe = Problem(-1, rules, subs, [])
+TicTacToe = Problem(-1, rules, set(subs), [])
 
 storage.saveProblem(TicTacToe)
 
 for i in range(StrategyCnt):
-    user = User(-1, "hlebushek" + str(i), "12345", {0 : [i]})
+    user = User(-1, "hlebushek" + str(i), "12345", UserType.Defalut, {0 : [i]})
     storage.saveUser(user)
 
 for i in range(StrategyCnt):

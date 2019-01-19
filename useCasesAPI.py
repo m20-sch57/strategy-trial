@@ -1,4 +1,4 @@
-from structures import ProblemState, StrategyState
+from structures import ProblemState, StrategyState, UserType
 from structures import User, Rules, Problem, Submission, Tournament
 from storage import storage
 
@@ -14,10 +14,28 @@ def changeMainSubmission(userId, subId):
     newMainSubmission = storage.getSubmission(subId)
     user = storage.getUser(userId)
     probId = newSubmission.probId
+    problem = storage.getProblem(probId)
     for anotherSubmissionId in user.submissions[probId]:
         anotherSubmission = storage.getSubmission(anotherSubmissionId)
-        if (anotherSubmission.type = StrategyState.Main):
+        if (anotherSubmission.type == StrategyState.Main):
             anotherSubmission.type = StrategyState.NonMain
             storage.saveSubmission(anotherSubmission)
+            problem.submissions.erase(anotherSubmissionId)
     newMainSubmission.type = StrategyState.Main
     storage.saveSubmission(newMainSubmission)
+    problem.submissions.insert(subId)
+    storage.saveProblem(problem)
+
+def addNewUser(username, password):
+    newUser = User(-1, username, password, UserType.Defalut, dict())
+    idOfNewUser = storage.saveUser(newUser)
+    return idOfNewUser
+
+def getProblemset():
+    return []
+
+def getSubmissions(userId):
+    return []
+
+def getSubmissions(userId, probId):
+    return []
