@@ -1,6 +1,7 @@
 from structures import ProblemState, StrategyState, UserType
 from structures import User, Rules, Problem, Submission, Tournament
 from storage import storage
+from tester import tournament, testStrategies
 
 def addSubmission(userId, problemId, code):
     user = storage.getUser(userId)
@@ -39,3 +40,9 @@ def getSubmissions(userId):
 
 def getSubmissions(userId, probId):
     return []
+
+def makeTornament(probId):
+    return tournament(subId)
+
+def judge(id1, id2):
+    return testStrategies(id1, id2, saveLogs = True)

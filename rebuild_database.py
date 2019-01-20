@@ -16,7 +16,7 @@ css = readFile("tic_tac_toe/static/style.css")
 
 sources = [
     ['problems/0/game.py', game], 
-    ['problems/0/classes.py'], 
+    ['problems/0/classes.py', classes], 
     ['app/templates/problems/0/logs.html.j2', logsTemplate],
     ['app/static/problems/0/style.css', css]
 ]

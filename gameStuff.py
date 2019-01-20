@@ -38,8 +38,8 @@ class Result:
 		dictionary = {'verdict' : int(self.verdict), 'score' : self.score}
 		return str(dictionary)
 
-	def goodStr(self, maxScore):
-		res = str(self.score) + "/" + str(maxScore) + " (" + verdictStringDictionary[self.verdict] + ")"
+	def goodStr(self):
+		res = str(self.score) + " (" + verdictStringDictionary[self.verdict] + ")"
 		return res
 
 def resultFromStr(s: str):

@@ -62,4 +62,29 @@ while (True):
 				continue
 
 			useCasesAPI.addUser(params[2], params[3])
-			
+
+	if (command == 'ch'):
+		if (len(params) < 3 or (not isInt(params[1])) or (not isInt(params[2]))):
+			continue
+
+		useCasesAPI.changeMainSubmission(int(params[1]), int(params[2]))
+
+	if (command == 'tour'):
+		if (len(params) < 2 or (not isInt(params[1]))):
+			continue
+
+		probId = int(params[1])
+		useCasesAPI.tournament(probId)
+
+	if (command == 'judge'):
+		if (len(params) < 3 or (not isInt(params[1])) or (not isInt(params[2]))):
+			continue
+
+		id1 = int(params[1])
+		id2 = int(params[2])
+		invocationResult = useCasesAPI.judge(id1, id2)
+		print(invocationResult.results[0].goodStr())
+		print(invocationResult.results[1].goodStr())
+
+	if (command == 'close'):
+		break
