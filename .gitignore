@@ -105,3 +105,6 @@ venv.bak/
 
 # temporary folder
 problems/
+
+# trash binary files
+.DS_Store
