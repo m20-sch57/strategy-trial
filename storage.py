@@ -74,5 +74,13 @@ class Storage:
 		self.connection.commit()
 		return tournament.id
 
+	def getProblemset(self):
+		response = structures.getProblemset(self.cursor)
+		dictResponse = [
+			{'id' : response[i][0], 'name' : response[i][1]}
+			for i in range(len(response))
+		]
+		return dictResponse
+
 storage = Storage()
 

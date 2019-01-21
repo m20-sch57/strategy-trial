@@ -86,5 +86,9 @@ while (True):
 		print(invocationResult.results[0].goodStr())
 		print(invocationResult.results[1].goodStr())
 
+	if (command == 'problemset'):
+		res = storage.getProblemset()
+		print(res)
+
 	if (command == 'close'):
 		break

@@ -33,7 +33,7 @@ def addUser(username, password):
     return idOfNewUser
 
 def getProblemset():
-    return []
+    return storage.getProblemset()
 
 def getSubmissions(userId):
     return []
