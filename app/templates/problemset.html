@@ -1,10 +1,22 @@
 {% extends "base.html" %}
 
+
 {% block content %}
+
     <table border="1">
+
         <tr><th>Id</th><th>Name</th><th>Enter</th></tr>
+
         {% for problem in problemList %}
-            <tr><td>{{ problem.id }}</td> <td>{{ problem.name }}</td> <td><a href=/{{ "problemset" + "/" + problem.id|string }}> <b>Enter</b> </td></tr>
+
+            <tr>
+                <td>{{ problem.id }}</td>
+                <td>{{ problem.name }}</td>
+                <td><a href=/{{ "problemset" + "/" + problem.id|string }}>
+                <b>Enter</b> </td>
+            </tr>
+
         {% endfor %}
+
     </table>
 {% endblock %}
