@@ -5,6 +5,9 @@ from gameStuff import resultFromStr
 from commonFunctions import jsonParser
 import json
 
+
+#additional structures
+
 class ProblemState(IntEnum):
     Running = 0
     Upsolving = 1
@@ -13,9 +16,12 @@ class ProblemState(IntEnum):
 class StrategyState(IntEnum):
     Main = 0
     NonMain = 1
-    Failed = 2
 
-# definition of user
+class UserType(IntEnum):
+    Defalut = 0
+    Admin = 1
+
+#database functions
 
 def saveList(cursor, tableName, lst):
     cursor.execute('DELETE FROM ' + tableName + ' WHERE id=?', [lst[0]])
@@ -26,22 +32,51 @@ def getFromDatabase(cursor, tableName, id: int):
     cursor.execute('SELECT * FROM ' + tableName + ' WHERE id=?', [id])
     return cursor.fetchone();
 
+
+#user
+#saving: [id, username, password, submissions]
+
+def createUsersTable(cursor):
+    cursor.execute('''CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, 
+        username TEXT, password TEXT, type integer, submissions TEXT)''')
+
+def toJSON(submissions):
+    stringDict = {}
+    for sub in submissions.items():
+        stringDict[str(sub[0])] = sub[1]
+    return json.dumps(stringDict)
+
+def fromJSON(string):
+    stringDict = json.loads(string)
+    res = {}
+    for sub in stringDict.items():
+        res[int(sub[0])] = sub[1]
+    return res
+
 class User:
-    def __init__(self, Id: int, username: str, password: str, submissions: list):
+    def __init__(self, Id, username, password, userType, submissions):
         self.id = Id # id of user
         self.username = username # username of user
         self.password = password # password of user
-        self.submissions = submissions # list of user's ids of submissions
+        self.type = userType # type of user (Defalut or Admin)
+        self.submissions = submissions # dictionary {problemId : list of submissions}
 
     def getList(self):
-        return [self.id, self.username, self.password, str(self.submissions)]
+        return [self.id, self.username, self.password, int(self.type), 
+            toJSON(self.submissions)]
 
     def save(self, cursor):
-        lst = self.getList()
         saveList(cursor, 'users', self.getList())
 
+    def print(self):
+        print("id:", self.id)
+        print("name:", self.username)
+        print("password:", self.password)
+        print("type:", self.type)
+        print("submissions:", self.submissions)
+
 def userFromList(lst):
-    return User(lst[0], lst[1], lst[2], jsonParser(lst[3]))
+    return User(lst[0], lst[1], lst[2], UserType(lst[3]), fromJSON(lst[4]))
 
 def getUser(cursor, id):
     lst = getFromDatabase(cursor, 'users', id)
@@ -54,72 +89,120 @@ def getUserByName(cursor, username):
         return None
     return userFromList(lst)
 
-def createUsersTable(cursor):
-    cursor.execute('''CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, username TEXT, password TEXT, submissions TEXT)''')
+
+#problem
+#saving: [id, name, sources, downloads, statement, submissions, tournaments]
+
+def createProblemsTable(cursor):
+    cursor.execute('''CREATE TABLE IF NOT EXISTS problems 
+        (id integer PRIMARY KEY, name TEXT, sources TEXT, downloads TEXT, statement TEXT, submissions TEXT, tournaments TEXT)''')
 
 class Rules:
-    def __init__(self, ProbId: int, Sources, Templates, Static, statement: str):
-        self.probId = ProbId # id of problem
-        self.sources = Sources #list of ["name.py", code: str]
-        self.templates = Templates #list of ["template.html", code: str]
-        self.static = Static #...
-        self.statement = statement # text needed to be published
-
-# definition of problem
+    def __init__(self, Name, Sources, Downloads, statement):
+        self.name = Name # title of problem
+        self.sources = Sources # list of ["name.py", code: str]
+        self.downloads = Downloads # same
+        self.statement = statement # text needed to be published (in html)
 
 class Problem:
-    def __init__(self, Id: int, name: str, rules: Rules, ttype: ProblemState, StartTime: int, EndTime: int, submissions: list, standings: list):
+    def __init__(self, Id, rules, submissions, tournaments):
         self.id = Id # id of problem
-        self.name = name # name of problem
         self.rules = rules # description of rules, interaction with strategy
-        self.type = ttype # type (running/upsolving/testing)
-        self.startTime = StartTime # time when users can send strategies
-        self.endTime = EndTime # time when users stop sending strategies, time in milliseconds from 01.01.1970
-        self.submissions = submissions #list of strategies' ids (startegies that will play with each other, selected by user)
-        self.standings = standings # standings: sortedby score list of results of all strategies
+        self.submissions = submissions # set of strategies' ids (startegies that will play with each other, selected by user)
+        self.tournaments = tournaments # standings: sortedby score list of results of all strategies
 
     def getList(self):
-        return [self.id, self.name, json.dumps(self.rules.sources), json.dumps(self.rules.templates), json.dumps(self.rules.static), self.rules.statement, int(self.type),
-        self.startTime, self.endTime, str(self.submissions), str(self.standings)]
+        return [
+            self.id, self.rules.name, json.dumps(self.rules.sources),
+            json.dumps(self.rules.downloads), self.rules.statement,
+            json.dumps(list(self.submissions)), json.dumps(self.tournaments)
+        ]
 
     def save(self, cursor):
         saveList(cursor, 'problems', self.getList())
 
+    def print(self):
+        print("id:", self.id)
+        print("name:", self.rules.name)
+        print("sources...")
+        print(self.rules.sources)
+        print("statement:", self.rules.statement)
+        print("submissions:", self.submissions)
+        print("tournaments:", self.tournaments)
+
 def problemFromList(lst):
-    return Problem(lst[0], lst[1], Rules(lst[0], json.loads(lst[2]), json.loads(lst[3]), json.loads(lst[4]), lst[5]), ProblemState(lst[6]), lst[7], lst[8], jsonParser(lst[9]), jsonParser(lst[10]))
+    return Problem(lst[0], Rules(lst[1], json.loads(lst[2]), json.loads(lst[3]), lst[4]), 
+        set(json.loads(lst[5])), json.loads(lst[6]))
 
 def getProblem(cursor, id):
     lst = getFromDatabase(cursor, 'problems', id)
     return problemFromList(lst)
 
-def createProblemsTable(cursor):
-    cursor.execute('''CREATE TABLE IF NOT EXISTS problems (id integer PRIMARY KEY, name TEXT, sources TEXT, templates TEXT, static TEXT, statement TEXT, type integer, startTime integer, endTime integer, submissions TEXT, standings TEXT)''')
 
+#submission
+#saving: [id, userId, probId, code, type]
 
-# defination of submission
+def createSubmissionsTable(cursor):
+    cursor.execute('''CREATE TABLE IF NOT EXISTS submissions (id integer PRIMARY KEY, 
+        userId integer, probId integer, code TEXT, type integer)''')
 
 class Submission:
-    def __init__(self, Id: int, UserId: int, ProbId: int, Code: str, ttype: StrategyState, result: Result):
+    def __init__(self, Id, userId, probId, code, Type):
         self.id = Id # id of submission
-        self.userId = UserId # id of owner
-        self.probId = ProbId # id of problem that it solves
-        self.code = Code
-        self.type = ttype # type of strategy (e.g. main or nonmain)
-        self.result = result # result of strategy
+        self.userId = userId # id of owner
+        self.probId = probId # id of problem that it solves
+        self.code = code # code of submission
+        self.type = Type # type of strategy (e.g. main or nonmain)
 
     def getList(self):
-        return [self.id, self.userId, self.probId, self.code, int(self.type), str(self.result)]
+        return [self.id, self.userId, self.probId, self.code, int(self.type)]
 
     def save(self, cursor):
         saveList(cursor, 'submissions', self.getList())
 
+    def print(self):
+        print("id:", self.id)
+        print("userId:", self.userId)
+        print("probId:", self.probId)
+        print("code...")
+        print(self.code)
+        print("type:", self.type)
+
 def submissionFromList(lst):
-    return Submission(lst[0], lst[1], lst[2], lst[3], StrategyState(lst[4]), resultFromStr(lst[5]))
+    return Submission(lst[0], lst[1], lst[2], lst[3], StrategyState(lst[4]))
 
 def getSubmission(cursor, id):
     lst = getFromDatabase(cursor, 'submissions', id)
     return submissionFromList(lst)
 
-def createSubmissionsTable(cursor):
-    cursor.execute('''CREATE TABLE IF NOT EXISTS submissions (id integer PRIMARY KEY, userId integer, probId integer, code TEXT, type integer, result TEXT)''')
 
+#tournament
+#saving: [id, time, standings]
+
+def createTournamentsTable(cursor):
+    cursor.execute('''CREATE TABLE IF NOT EXISTS tournaments (id integer PRIMARY KEY, 
+        t integer, standings TEXT)''')
+
+class Tournament:
+    def __init__(self, id, time, standings):
+        self.id = id
+        self.time = time
+        self.standings = standings
+
+    def getList(self):
+        return [self.id, self.time, json.dumps(self.standings)]
+
+    def save(self, cursor):
+        saveList(cursor, 'tournaments', self.getList())
+
+    def print(self):
+        print("id:", self.id)
+        print("time:", self.time)
+        print("standings:", self.standings)
+
+def tournamentFromList(lst):
+    return Tournament(lst[0], lst[1], json.loads(lst[2]))
+
+def getTournament(cursor, id):
+    lst = getFromDatabase(cursor, 'tournaments', id)
+    return tournamentFromList(lst)
