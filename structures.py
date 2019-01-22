@@ -138,6 +138,10 @@ def getProblem(cursor, id):
     lst = getFromDatabase(cursor, 'problems', id)
     return problemFromList(lst)
 
+def getProblemset(cursor):
+    cursor.execute('SELECT id, name FROM problems')
+    response = cursor.fetchall()
+    return response
 
 #submission
 #saving: [id, userId, probId, code, type]
