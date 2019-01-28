@@ -13,7 +13,7 @@ def Sign_up(form: SignUp) -> list:
         if password != passwordRet:
             print("p")
             return [0, "Passwords don't match"]
-        user = structures.User(storage.storage.getUsersCount(), username, password, [])
+        user = structures.User(storage.storage.getUsersCount(), username, password, structures.UserType.Default, {})
         storage.storage.saveUser(user)
         return [1, "Signed up successfully"]
     return [0, ""]

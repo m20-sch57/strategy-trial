@@ -18,7 +18,7 @@ class StrategyState(IntEnum):
     NonMain = 1
 
 class UserType(IntEnum):
-    Defalut = 0
+    Default = 0
     Admin = 1
 
 #database functions
