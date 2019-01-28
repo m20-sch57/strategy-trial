@@ -4,6 +4,7 @@ from app.forms import LoginForm, SignUp, Submit, StrategyTester, ProblemsetID
 import storage, structures
 from login import Login
 from sign_up import Sign_up
+import useCasesAPI
 
 #вот в таком виде пока нет базы данных словарь с problem
 dict_problems = {
