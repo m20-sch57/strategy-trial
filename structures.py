@@ -210,3 +210,18 @@ def tournamentFromList(lst):
 def getTournament(cursor, id):
     lst = getFromDatabase(cursor, 'tournaments', id)
     return tournamentFromList(lst)
+
+
+#getSumissionLists
+
+def getSubmissionList(cursor, userId):
+    result = []
+    user = getUser(cursor, userId)
+    for item in user.submissions.items():
+        probId = item[0]
+        probName = cursor.execute('SELECT ')
+        subList = item[1]
+        for subId in subList:
+            status = cursor.execute('SELECT type FROM submissions WHERE id=?', 
+                [subId])
+            result.append({'id' : subId, 'probId' : probId, })
