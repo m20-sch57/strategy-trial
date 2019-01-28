@@ -90,5 +90,14 @@ while (True):
 		res = storage.getProblemset()
 		print(res)
 
+	if (command == 'subs'):
+		if (len(params) == 2 and isInt(params[1])):
+			res = storage.getSubmissionListU(int(params[1]))
+			print(res)
+
+		if (len(params) == 3 and isInt(params[1]) and isInt(params[2])):
+			res = storage.getSubmissionListUP(int(params[1]), int(params[2]))
+			print(res)
+
 	if (command == 'close'):
 		break

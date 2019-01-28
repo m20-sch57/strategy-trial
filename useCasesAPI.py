@@ -35,11 +35,11 @@ def addUser(username, password):
 def getProblemset():
     return storage.getProblemset()
 
-def getSubmissions(userId):
-    return []
+def getSubmissionsU(userId):
+    return storage.getSubmissionListU(userId)
 
-def getSubmissions(userId, probId):
-    return []
+def getSubmissionsUP(userId, probId):
+    return storage.getSubmissionListUP(userId, probId)
 
 def makeTornament(probId):
     return tournament(subId)

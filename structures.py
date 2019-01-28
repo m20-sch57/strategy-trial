@@ -17,6 +17,12 @@ class StrategyState(IntEnum):
     Main = 0
     NonMain = 1
 
+def visualize(strategyState):
+    if (strategyState == StrategyState.Main):
+        return 'Main'
+    else:
+        return 'NonMain'
+
 class UserType(IntEnum):
     Defalut = 0
     Admin = 1
@@ -214,14 +220,33 @@ def getTournament(cursor, id):
 
 #getSumissionLists
 
-def getSubmissionList(cursor, userId):
+def getProblemName(cursor, probId):
+    cursor.execute('SELECT name FROM problems WHERE id=?', [probId])
+    return cursor.fetchone()[0]
+
+def getSubDict(cursor, subId, probName):
+    cursor.execute('SELECT type FROM submissions WHERE id=?', [subId])
+    status = cursor.fetchone()[0]
+    return {'id' : subId, 'probName' : probName, 'type' : visualize(status)}
+
+def getSubmissionListUP(cursor, userId, probId):
+    result = []
+    user = getUser(cursor, userId)
+    probName = getProblemName(cursor, probId)
+    if (probId in user.submissions):
+        for subId in user.submissions[probId]:
+            result.append(getSubDict(cursor, subId, probName))
+
+    return result
+
+def getSubmissionListU(cursor, userId):
     result = []
     user = getUser(cursor, userId)
     for item in user.submissions.items():
         probId = item[0]
-        probName = cursor.execute('SELECT ')
+        probName = getProblemName(cursor, probId)
         subList = item[1]
         for subId in subList:
-            status = cursor.execute('SELECT type FROM submissions WHERE id=?', 
-                [subId])
-            result.append({'id' : subId, 'probId' : probId, })
+            result.append(getSubDict(cursor, subId, probName))
+
+    return result
