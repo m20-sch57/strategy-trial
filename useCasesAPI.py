@@ -7,6 +7,8 @@ def addSubmission(userId, problemId, code):
     user = storage.getUser(userId)
     newSubmission = Submission(-1, userId, problemId, code, StrategyState.NonMain)
     idOfNewSubmission = storage.saveSubmission(newSubmission)
+    if (problemId not in user.submissions):
+        user.submissions[problemId] = []
     user.submissions[problemId].append(idOfNewSubmission)
     storage.saveUser(user)
     return idOfNewSubmission

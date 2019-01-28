@@ -1,7 +1,8 @@
 from flask import render_template, flash, redirect, make_response, request
 from app import app
 from app.forms import LoginForm, SignUp, Submit, StrategyTester, ProblemsetID
-import storage, structures
+import structures
+from storage import storage
 from login import Login
 from sign_up import Sign_up
 import useCasesAPI
@@ -165,20 +166,12 @@ def submissions():
     username = info()[1]
     if username == "Guest":
         return "..."
-    user = storage.storage.getUserByName(username)
-    lst = [storage.storage.getSubmission(id) for id in user.submissions]
-    for subm in lst:
-        subm.prob_name = storage.storage.getProblem(subm.probId).name
-        subm.id = str(subm.id)
-        subm.userId = str(subm.userId)
-        subm.probId = str(subm.probId)
-        if subm.type == structures.StrategyState.Main:
-            subm.type = "main"
-        elif subm.type == structures.StrategyState.NonMain:
-            subm.type = "non main"
-        else:
-            subm.type = "failed"
-    return render_template('submissions.html', title = "Submissions", info = info(), subm_list = lst)
+    user = storage.getUserByName(username)
+    
+    lst = useCasesAPI.getSubmissionsU(user.id)
+    print(user.id)
+    print(lst)
+    return render_template('submissions.html', title = "Submissions", info = info(), subList = lst)
 
 @app.route("/submit", methods = ["GET", "POST"])
 def submit():

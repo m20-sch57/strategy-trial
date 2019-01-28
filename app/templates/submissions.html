@@ -1,21 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
-{#    <h1>{{ title }}</h1>
-    <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.textfield.label }}<br> 
-            {{ form.textfield(size=32) }}
-        </p>
-        <p>
-            {{ form.submit() }}
-        </p>
-    </form>#}
-    {% for subm in subm_list %}
-        <p>
-            <a href=/{{ "submissions/" + subm.id }}>{{subm.id}}</a> {{ subm.prob_name }} {{ subm.result.verdict }} {{ subm.type }}
-        </p>
-    {% endfor %}
-{% endblock %}
 
+    <table border="1">
+
+        <tr><th>Id</th><th>ProbName</th><th>Type</th></tr>
+
+        {% for submission in subList %}
+
+            <tr>
+                <td>{{ submission.id|string }}</td>
+                <td>{{ submission.probName }}</td>
+                <td>{{ submission.type}}</td>
+                <td> KEK </td>
+            </tr>
+
+        {% endfor %}
+
+    </table>
+
+{% endblock %}

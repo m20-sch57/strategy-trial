@@ -29,7 +29,7 @@ TicTacToe = Problem(-1, rules, set(subs), [])
 storage.saveProblem(TicTacToe)
 
 for i in range(StrategyCnt):
-    user = User(-1, "hlebushek" + str(i), "12345", UserType.Defalut, {0 : [i]})
+    user = User(-1, "hlebushek" + str(i), "12345", UserType.Default, {0 : [i]})
     storage.saveUser(user)
 
 for i in range(StrategyCnt):
