@@ -9,21 +9,21 @@ https://github.com/m20-sch57/strategy-trial/issues/64
 https://github.com/m20-sch57/strategy-trial/issues/74
 https://github.com/m20-sch57/strategy-trial/issues/73
 https://github.com/m20-sch57/strategy-trial/issues/53
-https://github.com/m20-sch57/strategy-trial/issues/49
+https://github.com/m20-sch57/strategy-trial/issues/49 (HARD)
 
 Следующий отрезок времени:
-https://github.com/m20-sch57/strategy-trial/issues/52
 https://github.com/m20-sch57/strategy-trial/issues/63
 https://github.com/m20-sch57/strategy-trial/issues/70
 https://github.com/m20-sch57/strategy-trial/issues/71
 https://github.com/m20-sch57/strategy-trial/issues/67
 
 Дальше:
-
+https://github.com/m20-sch57/strategy-trial/issues/52 (HARD)
 https://github.com/m20-sch57/strategy-trial/issues/69
 https://github.com/m20-sch57/strategy-trial/issues/83
 https://github.com/m20-sch57/strategy-trial/issues/84
-
+https://github.com/m20-sch57/strategy-trial/issues/85
+https://github.com/m20-sch57/strategy-trial/issues/86
 
 Отрезок времени - примерно 2 недели.
 
