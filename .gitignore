@@ -108,3 +108,6 @@ problems/
 
 # trash binary files
 .DS_Store
+
+# database
+database.db

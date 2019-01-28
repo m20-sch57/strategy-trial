@@ -82,5 +82,11 @@ class Storage:
 		]
 		return dictResponse
 
+	def getSubmissionListU(self, userId):
+		return structures.getSubmissionListU(self.cursor, userId)
+
+	def getSubmissionListUP(self, userId, probId):
+		return structures.getSubmissionListUP(self.cursor, userId, probId)
+
 storage = Storage()
 
