@@ -2,7 +2,10 @@ from flask import render_template, flash, redirect, make_response, request
 from app import app
 from app.forms import LoginForm, SignUp, Submit, StrategyTester, ProblemsetID
 import storage, structures
+from login import Login
+from sign_up import Sign_up
 import useCasesAPI
+
 #вот в таком виде пока нет базы данных словарь с problem
 dict_problems = {
     "problem_id": {
@@ -80,16 +83,23 @@ def strategy_tester():
 @app.route("/login", methods = ["GET", "POST"])
 def login():
     form = LoginForm()
-    if form.validate_on_submit():
-        username = form.username.data
-        password = form.password.data
-        if storage.storage.getUserByName(username).password == password:
-            resp = make_response(redirect('/home'))
-            resp.set_cookie("logged_in", '1')
-            resp.set_cookie("username", username)
-            return resp
-        flash("Failed to log in")
-    return render_template('login.html', title = "Sign In", form = form, info = [request.cookies.get("logged_in"), request.cookies.get("username")])
+#    if form.validate_on_submit():
+#        username = form.username.data
+#        password = form.password.data
+#        if storage.storage.getUserByName(username).password == password:
+#            resp = make_response(redirect('/home'))
+#            resp.set_cookie("logged_in", '1')
+#            resp.set_cookie("username", username)
+#            return resp
+#        flash("Failed to log in")
+    success, message, username = Login(form)
+    flash(message)
+    if success:
+        resp = make_response(redirect('/home'))
+        resp.set_cookie("logged_in", '1')
+        resp.set_cookie("username", username)
+        return resp
+    return render_template('login.html', title = "Sign In", form = form, info = info())
 
 @app.route("/logout")
 def logout():
@@ -101,24 +111,28 @@ def logout():
 @app.route("/sign_up", methods = ["GET", "POST"])
 def sign_up():
     form = SignUp()
-    if form.validate_on_submit():
-        name = form.name.data
-        secondname = form.secondname.data
-        username = form.username.data
-        password = form.password.data
-        passwordRet = form.passwordRet.data
-        if storage.storage.getUserByName(username) == None and password == passwordRet:
-            user = structures.User(storage.storage.getUsersCount(), username, password, [])
-            storage.storage.saveUser(user)
+#    if form.validate_on_submit():
+#        name = form.name.data
+#        secondname = form.secondname.data
+#        username = form.username.data
+#        password = form.password.data
+#        passwordRet = form.passwordRet.data
+#        if storage.storage.getUserByName(username) == None and password == passwordRet:
+#            user = structures.User(storage.storage.getUsersCount(), username, password, [])
+#            storage.storage.saveUser(user)
 #        remember_me = form.remember_me.data
-            return redirect('/home')
-        if storage.storage.getUserByName(username) != None:
-            flash("There is a user with this username")
-            print("username")
-        else:
-            flash("Passwords don't match")
-            print("password")
-    return render_template('sign_up.html', title = "Sign Up", form = form, info = [request.cookies.get("logged_in"), request.cookies.get("username")])
+#            return redirect('/home')
+#        if storage.storage.getUserByName(username) != None:
+#            flash("There is a user with this username")
+#            print("username")
+#        else:
+#            flash("Passwords don't match")
+#            print("password")
+    success, message = Sign_up(form)
+    flash(message)
+    if success:
+        return redirect("home")
+    return render_template('sign_up.html', title = "Sign Up", form = form, info = info())
 
 @app.route("/test")
 def showTestPage():
