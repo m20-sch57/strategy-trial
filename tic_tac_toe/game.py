@@ -31,7 +31,7 @@ class Logs:
 
 	def show(self):
 		with app.app_context():
-			data = render_template("tmp/logs.html.j2", fieldLog = self.fieldLog, res1 = self.results[0].goodStr(MaxScore), res2 = self.results[1].goodStr(MaxScore))
+			data = render_template("problems/0/logs.html.j2", fieldLog = self.fieldLog, res1 = self.results[0].goodStr(MaxScore), res2 = self.results[1].goodStr(MaxScore))
 		return data
 
 def gameStateRep(full: FullGameState, playerId: int) -> GameState:

@@ -104,4 +104,7 @@ venv.bak/
 .mypy_cache/
 
 # temporary folder
-tmp/
+problems/
+
+# trash binary files
+.DS_Store

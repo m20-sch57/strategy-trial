@@ -10,6 +10,7 @@ class Storage:
 		structures.createUsersTable(self.cursor)
 		structures.createProblemsTable(self.cursor)
 		structures.createSubmissionsTable(self.cursor)
+		structures.createTournamentsTable(self.cursor)
 		self.connection.commit()
 
 	def getSize(self, tableName):
@@ -26,6 +27,9 @@ class Storage:
 	def getSubmissionsCount(self):
 		return self.getSize('submissions')
 
+	def getTournamentsCount(self):
+		return self.getSize('tournaments')
+
 	def updateId(self, obj, tableName):
 		if (obj.id == -1):
 			size = self.getSize(tableName)
@@ -39,6 +43,9 @@ class Storage:
 
 	def getSubmission(self, id):
 		return structures.getSubmission(self.cursor, id)
+
+	def getTournament(self, id):
+		return structures.getTournament(self.cursor, id)
 
 	def getUserByName(self, username):
 		return structures.getUserByName(self.cursor, username)
@@ -60,6 +67,20 @@ class Storage:
 		submission.save(self.cursor)
 		self.connection.commit()
 		return submission.id
+
+	def saveTournament(self, tournament):
+		self.updateId(tournament, 'tournaments')
+		tournament.save(self.cursor)
+		self.connection.commit()
+		return tournament.id
+
+	def getProblemset(self):
+		response = structures.getProblemset(self.cursor)
+		dictResponse = [
+			{'id' : response[i][0], 'name' : response[i][1]}
+			for i in range(len(response))
+		]
+		return dictResponse
 
 storage = Storage()
 

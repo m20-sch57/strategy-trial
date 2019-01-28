@@ -1,6 +1,3 @@
-import storageInit
-storageInit.init()
-
 import sys
 sys.path.append("/")
 

@@ -1,4 +1,5 @@
 import json
+import time
 import os.path
 
 def readFile(path):
@@ -18,3 +19,6 @@ def printToFile(text: str, path: str):
 def jsonParser(s):
 	s = s.replace("'", "\"")
 	return json.loads(s)
+
+def unixTime():
+	return int(time.time())

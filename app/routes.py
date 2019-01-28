@@ -54,7 +54,8 @@ def home():
 @app.route("/problemset")
 def problemset():
     title = "Problems"
-    return render_template('problemset.html', dict_problems = dict_problems, title = title, info = info())
+    problemList = useCasesAPI.getProblemset()
+    return render_template('problemset.html', problemList = problemList, title = title, info = info())
 
 @app.route("/problemset/<problem_id>", methods = ["GET", "POST"])
 def problemset_id(problem_id):
