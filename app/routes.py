@@ -1,7 +1,6 @@
 from flask import render_template, flash, redirect, make_response, request
 from app import app
 from app.forms import LoginForm, SignUp, Submit, StrategyTester, ProblemsetID
-import demoAPI
 import storage, structures
 from login import Login
 from sign_up import Sign_up
