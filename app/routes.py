@@ -169,8 +169,6 @@ def submissions():
     user = storage.getUserByName(username)
     
     lst = useCasesAPI.getSubmissionsU(user.id)
-    print(user.id)
-    print(lst)
     return render_template('submissions.html', title = "Submissions", info = info(), subList = lst)
 
 @app.route("/submit", methods = ["GET", "POST"])
