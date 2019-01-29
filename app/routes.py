@@ -68,7 +68,15 @@ def problemset_id(strId):
     problem = storage.getProblem(probId)
     if (problem is None):
         return redirect('/home')
-    return render_template('problem.html.j2', form = form, title = problem.rules.name, problem = problem, info = info())
+
+    username = info()[1]
+    if username == "Guest":
+        subList = []
+    else:
+        user = storage.getUserByName(username)
+        subList = useCasesAPI.getSubmissionsUP(user.id, probId)    
+    return render_template('problem.html.j2', form = form, title = problem.rules.name, problem = problem,
+        subList = subList, info = info())
 
 @app.route("/settings")
 def settings():

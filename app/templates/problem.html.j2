@@ -9,15 +9,27 @@
         <tr><th>Files to download:</th></tr>
     </table>
     <h3>Submissions</h3>
-    <!-- <table border="1">
-        <tr><th>Submission id</th><th>Name</th><th>Status</th><th>View</th></tr>
-        {% for submission_id in dict_submissions %}
-            <tr><td>{{ submission_id }}</td> 
-            <td>{{ problem_name }}</td> 
-            <td>{{ dict_submissions[submission_id]["Status"] }}</td>
-            <td><a href=/{{ "submissions" + "/" + submission_id }}> <b>View</b> </td></tr>
-        {% endfor %}
-    </table> -->
+
+    <!-- shouldn't be copypasted -->
+
+    {% if subList %}
+        <table border="1">
+            <tr><th>Id</th><th>ProbName</th><th>Type</th><th>Source</th></tr>
+
+            {% for submission in subList %}
+
+                <tr>
+                    <td>{{ submission.id|string }}</td>
+                    <td>{{ submission.probName }}</td>
+                    <td>{{ submission.type}}</td>
+                    <td><a href=/{{ "source" + "/" + submission.id|string }}>
+                    <b>View source</b> </td>
+                </tr>
+
+            {% endfor %}
+        </table>
+    {% endif %}
+
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
         <p>
