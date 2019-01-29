@@ -4,7 +4,7 @@
 
     <table border="1">
 
-        <tr><th>Id</th><th>ProbName</th><th>Type</th></tr>
+        <tr><th>Id</th><th>ProbName</th><th>Type</th><th>Source</th></tr>
 
         {% for submission in subList %}
 
@@ -12,7 +12,8 @@
                 <td>{{ submission.id|string }}</td>
                 <td>{{ submission.probName }}</td>
                 <td>{{ submission.type}}</td>
-                <td> KEK </td>
+                <td><a href=/{{ "submission" + "/" + submission.id|string }}>
+                <b>View source</b> </td>
             </tr>
 
         {% endfor %}
