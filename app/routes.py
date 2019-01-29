@@ -145,13 +145,9 @@ def showTestPage():
     invocationResult = demoAPI.judge(id1, id2)
     return invocationResult.logs.show()
 
-@app.route("/source")
-def showSource():
-    id = request.args.get('id')
-    if (id == None):
-        return "..."
-
-    return render_template('source.html.j2', id = id, code = demoAPI.getStrategyCode(id), info = info())
+@app.route("/source/<subId>")
+def showSource(subId):
+    return render_template('source.html.j2', id = subId, code = useCasesAPI.getSubmissionCode(subId), info = info())
 
     """TODO return!!!!"""
 

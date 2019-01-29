@@ -48,3 +48,10 @@ def makeTornament(probId):
 
 def judge(id1, id2):
     return testStrategies(id1, id2, saveLogs = True)
+
+def getSubmissionCode(subId):
+    submission = storage.getSubmission(subId)
+    if (submission is None):
+        return ""
+    else:
+        return submission.code
