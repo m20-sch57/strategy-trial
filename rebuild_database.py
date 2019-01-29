@@ -6,6 +6,7 @@ import os
 os.remove('database.db')
 
 from storage import storage
+import useCasesAPI
 
 StrategyCnt = 10
 
@@ -41,3 +42,8 @@ for i in range(StrategyCnt):
 for i in range(StrategyCnt):
     sub = Submission(-1, i, 0, readFile("tic_tac_toe/strategies/st" + str(i + 1) + ".py"), StrategyState.Main)
     storage.saveSubmission(sub)
+
+useCasesAPI.addUser("test", "123")
+useCasesAPI.addSubmission(10, 0, "tic_tac_toe/strategies/st1.py")
+useCasesAPI.addSubmission(10, 0, "tic_tac_toe/strategies/st2.py")
+useCasesAPI.addSubmission(10, 0, "tic_tac_toe/strategies/st3.py")

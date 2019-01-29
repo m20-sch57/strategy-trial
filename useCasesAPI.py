@@ -30,7 +30,7 @@ def changeMainSubmission(userId, subId):
     storage.saveProblem(problem)
 
 def addUser(username, password):
-    newUser = User(-1, username, password, UserType.Defalut, dict())
+    newUser = User(-1, username, password, UserType.Default, dict())
     idOfNewUser = storage.saveUser(newUser)
     return idOfNewUser
 
