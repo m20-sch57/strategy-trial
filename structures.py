@@ -86,6 +86,8 @@ def userFromList(lst):
 
 def getUser(cursor, id):
     lst = getFromDatabase(cursor, 'users', id)
+    if (lst is None):
+        return None
     return userFromList(lst)
 
 def getUserByName(cursor, username):
@@ -142,6 +144,8 @@ def problemFromList(lst):
 
 def getProblem(cursor, id):
     lst = getFromDatabase(cursor, 'problems', id)
+    if (lst is None):
+        return None
     return problemFromList(lst)
 
 def getProblemset(cursor):
@@ -183,6 +187,8 @@ def submissionFromList(lst):
 
 def getSubmission(cursor, id):
     lst = getFromDatabase(cursor, 'submissions', id)
+    if (lst is None):
+        return None
     return submissionFromList(lst)
 
 
@@ -215,6 +221,8 @@ def tournamentFromList(lst):
 
 def getTournament(cursor, id):
     lst = getFromDatabase(cursor, 'tournaments', id)
+    if (lst is None):
+        return None
     return tournamentFromList(lst)
 
 

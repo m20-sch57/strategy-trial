@@ -58,15 +58,17 @@ def problemset():
     problemList = useCasesAPI.getProblemset()
     return render_template('problemset.html', problemList = problemList, title = title, info = info())
 
-@app.route("/problemset/<problem_id>", methods = ["GET", "POST"])
-def problemset_id(problem_id):
+@app.route("/problemset/<strId>", methods = ["GET", "POST"])
+def problemset_id(strId):
     form = ProblemsetID()
-    if problem_id not in list_name_problems:
+    try:
+        probId = int(strId)
+    except ValueError:
         return redirect('/home')
-    problem_name = dict_problems[problem_id]["Name"]
-    dict_problem_id = dict_problems[problem_id]
-    dict_submissions = dict_problems[problem_id]["Username"]["Submissions"]
-    return render_template('problemset_id.html', form = form, title = problem_name, problem_name = problem_name, dict_problem_id = dict_problem_id, dict_submissions = dict_submissions, info = info())
+    problem = storage.getProblem(probId)
+    if (problem is None):
+        return redirect('/home')
+    return render_template('problem.html.j2', form = form, title = problem.rules.name, problem = problem, info = info())
 
 @app.route("/settings")
 def settings():

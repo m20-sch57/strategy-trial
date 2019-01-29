@@ -2,14 +2,14 @@
 
 {% block content %}
     <table border="1">
-        <tr><th>{{ dict_problem_id["Text"] }}</th></tr>
+        <tr><th>Problem {{ problem.rules.name }}</th></tr>
     </table>
-    <p></p>
+    <p>{{ problem.statement }}</p>
     <table border="1">
         <tr><th>Files to download:</th></tr>
     </table>
-    <p></p>
-    <table border="1">
+    <h3>Submissions</h3>
+    <!-- <table border="1">
         <tr><th>Submission id</th><th>Name</th><th>Status</th><th>View</th></tr>
         {% for submission_id in dict_submissions %}
             <tr><td>{{ submission_id }}</td> 
@@ -17,7 +17,7 @@
             <td>{{ dict_submissions[submission_id]["Status"] }}</td>
             <td><a href=/{{ "submissions" + "/" + submission_id }}> <b>View</b> </td></tr>
         {% endfor %}
-    </table>
+    </table> -->
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
         <p>
