@@ -44,6 +44,6 @@ for i in range(StrategyCnt):
     storage.saveSubmission(sub)
 
 useCasesAPI.addUser("test", "123")
-useCasesAPI.addSubmission(10, 0, "tic_tac_toe/strategies/st1.py")
-useCasesAPI.addSubmission(10, 0, "tic_tac_toe/strategies/st2.py")
-useCasesAPI.addSubmission(10, 0, "tic_tac_toe/strategies/st3.py")
+useCasesAPI.addSubmission(10, 0, readFile("tic_tac_toe/strategies/st1.py"))
+useCasesAPI.addSubmission(10, 0, readFile("tic_tac_toe/strategies/st2.py"))
+useCasesAPI.addSubmission(10, 0, readFile("tic_tac_toe/strategies/st3.py"))
