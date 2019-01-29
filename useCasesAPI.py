@@ -2,6 +2,7 @@ from structures import ProblemState, StrategyState, UserType
 from structures import User, Rules, Problem, Submission, Tournament
 from storage import storage
 from tester import tournament, testStrategies
+from tester import loadProblemDownloads as TesterLPD
 
 def addSubmission(userId, problemId, code):
     user = storage.getUser(userId)

@@ -6,6 +6,7 @@ from storage import storage
 from login import Login
 from sign_up import Sign_up
 import useCasesAPI
+import tester
 
 #вот в таком виде пока нет базы данных словарь с problem
 dict_problems = {
@@ -76,7 +77,11 @@ def problemset_id(strId):
         user = storage.getUserByName(username)
         subList = useCasesAPI.getSubmissionsUP(user.id, probId)
 
-    print(problem.rules.downloads)
+    tester.loadProblemDownloads(problem)
+
+    paths = [path[0] for path in problem.rules.downloads]
+    #paths - список путей до файлов, которые пользователь может скачать
+    #print(paths)
 
     return render_template('problem.html.j2', form = form, title = problem.rules.name, problem = problem,
         subList = subList, info = info())

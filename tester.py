@@ -9,14 +9,19 @@ import sys
 
 #TODO: same name of modules
 
+def loadSources(sources):
+	for source in sources:
+		path = source[0]
+		printToFile(source[1], path)
+
 def loadProblem(problem):
 	problempath = "problems/" + str(problem.id)
 	sys.path.append(problempath)
 	sys.path.append(problempath + "/strategies")
-	sources = problem.rules.sources
-	for source in sources:
-		path = source[0]
-		printToFile(source[1], path)
+	loadSources(problem.rules.sources)
+
+def loadProblemDownloads(problem):
+	loadSources(problem.rules.downloads)
 
 def getFilename(submission):
 	return "sub" + str(submission.id) + ".py"
