@@ -21,7 +21,9 @@ sources = [
     ['app/static/problems/0/style.css', css]
 ]
 
-rules = Rules("TicTacToe", sources, [], "...")
+statement = readFile("Text/trashST")
+
+rules = Rules("TicTacToe", sources, [], statement)
 subs = [i for i in range(10)]
 
 TicTacToe = Problem(-1, rules, set(subs), [])
