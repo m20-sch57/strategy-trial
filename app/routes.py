@@ -74,7 +74,10 @@ def problemset_id(strId):
         subList = []
     else:
         user = storage.getUserByName(username)
-        subList = useCasesAPI.getSubmissionsUP(user.id, probId)    
+        subList = useCasesAPI.getSubmissionsUP(user.id, probId)
+
+    print(problem.rules.downloads)
+
     return render_template('problem.html.j2', form = form, title = problem.rules.name, problem = problem,
         subList = subList, info = info())
 
