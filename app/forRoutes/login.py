@@ -7,9 +7,9 @@ def Login(form: LoginForm) -> list:
         password = form.password.data
         user = storage.storage.getUserByName(username)
         if user == None:
-            return [0, "There is no registred user with this username", "Guest"]
+            return [0, "There is no registred user with this username", "Guest", "-1"]
         if user.password != password:
-            return [0, "Incorrect password", "Guest"]
-        return [1, "Logged in successfully", username]
-    return [0, "", "Guest"]
+            return [0, "Incorrect password", "Guest", "-1"]
+        return [1, "Logged in successfully", username, str(user.id)]
+    return [0, "", "Guest", "-1"]
 

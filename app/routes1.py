@@ -102,21 +102,13 @@ def strategy_tester():
 @app.route("/login", methods = ["GET", "POST"])
 def login():
     form = LoginForm()
-#    if form.validate_on_submit():
-#        username = form.username.data
-#        password = form.password.data
-#        if storage.storage.getUserByName(username).password == password:
-#            resp = make_response(redirect('/home'))
-#            resp.set_cookie("logged_in", '1')
-#            resp.set_cookie("username", username)
-#            return resp
-#        flash("Failed to log in")
-    success, message, username = Login(form)
+    success, message, username, userId = Login(form)
     flash(message)
     if success:
         resp = make_response(redirect('/home'))
         resp.set_cookie("logged_in", '1')
         resp.set_cookie("username", username)
+        resp.set_cookie("user_id", userId)
         return resp
     return render_template('login.html', title = "Sign In", form = form, info = info())
 
@@ -125,28 +117,12 @@ def logout():
     resp = make_response(redirect("/home"))
     resp.set_cookie("logged_in", "0")
     resp.set_cookie("username", "Guest")
+    resp.set_cookie("user_id", "-1")
     return resp
 
 @app.route("/sign_up", methods = ["GET", "POST"])
 def sign_up():
     form = SignUp()
-#    if form.validate_on_submit():
-#        name = form.name.data
-#        secondname = form.secondname.data
-#        username = form.username.data
-#        password = form.password.data
-#        passwordRet = form.passwordRet.data
-#        if storage.storage.getUserByName(username) == None and password == passwordRet:
-#            user = structures.User(storage.storage.getUsersCount(), username, password, [])
-#            storage.storage.saveUser(user)
-#        remember_me = form.remember_me.data
-#            return redirect('/home')
-#        if storage.storage.getUserByName(username) != None:
-#            flash("There is a user with this username")
-#            print("username")
-#        else:
-#            flash("Passwords don't match")
-#            print("password")
     success, message = Sign_up(form)
     flash(message)
     if success:
