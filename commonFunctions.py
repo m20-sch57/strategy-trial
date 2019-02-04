@@ -3,7 +3,7 @@ import time
 import os.path
 
 def readFile(path):
-	with open(path, 'r') as myfile:
+	with open(path, 'r', encoding="utf8") as myfile: #cp1251
 		data = str(myfile.read())
 		return data
 
