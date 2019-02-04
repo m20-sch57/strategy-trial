@@ -6,7 +6,12 @@
     </table>
     <p><pre>{{ problem.rules.statement }}</pre></p>
     <table border="1">
-        <tr><th>Files to download:</th></tr>
+		<tr><th>Files to download:</th></tr>
+		{% for path in paths %}
+        <tr>
+			<td><a href=/{{"download/" + path}} target="_blank">{{ path.split('/')[-1] }}</a></td>
+		</tr>
+		{% endfor %}
     </table>
     <h3>Submissions</h3>
 
@@ -33,10 +38,11 @@
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
         <p>
-            {{ form.selectfile() }}
+            {{ form.selectfile(size=32) }}
         </p>
         <p>
             {{ form.submit() }}
         </p>
     </form>
 {% endblock %}
+
