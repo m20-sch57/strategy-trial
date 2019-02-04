@@ -1,5 +1,5 @@
 from app.forRoutes.info import info
-from flask import render_template, redirect
+from flask import render_template, redirect, send_file
 from app import app
 from app.forRoutes.problemsetId import problemsetId
 from app.forms import ProblemsetID
@@ -32,7 +32,7 @@ def showSource(subId):
     title = "Code #" + subId
     return render_template('source.html.j2', id = subId, code = useCasesAPI.getSubmissionCode(subId), info = info())
 
-@app.route("/download/app/<d1>/<d2>/<filename>")
+@app.route("/download/<d1>/<d2>/<filename>")
 def download(d1, d2, filename):
     #TODO if no file redirect home
     path = d1 + "/" + d2 + "/" + filename

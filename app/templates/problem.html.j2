@@ -9,7 +9,7 @@
 		<tr><th>Files to download:</th></tr>
 		{% for path in paths %}
         <tr>
-			<td><a href=/{{ "download" + "/" + path}} target="_blank">{{ path.split('/')[-1] }}</a></td>
+			<td><a href=/{{"download/" + path}} target="_blank">{{ path.split('/')[-1] }}</a></td>
 		</tr>
 		{% endfor %}
     </table>
