@@ -23,7 +23,7 @@ sources = [
 ]
 
 downloads = [
-    ['app/downloads/0/classes.py', classes]
+    ['downloads/0/classes.py', classes]
 ]
 
 statement = readFile("Text/trashST")
