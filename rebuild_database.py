@@ -6,7 +6,7 @@ import os
 os.remove('database.db')
 
 from server.storage import storage
-import server.useCasesAPI
+import server.useCasesAPI as useCasesAPI
 
 StrategyCnt = 10
 
