@@ -6,12 +6,12 @@
     </table>
     <p><pre>{{ problem.rules.statement }}</pre></p>
     <table border="1">
-		<tr><th>Files to download:</th></tr>
-		{% for path in paths %}
+        <tr><th>Files to download:</th></tr>
+        {% for path in paths %}
         <tr>
-			<td><a href=/{{"download/" + path}} target="_blank">{{ path.split('/')[-1] }}</a></td>
-		</tr>
-		{% endfor %}
+            <td><a href=/{{"download/" + path}} target="_blank">{{ path.split('/')[-1] }}</a></td>
+        </tr>
+        {% endfor %}
     </table>
     <h3>Submissions</h3>
 
@@ -28,7 +28,7 @@
                     <td>{{ submission.probName }}</td>
                     <td>{{ submission.type}}</td>
                     <td><a href=/{{ "source" + "/" + submission.id|string }}>
-                    <b>View source</b> </td>
+                    <b>View source</b> </td></a>
                 </tr>
 
             {% endfor %}

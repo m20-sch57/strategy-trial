@@ -1,12 +1,12 @@
-from structures import ProblemState, StrategyState, UserType
-from structures import User, Rules, Problem, Submission, Tournament
-from commonFunctions import readFile
+from server.structures import ProblemState, StrategyState, UserType
+from server.structures import User, Rules, Problem, Submission, Tournament
+from server.commonFunctions import readFile
 import os
 
 os.remove('database.db')
 
-from storage import storage
-import useCasesAPI
+from server.storage import storage
+import server.useCasesAPI
 
 StrategyCnt = 10
 
@@ -23,7 +23,7 @@ sources = [
 ]
 
 downloads = [
-	['downloads/0/classes.py', classes]
+    ['app/downloads/0/classes.py', classes]
 ]
 
 statement = readFile("Text/trashST")

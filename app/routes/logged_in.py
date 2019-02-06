@@ -1,7 +1,7 @@
 from app.forRoutes.info import info
 from flask import make_response, render_template, redirect
 from app import app
-import useCasesAPI
+import server.useCasesAPI as useCasesAPI
 
 @app.route("/settings")
 def settings():

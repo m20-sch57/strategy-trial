@@ -1,8 +1,8 @@
-from structures import ProblemState, StrategyState, UserType
-from structures import User, Rules, Problem, Submission, Tournament
-from storage import storage
-from tester import tournament, testStrategies
-from tester import loadProblemDownloads as TesterLPD
+from server.structures import ProblemState, StrategyState, UserType
+from server.structures import User, Rules, Problem, Submission, Tournament
+from server.storage import storage
+from server.tester import tournament, testStrategies
+from server.tester import loadProblemDownloads as TesterLPD
 
 def addSubmission(userId, problemId, code):
     user = storage.getUser(userId)
