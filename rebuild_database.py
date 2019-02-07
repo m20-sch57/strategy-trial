@@ -1,6 +1,6 @@
 from server.structures import ProblemState, StrategyState, UserType
 from server.structures import User, Rules, Problem, Submission, Tournament
-from server.commonFunctions import readFile
+from server.commonFunctions import readFile, printToFile
 import os
 
 os.remove('database.db')
@@ -25,6 +25,9 @@ sources = [
 downloads = [
     ['downloads/0/classes.py', classes]
 ]
+
+for download in downloads:
+    printToFile(download[1], download[0])
 
 statement = readFile("Text/trashST")
 
