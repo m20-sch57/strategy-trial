@@ -1,5 +1,5 @@
-import storage
-import structures
+import server.storage as storage
+import server.structures as structures
 from app.forms import SignUp
 
 def Sign_up(form: SignUp) -> list:

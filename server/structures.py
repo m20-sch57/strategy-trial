@@ -1,8 +1,8 @@
 from enum import IntEnum
-from gameStuff import StrategyVerdict
-from gameStuff import Result
-from gameStuff import resultFromStr
-from commonFunctions import jsonParser
+from server.gameStuff import StrategyVerdict
+from server.gameStuff import Result
+from server.gameStuff import resultFromStr
+from server.commonFunctions import jsonParser
 import json
 
 

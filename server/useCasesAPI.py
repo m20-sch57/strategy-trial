@@ -1,8 +1,8 @@
-from structures import ProblemState, StrategyState, UserType
-from structures import User, Rules, Problem, Submission, Tournament
-from storage import storage
-from tester import tournament, testStrategies
-from tester import loadProblemDownloads as TesterLPD
+from server.structures import ProblemState, StrategyState, UserType
+from server.structures import User, Rules, Problem, Submission, Tournament
+from server.storage import storage
+from server.tester import tournament, testStrategies
+from server.tester import loadProblemDownloads as TesterLPD
 
 def addSubmission(userId, problemId, code):
     user = storage.getUser(userId)
@@ -17,17 +17,17 @@ def addSubmission(userId, problemId, code):
 def changeMainSubmission(userId, subId):
     newMainSubmission = storage.getSubmission(subId)
     user = storage.getUser(userId)
-    probId = newSubmission.probId
+    probId = newMainSubmission.probId
     problem = storage.getProblem(probId)
     for anotherSubmissionId in user.submissions[probId]:
         anotherSubmission = storage.getSubmission(anotherSubmissionId)
         if (anotherSubmission.type == StrategyState.Main):
             anotherSubmission.type = StrategyState.NonMain
             storage.saveSubmission(anotherSubmission)
-            problem.submissions.erase(anotherSubmissionId)
+            problem.submissions.remove(anotherSubmissionId)
     newMainSubmission.type = StrategyState.Main
     storage.saveSubmission(newMainSubmission)
-    problem.submissions.insert(subId)
+    problem.submissions.add(subId)
     storage.saveProblem(problem)
 
 def addUser(username, password):

@@ -1,10 +1,10 @@
-from structures import ProblemState, StrategyState, UserType
-from structures import User, Rules, Problem, Submission, Tournament
-from storage import storage
-from gameStuff import StrategyVerdict, Result, InvocationResult
-from commonFunctions import printToFile, unixTime
+from server.structures import ProblemState, StrategyState, UserType
+from server.structures import User, Rules, Problem, Submission, Tournament
+from server.storage import storage
+from server.gameStuff import StrategyVerdict, Result, InvocationResult
+from server.commonFunctions import printToFile, unixTime
 import os
-import judge
+import server.judge as judge
 import sys
 
 #TODO: same name of modules

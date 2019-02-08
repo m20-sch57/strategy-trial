@@ -1,9 +1,9 @@
 from app.forRoutes.info import info
 from app.forms import ProblemsetID
-import tester
-import useCasesAPI
-from storage import storage
-import structures
+import server.tester as tester
+import server.useCasesAPI as useCasesAPI
+from server.storage import storage
+import server.structures as structures
 
 def problemsetId(form: ProblemsetID, strId: str) -> list:
     try:

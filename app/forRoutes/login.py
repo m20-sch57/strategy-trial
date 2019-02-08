@@ -1,4 +1,4 @@
-import storage
+import server.storage as storage
 from app.forms import LoginForm
 
 def Login(form: LoginForm) -> list:

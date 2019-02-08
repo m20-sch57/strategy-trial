@@ -3,7 +3,7 @@ from flask import render_template, redirect, send_file
 from app import app
 from app.forRoutes.problemsetId import problemsetId
 from app.forms import ProblemsetID
-import useCasesAPI
+import server.useCasesAPI as useCasesAPI
 
 @app.route("/")
 @app.route("/home")
@@ -24,7 +24,6 @@ def problemset_id(strId):
     if not success:
         return redirect("/home")
 #    smth with paths...
-    print(paths)
     return render_template('problem.html.j2', form = form, title = problem.rules.name, problem = problem, subList = subList, paths = paths, info = info())
 
 @app.route("/source/<subId>")

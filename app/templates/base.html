@@ -1,6 +1,6 @@
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="static/styles/trash.css">
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='styles/trash.css')}}">
         {% if title %}
         <title>{{ title }}</title>
         {% else %}
