@@ -43,7 +43,8 @@ for i in range(StrategyCnt):
     sub = Submission(-1, i, 0, readFile("tic_tac_toe/strategies/st" + str(i + 1) + ".py"), StrategyState.Main)
     storage.saveSubmission(sub)
 
-useCasesAPI.addUser("test", "123")
+root = User(-1, "test", "123", UserType.Admin, {})
+storage.saveUser(root)
 useCasesAPI.addSubmission(10, 0, readFile("tic_tac_toe/strategies/st1.py"))
 useCasesAPI.addSubmission(10, 0, readFile("tic_tac_toe/strategies/st2.py"))
 useCasesAPI.addSubmission(10, 0, readFile("tic_tac_toe/strategies/st3.py"))
