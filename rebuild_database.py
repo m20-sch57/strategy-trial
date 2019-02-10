@@ -23,11 +23,8 @@ sources = [
 ]
 
 downloads = [
-    ['downloads/0/classes.py', classes]
+    ['app/downloads/0/classes.py', classes]
 ]
-
-for download in downloads:
-    printToFile(download[1], download[0])
 
 statement = readFile("Text/trashST")
 

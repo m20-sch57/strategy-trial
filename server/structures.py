@@ -134,6 +134,8 @@ class Problem:
         print("name:", self.rules.name)
         print("sources...")
         print(self.rules.sources)
+        print("downloads...")
+        print(self.rules.downloads)
         print("statement:", self.rules.statement)
         print("submissions:", self.submissions)
         print("tournaments:", self.tournaments)
