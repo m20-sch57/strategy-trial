@@ -1,2 +1,2 @@
 def Strategy(a, b):
-	return 5
+    return 5
