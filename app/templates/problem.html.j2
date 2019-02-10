@@ -13,11 +13,12 @@
         </tr>
         {% endfor %}
     </table>
-    <h3>Submissions</h3>
 
     <!-- shouldn't be copypasted -->
 
-    {% if subList %}
+    {% if info[0] == '1' %}
+        <h3>Submissions</h3>
+
         <table border="1">
             <tr><th>Id</th><th>ProbName</th><th>Type</th><th>Source</th></tr>
 
@@ -33,16 +34,18 @@
 
             {% endfor %}
         </table>
-    {% endif %}
 
-    <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.selectfile(size=32) }}
-        </p>
-        <p>
-            {{ form.submit() }}
-        </p>
-    </form>
+        <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.selectfile(size=32) }}
+            </p>
+            <p>
+                {{ form.submit() }}
+            </p>
+        </form>
+    {% else %}
+        <h3>In order to send strategy you have to <a href="/login">log in</a> or <a href="/sign_up"> sign up</a></h3>
+    {% endif %}
 {% endblock %}
 

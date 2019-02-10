@@ -20,6 +20,7 @@ def problemsetId(form: ProblemsetID, strId: str) -> list:
         return [0, [], None, None]
 
     userId = info()[2]
+    print(info())
     if userId == -1:
         subList = []
     else:
