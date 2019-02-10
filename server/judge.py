@@ -7,10 +7,6 @@ import os
 import sys
 sys.path.append("tmp")
 
-def importPath(path: str):
-    path = os.path.splitext(path)[0]
-    return __import__(path)
-
 import time
 import multiprocessing as mp
 
@@ -67,8 +63,8 @@ def badStrategy(game, i, verdict, result, logs):
     updateLogs(logs, result.results)
 
 def run(gamePath: str, classesPath: str, strategyPathes : list, saveLogs = False) -> InvocationResult:
-    classes = importPath(classesPath)
-    game = importPath(gamePath)
+    classes = __import__(classesPath)
+    game = __import__(gamePath)
     result = InvocationResult()
     logs = None
     if (saveLogs):
@@ -78,7 +74,7 @@ def run(gamePath: str, classesPath: str, strategyPathes : list, saveLogs = False
     strategies = []
     for i in range(len(strategyPathes)):
         try:
-            strategies.append(importPath(strategyPathes[i]))
+            strategies.append(__import__(strategyPathes[i]))
         except Exception:
             badStrategy(game, i, StrategyVerdict.ImportFail, result, logs)
             return result

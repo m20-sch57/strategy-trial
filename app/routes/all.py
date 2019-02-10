@@ -15,7 +15,7 @@ def home():
 def problemset():
     title = "Problems"
     problemList = useCasesAPI.getProblemset()
-    return render_template('problemset.html', problemList = problemList, title = title, info = info())
+    return render_template('problemset.html', problemList = problemList[::-1], title = title, info = info())
 
 @app.route("/problemset/<strId>", methods = ["GET", "POST"])
 def problemset_id(strId):
@@ -24,7 +24,7 @@ def problemset_id(strId):
     if not success:
         return redirect("/home")
 #    smth with paths...
-    return render_template('problem.html.j2', form = form, title = problem.rules.name, problem = problem, subList = subList, paths = paths, info = info())
+    return render_template('problem.html.j2', form = form, title = problem.rules.name, problem = problem, subList = subList[::-1], paths = paths, info = info())
 
 @app.route("/source/<subId>")
 def showSource(subId):
