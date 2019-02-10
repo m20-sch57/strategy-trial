@@ -1,24 +1,37 @@
-Возможно, сделано (надо чекнуть):
-https://github.com/m20-sch57/strategy-trial/issues/51
+Апдейт 10.02 15:30
 
-Ближайший отрезок времени:
-https://github.com/m20-sch57/strategy-trial/issues/59
-https://github.com/m20-sch57/strategy-trial/issues/64
+Всё ещё не сделано:
+https://github.com/m20-sch57/strategy-trial/issues/51
+https://github.com/m20-sch57/strategy-trial/issues/59 (↓)
 https://github.com/m20-sch57/strategy-trial/issues/73
+https://github.com/m20-sch57/strategy-trial/issues/97
 
 Следующий отрезок времени:
 https://github.com/m20-sch57/strategy-trial/issues/63
-https://github.com/m20-sch57/strategy-trial/issues/70
-https://github.com/m20-sch57/strategy-trial/issues/71
+https://github.com/m20-sch57/strategy-trial/issues/70 (↓↓)
+https://github.com/m20-sch57/strategy-trial/issues/71 (↓)
 https://github.com/m20-sch57/strategy-trial/issues/67
+https://github.com/m20-sch57/strategy-trial/issues/105
 
 Дальше:
 https://github.com/m20-sch57/strategy-trial/issues/52 (HARD)
 https://github.com/m20-sch57/strategy-trial/issues/69
 https://github.com/m20-sch57/strategy-trial/issues/83
-https://github.com/m20-sch57/strategy-trial/issues/84
-https://github.com/m20-sch57/strategy-trial/issues/85
-https://github.com/m20-sch57/strategy-trial/issues/86
+https://github.com/m20-sch57/strategy-trial/issues/107
+https://github.com/m20-sch57/strategy-trial/issues/84 (↓)
+https://github.com/m20-sch57/strategy-trial/issues/85 (↑)
+https://github.com/m20-sch57/strategy-trial/issues/86 (↑)
+
++1 seg:
+https://github.com/m20-sch57/strategy-trial/issues/106
+https://github.com/m20-sch57/strategy-trial/issues/109
+
++2 seg:
+https://github.com/m20-sch57/strategy-trial/issues/108
+https://github.com/m20-sch57/strategy-trial/issues/110
+
++3 seg:
+https://github.com/m20-sch57/strategy-trial/issues/111
 
 Отрезок времени - примерно 2 недели.
 
@@ -38,3 +51,4 @@ https://github.com/m20-sch57/strategy-trial/issues/58
 https://github.com/m20-sch57/strategy-trial/issues/53
 https://github.com/m20-sch57/strategy-trial/issues/49
 https://github.com/m20-sch57/strategy-trial/issues/60
+https://github.com/m20-sch57/strategy-trial/issues/64
