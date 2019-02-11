@@ -3,7 +3,10 @@ from server.structures import User, Rules, Problem, Submission, Tournament
 from server.commonFunctions import readFile, printToFile
 import os
 
-os.remove('database.db')
+try:
+    os.remove('database.db')
+except:
+    pass
 
 from server.storage import storage
 import server.useCasesAPI as useCasesAPI
