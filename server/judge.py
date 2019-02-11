@@ -5,7 +5,6 @@ from server.gameStuff import InvocationResult
 import os
 
 import sys
-sys.path.append("tmp")
 
 import time
 import multiprocessing as mp
@@ -62,7 +61,7 @@ def badStrategy(game, i, verdict, result, logs):
     result.results = strategyFailResults(game, i, verdict)
     updateLogs(logs, result.results)
 
-def run(gamePath: str, classesPath: str, strategyPathes : list, saveLogs = False) -> InvocationResult:
+def run(gamePath, classesPath, strategyPathes, problemPath, saveLogs = False):
     classes = __import__(classesPath)
     game = __import__(gamePath)
     result = InvocationResult()
@@ -72,6 +71,7 @@ def run(gamePath: str, classesPath: str, strategyPathes : list, saveLogs = False
         result.logs = logs
 
     strategies = []
+    sys.path.append(problemPath)
     for i in range(len(strategyPathes)):
         try:
             strategies.append(__import__(strategyPathes[i]))
@@ -81,6 +81,7 @@ def run(gamePath: str, classesPath: str, strategyPathes : list, saveLogs = False
         if ("Strategy" not in dir(strategies[i])):
             badStrategy(game, i, StrategyVerdict.PresentationError, result, logs)
             return result
+    sys.path.remove(problemPath)
 
     fullGameState = game.FullGameState()
     whoseTurn = 0
