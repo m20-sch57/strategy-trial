@@ -36,3 +36,7 @@ def download():
     #TODO if no file redirect home
     return send_file(request.args.get('path'), as_attachment = True)
 
+@app.route("/test")
+def test():
+    standings = [[1,2],[3,4]]
+    return render_template('temp.html', standings = standings, info = info())
