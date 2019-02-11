@@ -14,5 +14,5 @@ def Sign_up(form: SignUp) -> list:
         user = structures.User(storage.storage.getUsersCount(), username, password, structures.UserType.Default, {})
         storage.storage.saveUser(user)
         return [1, "Signed up successfully"]
-    return [0, ""]
+    return [0, "You must fill all fields with *"]
 
