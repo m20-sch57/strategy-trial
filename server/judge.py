@@ -53,15 +53,24 @@ def updateLogs(logs, results):
     if (logs is not None):
         logs.processResults(results)
 
-def endJudge(pools, logs, results):
+def removePathes(importPathes):
+    for path in importPathes:
+        sys.path.remove(path)
+
+def endJudge(pools, logs, results, importPathes):
+    removePathes(importPathes)
     closePools(pools)
     updateLogs(logs, results)
 
-def badStrategy(game, i, verdict, result, logs):
+def badStrategy(game, i, verdict, result, logs, importPathes):
+    removePathes(importPathes)
     result.results = strategyFailResults(game, i, verdict)
     updateLogs(logs, result.results)
 
-def run(gamePath, classesPath, strategyPathes, problemPath, saveLogs = False):
+def run(gamePath, classesPath, strategyPathes, importPathes, saveLogs = False):
+    for path in importPathes:
+        sys.path.append(path)
+
     classes = __import__(classesPath)
     game = __import__(gamePath)
     result = InvocationResult()
@@ -69,19 +78,16 @@ def run(gamePath, classesPath, strategyPathes, problemPath, saveLogs = False):
     if (saveLogs):
         logs = game.Logs()
         result.logs = logs
-
     strategies = []
-    sys.path.append(problemPath)
     for i in range(len(strategyPathes)):
         try:
             strategies.append(__import__(strategyPathes[i]))
         except Exception:
-            badStrategy(game, i, StrategyVerdict.ImportFail, result, logs)
+            badStrategy(game, i, StrategyVerdict.ImportFail, result, logs, importPathes)
             return result
         if ("Strategy" not in dir(strategies[i])):
-            badStrategy(game, i, StrategyVerdict.PresentationError, result, logs)
+            badStrategy(game, i, StrategyVerdict.PresentationError, result, logs, importPathes)
             return result
-    sys.path.remove(problemPath)
 
     fullGameState = game.FullGameState()
     whoseTurn = 0
@@ -92,25 +98,25 @@ def run(gamePath, classesPath, strategyPathes, problemPath, saveLogs = False):
         turnList = runStrategy(game, strategies[whoseTurn], fullGameState, whoseTurn, logs, pools[whoseTurn])
         if (turnList[0] != StrategyVerdict.Ok):
             result.results = strategyFailResults(game, whoseTurn, turnList[0])
-            endJudge(pools, logs, result.results)
+            endJudge(pools, logs, result.results, importPathes)
             return result
         
         turnResult = game.makeTurn(fullGameState, whoseTurn, turnList[1], logs)
         if (turnResult[0] == TurnState.Incorrect):
             result.results = strategyFailResults(game, whoseTurn, StrategyVerdict.IncorrectTurn)
-            endJudge(pools, logs, result.results)
+            endJudge(pools, logs, result.results, importPathes)
             return result
 
         if (turnResult[0] == TurnState.Last):
             result.results = turnResult[1]
-            endJudge(pools, logs, result.results)
+            endJudge(pools, logs, result.results, importPathes)
             return result
 
         fullGameState = turnResult[1]
         whoseTurn = turnResult[2]
 
     result.results = [Result() for i in range(PlayesCount)]
-    endJudge(pools, logs, result.results)
+    endJudge(pools, logs, result.results, importPathes)
     return result
 
 if __name__ == '__main__':

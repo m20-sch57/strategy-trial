@@ -25,7 +25,7 @@ def getName(submission):
     return "sub" + str(submission.id)
 
 def getModuleName(submission):
-    return "problems." + str(submission.probId) + "." + getName(submission)
+    return getName(submission)
 
 def getFilename(submission):
     return getName(submission) + ".py"
@@ -35,6 +35,12 @@ def loadSubmission(submission, problem):
     filename = "problems/" + str(problem.id) + "/strategies/" + getFilename(submission)
     print(filename)
     printToFile(submission.code, filename)
+
+def getProblemPath(probId):
+    return os.path.join('problems', str(probId))
+
+def getProblemStrategiesPath(probId):
+    return os.path.join(getProblemPath(probId), 'strategies')
 
 def testStrategies(id1, id2, saveLogs = False):
     sub1 = storage.getSubmission(id1)
@@ -49,7 +55,14 @@ def testStrategies(id1, id2, saveLogs = False):
 
     loadSubmission(sub1, problem)
     loadSubmission(sub2, problem)
-    invocationResult = judge.run("game.py", "classes.py", [getFilename(sub1), getFilename(sub2)], saveLogs = saveLogs)
+
+    invocationResult = judge.run(
+        'game',
+        'classes',
+        [getModuleName(sub1), getModuleName(sub2)],
+        [getProblemPath(problemId), getProblemStrategiesPath(problemId)],
+        saveLogs = saveLogs
+    )
     return invocationResult
 
 def tournament(problemId):
@@ -65,15 +78,20 @@ def tournament(problemId):
     for i in range(subCnt):
         loadSubmission(subs[i], problem)
 
+    problemPath = os.path.join('problems', str(problemId))
+
     for i in range(subCnt):
         for j in range(subCnt):
             if (i != j):
                 print("judging ", i, j)
                 invocationResult = judge.run(
-                    "problems." + str(problemId) + ".game",
-                    "problems." + str(problemId) + ".classes",
-                    [getModuleName(subs[i]), getModuleName(subs[j])]
+                    'game',
+                    'classes',
+                    [getModuleName(subs[i]), getModuleName(subs[j])],
+                    [getProblemPath(problemId), getProblemStrategiesPath(problemId)]
                 )
+                print(invocationResult.results[0].goodStr())
+                print(invocationResult.results[1].goodStr())
                 scores[i][0] += invocationResult.results[0].score
                 scores[j][0] += invocationResult.results[1].score
 
