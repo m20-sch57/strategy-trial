@@ -1,5 +1,5 @@
 from app.forRoutes.info import info
-from flask import make_response, render_template, redirect
+from flask import make_response, render_template, redirect, flash
 from app import app
 import server.useCasesAPI as useCasesAPI
 
@@ -10,6 +10,7 @@ def settings():
 @app.route("/logout")
 def logout():
     resp = make_response(redirect("/home"))
+    flash("Logged out successfully")
     resp.set_cookie("logged_in", "0")
     resp.set_cookie("username", "Guest")
     resp.set_cookie("user_id", "-1")

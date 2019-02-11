@@ -8,10 +8,8 @@ def Sign_up(form: SignUp) -> list:
         password = form.password.data
         passwordRet = form.passwordRet.data
         if storage.storage.getUserByName(username) != None:
-            print("u")
             return [0, "There is a user with this username"]
         if password != passwordRet:
-            print("p")
             return [0, "Passwords don't match"]
         user = structures.User(storage.storage.getUsersCount(), username, password, structures.UserType.Default, {})
         storage.storage.saveUser(user)

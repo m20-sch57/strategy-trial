@@ -23,6 +23,11 @@
             <a href="/settings">{{ info[1] }}</a>
             {% endif %}
         </div>
+        {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+        {% endwith %}
         <hr>
         {% block content %}{% endblock %}
     </body>
