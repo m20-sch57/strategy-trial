@@ -1,6 +1,7 @@
 Апдейт 13.02 21:30
 
 Следующий отрезок времени:
+https://github.com/m20-sch57/strategy-trial/issues/63
 https://github.com/m20-sch57/strategy-trial/issues/67
 https://github.com/m20-sch57/strategy-trial/issues/105
 https://github.com/m20-sch57/strategy-trial/issues/59
