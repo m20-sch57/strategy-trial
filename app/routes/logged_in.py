@@ -23,5 +23,5 @@ def submissions():
         return "..."
 
     lst = useCasesAPI.getSubmissionsU(userId)
-    return render_template('submissions.html', title = "Submissions", info = info(), subList = lst)
+    return render_template('submissions.html', title = "Submissions", info = info(), subList = lst[::-1])
 
