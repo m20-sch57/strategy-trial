@@ -3,6 +3,7 @@ from server.gameStuff import *
 from app import app
 from flask import render_template
 from copy import deepcopy
+import os.path
 
 FieldSize = 3
 MaxScore = 100
@@ -29,9 +30,13 @@ class Logs:
                     b[i][j][1] = 1
         self.fieldLog.append(b)
 
-    def show(self):
+    def show(self, probId):
         with app.app_context():
-            data = render_template("problems/0/logs.html.j2", fieldLog = self.fieldLog, res1 = self.results[0].goodStr(MaxScore), res2 = self.results[1].goodStr(MaxScore))
+            logPath = os.path.join('problems', str(probId), 'logs.html.j2')
+            data = render_template(logPath, fieldLog = self.fieldLog,
+                res1 = self.results[0].goodStr(MaxScore), res2 = self.results[1].goodStr(MaxScore),
+                strId = str(probId)
+            )
         return data
 
 def gameStateRep(full: FullGameState, playerId: int) -> GameState:

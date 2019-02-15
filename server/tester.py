@@ -31,8 +31,8 @@ def getFilename(submission):
     return getName(submission) + ".py"
 
 def loadSubmission(submission, problem):
-    #TODO use os.path.join
-    filename = "problems/" + str(problem.id) + "/strategies/" + getFilename(submission)
+    filename = os.path.join('problems', str(problem.id),
+        'strategies', getFilename(submission))
     print(filename)
     printToFile(submission.code, filename)
 
