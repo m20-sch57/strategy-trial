@@ -45,7 +45,7 @@ def getSubmissionsUP(userId, probId):
     return storage.getSubmissionListUP(userId, probId)
 
 def makeTornament(probId):
-    return tournament(subId)
+    return tournament(probId)
 
 def judge(id1, id2):
     return testStrategies(id1, id2, saveLogs = True)
