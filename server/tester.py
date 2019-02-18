@@ -15,7 +15,7 @@ def loadSources(sources):
         printToFile(source[1], path)
 
 def loadProblem(problem):
-    problempath = "problems/" + str(problem.id)
+    problempath = os.path.join('problems', str(problem.id))
     loadSources(problem.rules.sources)
 
 def loadProblemDownloads(problem):
