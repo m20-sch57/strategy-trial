@@ -38,5 +38,5 @@ def download():
 
 @app.route("/test")
 def test():
-    standings = [[1,2],[3,4]]
+    standings = [[1,2,'dfberfberfvbrf'],[3,4,'dwecwefwe'],[5,6,'sdfvbdjfv'],[7,8,'scvwef'],[9,10,'cvb df f']];
     return render_template('temp.html', standings = standings, info = info())
