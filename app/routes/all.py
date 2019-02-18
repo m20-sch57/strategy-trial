@@ -3,6 +3,7 @@ from flask import render_template, redirect, send_file, request
 from app import app
 from app.forRoutes.problemsetId import problemsetId
 from app.forms import ProblemsetID
+from server.storage import storage
 import server.useCasesAPI as useCasesAPI
 
 @app.route("/")
@@ -28,8 +29,13 @@ def problemset_id(strId):
 
 @app.route("/source/<subId>")
 def showSource(subId):
-    title = "Code #" + subId
-    return render_template('source.html.j2', id = subId, code = useCasesAPI.getSubmissionCode(subId), info = info())
+    submission = storage.getSubmission(subId);
+    Info = info();
+    title = "Code #" + subId;
+    print(Info);
+    if Info[0] and Info[2] == submission.userId:
+        return render_template('source.html.j2', id = subId, code = useCasesAPI.getSubmissionCode(subId), info = info());
+    return render_template('ban.html.j2', info = info());
 
 @app.route("/download")
 def download():
