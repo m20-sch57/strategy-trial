@@ -29,13 +29,13 @@ def problemset_id(strId):
 
 @app.route("/source/<subId>")
 def showSource(subId):
-    submission = storage.getSubmission(subId);
-    Info = info();
-    title = "Code #" + subId;
-    print(Info);
+    submission = storage.getSubmission(subId)
+    Info = info()
+    title = "Code #" + subId
+    print(Info)
     if Info[0] and Info[2] == submission.userId:
-        return render_template('source.html.j2', id = subId, code = useCasesAPI.getSubmissionCode(subId), info = info());
-    return render_template('ban.html.j2', info = info());
+        return render_template('source.html.j2', id = subId, code = useCasesAPI.getSubmissionCode(subId), info = info())
+    return render_template('ban.html.j2', info = info())
 
 @app.route("/download")
 def download():
@@ -44,5 +44,5 @@ def download():
 
 @app.route("/test")
 def test():
-    standings = [[1,2,'dfberfberfvbrf'],[3,4,'dwecwefwe'],[5,6,'sdfvbdjfv'],[7,8,'scvwef'],[9,10,'cvb df f']];
+    standings = [[1,2,'dfberfberfvbrf'],[3,4,'dwecwefwe'],[5,6,'sdfvbdjfv'],[7,8,'scvwef'],[9,10,'cvb df f']]
     return render_template('temp.html', standings = standings, info = info())
