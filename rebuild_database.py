@@ -23,8 +23,8 @@ for i in range(StrategyCnt):
     storage.saveUser(user)
 
 for i in range(StrategyCnt):
-    sub = Submission(-1, i, 0, readFile("ticTacToeStrategies/st" + str(i + 1) + ".py"), StrategyState.Main)
-    storage.saveSubmission(sub)
+    useCasesAPI.addSubmission(i, 0, readFile("ticTacToeStrategies/st" + str(i + 1) + ".py"))
+    useCasesAPI.changeMainSubmission(i, i)
 
 root = User(-1, "test", "123", UserType.Admin, {})
 storage.saveUser(root)

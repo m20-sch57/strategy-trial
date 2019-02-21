@@ -5,6 +5,7 @@ from app.forRoutes.problemsetId import problemsetId
 from app.forms import ProblemsetID
 from server.storage import storage
 import server.useCasesAPI as useCasesAPI
+from datetime import datetime
 
 @app.route("/")
 @app.route("/home")
@@ -32,7 +33,6 @@ def showSource(subId):
     submission = storage.getSubmission(subId)
     Info = info()
     title = "Code #" + subId
-    print(Info)
     if Info[0] and Info[2] == submission.userId:
         return render_template('source.html.j2', id = subId, code = useCasesAPI.getSubmissionCode(subId), info = info())
     return render_template('message.html.j2', text = "You can't see this source :)", info = info())
@@ -42,7 +42,20 @@ def download():
     #TODO if no file redirect home
     return send_file(request.args.get('path'), as_attachment = True)
 
-@app.route("/test")
-def test():
-    standings = [[1,2,'dfberfberfvbrf'],[3,4,'dwecwefwe'],[5,6,'sdfvbdjfv'],[7,8,'scvwef'],[9,10,'cvb df f']]
-    return render_template('temp.html', standings = standings, info = info())
+@app.route("/tournament/<strId>")
+def test(strId):
+    try:
+        tourId = int(strId)
+    except ValueError:
+        return redirect('/home')
+
+    tourDict = useCasesAPI.getTournament(tourId)
+    if (tourDict is None):
+        return redirect('/home')
+
+    title = 'Standings #' + strId
+    strtime = datetime.utcfromtimestamp(tourDict['time']).strftime(
+        '%d %b %Y %H.%M %p')
+    return render_template('standings.html.j2', standings = tourDict['list'],
+        time = strtime, title = title, info = info())
+  
