@@ -34,8 +34,8 @@ def showSource(subId):
     Info = info()
     title = "Code #" + subId
     if Info[0] and Info[2] == submission.userId:
-        return render_template('source.html.j2', id = subId, code = useCasesAPI.getSubmissionCode(subId), info = info(), title = title)
-    return render_template('ban.html.j2', info = info())
+        return render_template('source.html.j2', id = subId, code = useCasesAPI.getSubmissionCode(subId), info = info())
+    return render_template('message.html.j2', text = "You can't see this source :)", info = info())
 
 @app.route("/download")
 def download():
@@ -58,3 +58,4 @@ def test(strId):
         '%d %b %Y %H.%M %p')
     return render_template('standings.html.j2', standings = tourDict['list'],
         time = strtime, title = title, info = info())
+  
