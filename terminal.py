@@ -1,4 +1,5 @@
 import server.useCasesAPI as useCasesAPI
+import server.parser as parser
 from server.commonFunctions import readFile
 from server.storage import storage
 
@@ -98,6 +99,10 @@ while (True):
         if (len(params) == 3 and isInt(params[1]) and isInt(params[2])):
             res = storage.getSubmissionListUP(int(params[1]), int(params[2]))
             print(res)
+
+    if (command == 'parse'):
+        if (len(params) == 2):
+            parser.parseArchive(params[1])
 
     if (command == 'close'):
         break
