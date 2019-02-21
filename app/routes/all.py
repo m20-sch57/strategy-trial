@@ -33,7 +33,6 @@ def showSource(subId):
     submission = storage.getSubmission(subId)
     Info = info()
     title = "Code #" + subId
-    print(Info)
     if Info[0] and Info[2] == submission.userId:
         return render_template('source.html.j2', id = subId, code = useCasesAPI.getSubmissionCode(subId), info = info(), title = title)
     return render_template('ban.html.j2', info = info())
