@@ -40,7 +40,7 @@ def getFromDatabase(cursor, tableName, id: int):
     return cursor.fetchone();
 
 def getCertainField(cursor, tableName, id, fieldName):
-    cursor.execute('SELECT ' + fieldName + ' FROM ' + tableName + 'WHERE id=', [id])
+    cursor.execute('SELECT ' + fieldName + ' FROM ' + tableName + ' WHERE id=?', [id])
     lst = cursor.fetchone()
     if (lst is None):
         return None
