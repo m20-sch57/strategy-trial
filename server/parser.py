@@ -2,8 +2,8 @@ from server.structures import Problem, Rules
 from zipfile import ZipFile
 from enum import IntEnum
 from server.storage import storage
-import os
-import shutil
+from server.commonFunctions import readFile
+import os, shutil, glob, json
 
 SaveFolder = 'tmp'
 
@@ -27,11 +27,26 @@ def getFolderType(path):
             return {'type' : FolderType.Bad}
     return {'type' : FolderType.Correct}
 
+MaxSourceSize = 256000
 
+class SourceSizeException(Exception):
+    pass
+
+def readFiles(readPath, outPath):
+    print("readFiles", readPath, outPath)
+    res = []
+    for filename in glob.iglob(os.path.join(readPath, '**', '*'), recursive = True):
+        print(filename)
+        if (os.path.getsize(filename) > MaxSourceSize):
+            raise SourceSizeException
+        rel = os.path.relpath(filename, readPath)
+        res.append([os.path.join(outPath, rel), readFile(filename)])
+    print('res', res)
+    return res
 
 def parseArchive(archivePath):
     if (not os.path.isfile(archivePath)):
-        return {'success' : 0, 'error' : 'No such archive (internal error)'}
+        return {'ok' : 0, 'error' : 'No such archive (internal error)'}
     if (os.path.isdir(SaveFolder)):
         shutil.rmtree(SaveFolder)
     zip = ZipFile(archivePath)
@@ -43,9 +58,35 @@ def parseArchive(archivePath):
         if (typeDict['type'] == FolderType.Correct):
             break
         elif (typeDict['type'] == FolderType.Bad):
-            return {'success' : 0, 'error' : "Archive isn't correct"}
+            return {'ok' : 0, 'error' : "Archive isn't correct"}
         else:
             problemPath = os.path.join(problemPath, typeDict['go'])
 
-    print(problemPath)
+    print('path', problemPath)
+    probId = storage.getProblemsCount()
+    statement = readFile(os.path.join(problemPath, 'statement'))
+    rawConfig = readFile(os.path.join(problemPath, 'config.json'))
+    config = json.loads(rawConfig)
+
+    if ('name' not in config):
+        return {'ok' : 0, 'error' : 'No name parameter in config'}
+
+    name = config['name']
+
+    try:
+        downloads = readFiles(os.path.join(problemPath, 'downloads'),
+            os.path.join('app', 'downloads', str(probId)))
+        sources1 = readFiles(os.path.join(problemPath, 'sources'),
+            os.path.join('problems', str(probId)))
+        sources2 = readFiles(os.path.join(problemPath, 'templates'),
+            os.path.join('app', 'templates', 'problems', str(probId)))
+        sources3 = readFiles(os.path.join(problemPath, 'static'),
+            os.path.join('app', 'static', 'problems', str(probId)))
+    except SourceSizeException:
+        return {'ok' : 0, 'error' : 'Source file is too large'}
+
+    sources = sources1 + sources2 + sources3
+    problem = Problem(probId, Rules(name, sources, probId, statement), [], [])
+    storage.saveProblem(problem)
+    return {'ok' : 1}
 

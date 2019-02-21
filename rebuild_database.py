@@ -13,8 +13,8 @@ import server.useCasesAPI as useCasesAPI
 
 StrategyCnt = 10
 
-game = readFile("tic_tac_toe/game.py")
-classes = readFile("tic_tac_toe/classes.py")
+game = readFile("tic_tac_toe/sources/game.py")
+classes = readFile("tic_tac_toe/sources/classes.py")
 logsTemplate = readFile("tic_tac_toe/templates/logs.html.j2")
 css = readFile("tic_tac_toe/static/style.css")
 
@@ -40,7 +40,7 @@ downloads2 = [
     ['app/downloads/1/classes.py', classes]
 ]
 
-statement = readFile("Text/trashST")
+statement = readFile("tic_tac_toe/statement")
 
 rules = Rules("TicTacToe", sources, downloads, statement)
 rules2 = Rules("TicTacToe (copy)", sources2, downloads2, statement)
@@ -57,19 +57,19 @@ for i in range(StrategyCnt):
     storage.saveUser(user)
 
 for i in range(StrategyCnt):
-    sub = Submission(-1, i, 0, readFile("tic_tac_toe/strategies/st" + str(i + 1) + ".py"), StrategyState.Main)
+    sub = Submission(-1, i, 0, readFile("ticTacToeStrategies/st" + str(i + 1) + ".py"), StrategyState.Main)
     storage.saveSubmission(sub)
 
 root = User(-1, "test", "123", UserType.Admin, {})
 storage.saveUser(root)
-useCasesAPI.addSubmission(10, 0, readFile("tic_tac_toe/strategies/st1.py"))
-useCasesAPI.addSubmission(10, 0, readFile("tic_tac_toe/strategies/st2.py"))
-useCasesAPI.addSubmission(10, 0, readFile("tic_tac_toe/strategies/st3.py"))
-useCasesAPI.addSubmission(0, 1, readFile("tic_tac_toe/strategies/st1.py"))
-useCasesAPI.addSubmission(1, 1, readFile("tic_tac_toe/strategies/st2.py"))
-useCasesAPI.addSubmission(2, 1, readFile("tic_tac_toe/strategies/st3.py"))
-useCasesAPI.addSubmission(3, 1, readFile("tic_tac_toe/strategies/st4.py"))
-useCasesAPI.addSubmission(4, 1, readFile("tic_tac_toe/strategies/st10.py"))
+useCasesAPI.addSubmission(10, 0, readFile("ticTacToeStrategies/st1.py"))
+useCasesAPI.addSubmission(10, 0, readFile("ticTacToeStrategies/st2.py"))
+useCasesAPI.addSubmission(10, 0, readFile("ticTacToeStrategies/st3.py"))
+useCasesAPI.addSubmission(0, 1, readFile("ticTacToeStrategies/st1.py"))
+useCasesAPI.addSubmission(1, 1, readFile("ticTacToeStrategies/st2.py"))
+useCasesAPI.addSubmission(2, 1, readFile("ticTacToeStrategies/st3.py"))
+useCasesAPI.addSubmission(3, 1, readFile("ticTacToeStrategies/st4.py"))
+useCasesAPI.addSubmission(4, 1, readFile("ticTacToeStrategies/st10.py"))
 useCasesAPI.changeMainSubmission(0, 13)
 useCasesAPI.changeMainSubmission(1, 14)
 useCasesAPI.changeMainSubmission(2, 15)

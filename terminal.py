@@ -102,7 +102,7 @@ while (True):
 
     if (command == 'parse'):
         if (len(params) == 2):
-            parser.parseArchive(params[1])
+            print(parser.parseArchive(params[1]))
 
     if (command == 'close'):
         break
