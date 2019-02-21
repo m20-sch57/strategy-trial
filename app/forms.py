@@ -28,3 +28,8 @@ class StrategyTester(FlaskForm):
 class ProblemsetID(FlaskForm):
     selectfile = FileField("Select File")
     submit = SubmitField('Submit')
+
+class TournamentForm(FlaskForm):
+    probId = StringField("Id of problem", validators = [DataRequired()])
+    submit = SubmitField("Submit")
+

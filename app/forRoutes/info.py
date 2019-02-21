@@ -1,4 +1,6 @@
 from flask import request
+import server.structures as structures
+from server.storage import storage
 
 def unauthorized():
     return ['0', 'Guest', -1]
@@ -16,4 +18,10 @@ def info() -> list:
             return unauthorized()
 
     return [logged_in, username, id]
+
+def isAdmin() -> bool:
+    user = storage.getUserByName(info()[1])
+    if user == None:
+        return False
+    return user.type
 
