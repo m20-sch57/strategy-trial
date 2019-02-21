@@ -27,6 +27,7 @@ class UserType(IntEnum):
     Default = 0
     Admin = 1
 
+
 #database functions
 
 def saveList(cursor, tableName, lst):
@@ -37,6 +38,14 @@ def saveList(cursor, tableName, lst):
 def getFromDatabase(cursor, tableName, id: int):
     cursor.execute('SELECT * FROM ' + tableName + ' WHERE id=?', [id])
     return cursor.fetchone();
+
+def getCertainField(cursor, tableName, id, fieldName):
+    cursor.execute('SELECT ' + fieldName + ' FROM ' + tableName + ' WHERE id=?', [id])
+    lst = cursor.fetchone()
+    if (lst is None):
+        return None
+    else:
+        return lst[0]
 
 
 #user

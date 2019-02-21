@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+    <h2>Time: {{ time }}</h2>
+    <table style="width:100%" border="1">
+        <tr>
+            <th>Place</th>
+            <th>Score</th>
+            <th>Username</th>
+        </tr>
+    {% for i in standings %}
+        <tr>
+            <td>{{ i[0] }}</td>
+            <td>{{ i[1] }}</td>
+            <td>{{ i[2] }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+</div>
+{% endblock %}
