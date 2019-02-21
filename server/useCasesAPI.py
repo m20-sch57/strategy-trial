@@ -56,3 +56,14 @@ def getSubmissionCode(subId):
         return ""
     else:
         return submission.code
+
+def getTournament(tourId):
+    tournament = storage.getTournament(tourId)
+    if (tournament is None):
+        return None
+    lst = []
+    for i in range(len(tournament.standings)):
+        position = tournament.standings[i]
+        lst.append([i + 1, position[0],
+            storage.getCertainField('users', position[1], 'username')])
+    return {'time' : tournament.time, 'list' : lst}

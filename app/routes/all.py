@@ -42,7 +42,16 @@ def download():
     #TODO if no file redirect home
     return send_file(request.args.get('path'), as_attachment = True)
 
-@app.route("/test")
-def test():
+@app.route("/tournament/<strId>")
+def test(strId):
+    try:
+        tourId = int(strId):
+    except ValueError:
+        return redirect('/home')
+
+    tourDict = useCasesAPI.getTournament(tourId)
+    if (tourDict is None):
+        return redirect('/home')
+
     standings = [[1,2,'dfberfberfvbrf'],[3,4,'dwecwefwe'],[5,6,'sdfvbdjfv'],[7,8,'scvwef'],[9,10,'cvb df f']]
-    return render_template('temp.html', standings = standings, info = info())
+    return render_template('temp.html', standings = tourDict['list'], , info = info())
