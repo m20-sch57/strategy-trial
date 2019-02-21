@@ -33,15 +33,12 @@ class SourceSizeException(Exception):
     pass
 
 def readFiles(readPath, outPath):
-    print("readFiles", readPath, outPath)
     res = []
     for filename in glob.iglob(os.path.join(readPath, '**', '*'), recursive = True):
-        print(filename)
         if (os.path.getsize(filename) > MaxSourceSize):
             raise SourceSizeException
         rel = os.path.relpath(filename, readPath)
         res.append([os.path.join(outPath, rel), readFile(filename)])
-    print('res', res)
     return res
 
 def parseArchive(archivePath):
@@ -62,7 +59,6 @@ def parseArchive(archivePath):
         else:
             problemPath = os.path.join(problemPath, typeDict['go'])
 
-    print('path', problemPath)
     probId = storage.getProblemsCount()
     statement = readFile(os.path.join(problemPath, 'statement'))
     rawConfig = readFile(os.path.join(problemPath, 'config.json'))
@@ -86,7 +82,7 @@ def parseArchive(archivePath):
         return {'ok' : 0, 'error' : 'Source file is too large'}
 
     sources = sources1 + sources2 + sources3
-    problem = Problem(probId, Rules(name, sources, probId, statement), [], [])
+    problem = Problem(probId, Rules(name, sources, downloads, statement), [], [])
     storage.saveProblem(problem)
     return {'ok' : 1}
 

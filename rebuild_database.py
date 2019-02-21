@@ -13,44 +13,10 @@ import server.useCasesAPI as useCasesAPI
 
 StrategyCnt = 10
 
-game = readFile("tic_tac_toe/sources/game.py")
-classes = readFile("tic_tac_toe/sources/classes.py")
-logsTemplate = readFile("tic_tac_toe/templates/logs.html.j2")
-css = readFile("tic_tac_toe/static/style.css")
+import server.parser as parser
+parser.parseArchive('tic_tac_toe.zip')
 
-sources = [
-    ['problems/0/game.py', game], 
-    ['problems/0/classes.py', classes], 
-    ['app/templates/problems/0/logs.html.j2', logsTemplate],
-    ['app/static/problems/0/style.css', css]
-]
-
-downloads = [
-    ['app/downloads/0/classes.py', classes]
-]
-
-sources2 = [
-    ['problems/1/game.py', game], 
-    ['problems/1/classes.py', classes], 
-    ['app/templates/problems/1/logs.html.j2', logsTemplate],
-    ['app/static/problems/1/style.css', css]
-]
-
-downloads2 = [
-    ['app/downloads/1/classes.py', classes]
-]
-
-statement = readFile("tic_tac_toe/statement")
-
-rules = Rules("TicTacToe", sources, downloads, statement)
-rules2 = Rules("TicTacToe (copy)", sources2, downloads2, statement)
 subs = [i for i in range(10)]
-
-TicTacToe = Problem(-1, rules, set(subs), [])
-TicTacToe2 = Problem(-1, rules2, {}, [])
-
-storage.saveProblem(TicTacToe)
-storage.saveProblem(TicTacToe2)
 
 for i in range(StrategyCnt):
     user = User(-1, "hlebushek" + str(i), "12345", UserType.Default, {0 : [i]})
@@ -65,13 +31,3 @@ storage.saveUser(root)
 useCasesAPI.addSubmission(10, 0, readFile("ticTacToeStrategies/st1.py"))
 useCasesAPI.addSubmission(10, 0, readFile("ticTacToeStrategies/st2.py"))
 useCasesAPI.addSubmission(10, 0, readFile("ticTacToeStrategies/st3.py"))
-useCasesAPI.addSubmission(0, 1, readFile("ticTacToeStrategies/st1.py"))
-useCasesAPI.addSubmission(1, 1, readFile("ticTacToeStrategies/st2.py"))
-useCasesAPI.addSubmission(2, 1, readFile("ticTacToeStrategies/st3.py"))
-useCasesAPI.addSubmission(3, 1, readFile("ticTacToeStrategies/st4.py"))
-useCasesAPI.addSubmission(4, 1, readFile("ticTacToeStrategies/st10.py"))
-useCasesAPI.changeMainSubmission(0, 13)
-useCasesAPI.changeMainSubmission(1, 14)
-useCasesAPI.changeMainSubmission(2, 15)
-useCasesAPI.changeMainSubmission(3, 16)
-useCasesAPI.changeMainSubmission(4, 17)
