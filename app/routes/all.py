@@ -53,7 +53,8 @@ def test(strId):
     if (tourDict is None):
         return redirect('/home')
 
+    title = 'Standings #' + strId
     strtime = datetime.utcfromtimestamp(tourDict['time']).strftime(
         '%d %b %Y %H.%M %p')
     return render_template('standings.html.j2', standings = tourDict['list'],
-        time = strtime, info = info())
+        time = strtime, title = title, info = info())
