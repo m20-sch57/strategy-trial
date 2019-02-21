@@ -55,7 +55,7 @@ def test(strId):
 
     title = 'Standings #' + strId
     strtime = datetime.utcfromtimestamp(tourDict['time']).strftime(
-        '%d %b %Y %H.%M %p')
+        '%d %b %Y %I.%M %p')
     return render_template('standings.html.j2', standings = tourDict['list'],
         time = strtime, title = title, info = info())
   
