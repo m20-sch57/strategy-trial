@@ -22,12 +22,12 @@ def problemset():
 @app.route("/problemset/<strId>", methods = ["GET", "POST"])
 def problemset_id(strId):
     form = ProblemsetID()
-    success, paths, problem, subList, tourList = problemsetId(form, strId)
+    success, paths, problem, subList, tourList = problemsetId(strId)
     if not success:
         return redirect("/home")
 #    smth with paths...
     return render_template('problem.html.j2', form = form, title = problem.rules.name, 
-        problem = problem, subList = subList[::-1], paths = paths, tourList = tourList, info = info())
+        problem = problem, subList = subList[::-1], paths = paths, tourList = tourList[::-1], info = info())
 
 @app.route("/source/<subId>")
 def showSource(subId):

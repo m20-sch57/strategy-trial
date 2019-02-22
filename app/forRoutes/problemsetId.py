@@ -10,7 +10,7 @@ def convertPathForApp(path):
     arr = path.split(os.sep)
     return os.path.join(*arr[1:])
 
-def problemsetId(s: ProblemsetID, strId: str) -> list:
+def problemsetId(strId: str) -> list:
     try:
         probId = int(strId)
     except ValueError:
