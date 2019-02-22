@@ -208,7 +208,7 @@ def getSubmission(cursor, id):
 
 def createTournamentsTable(cursor):
     cursor.execute('''CREATE TABLE IF NOT EXISTS tournaments (id integer PRIMARY KEY, 
-        t integer, standings TEXT)''')
+        time integer, standings TEXT)''')
 
 class Tournament:
     def __init__(self, id, time, standings):

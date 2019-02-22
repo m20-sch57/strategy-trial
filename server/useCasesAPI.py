@@ -3,6 +3,8 @@ from server.structures import User, Rules, Problem, Submission, Tournament
 from server.storage import storage
 from server.tester import tournament, testStrategies
 from server.tester import loadProblemDownloads as TesterLPD
+from server.commonFunctions import stringTime
+import json
 
 def addSubmission(userId, problemId, code):
     user = storage.getUser(userId)
@@ -56,6 +58,18 @@ def getSubmissionCode(subId):
         return ""
     else:
         return submission.code
+
+def getProbTournaments(probId):
+    lst = json.loads(storage.getCertainField('problems', probId, 'tournaments'))
+    res = [
+        {
+            'id' : i + 1, 
+            'tour_id' : lst[i], 
+            'time' : stringTime(storage.getCertainField('tournaments', lst[i], 'time'))
+        }
+        for i in range(len(lst))
+    ]
+    return res
 
 def getTournament(tourId):
     tournament = storage.getTournament(tourId)

@@ -47,5 +47,18 @@
     {% else %}
         <h3>In order to send strategy you have to <a href="/login">log in</a> or <a href="/sign_up"> sign up</a></h3>
     {% endif %}
+
+    <h3>Tournaments</h3>
+    <table border="1">
+        <tr><th>Id</th><th>Time</th><th>Link</th></tr>
+        {% for tour in tourList %}
+            <tr>
+                <td>{{ tour.id }}</td>
+                <td>{{ tour.time }}</td>
+                <td>{{ tour.tour_id }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
 {% endblock %}
 

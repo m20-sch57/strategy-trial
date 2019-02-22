@@ -10,14 +10,14 @@ def convertPathForApp(path):
     arr = path.split(os.sep)
     return os.path.join(*arr[1:])
 
-def problemsetId(form: ProblemsetID, strId: str) -> list:
+def problemsetId(s: ProblemsetID, strId: str) -> list:
     try:
         probId = int(strId)
     except ValueError:
-        return [0, [], None, None]
+        return [0, [], None, None, None]
     problem = storage.getProblem(probId)
     if (problem is None):
-        return [0, [], None, None]
+        return [0, [], None, None, None]
 
     userId = info()[2]
     if userId == -1:
@@ -31,5 +31,4 @@ def problemsetId(form: ProblemsetID, strId: str) -> list:
     #paths - список путей до файлов, которые пользователь может скачать
     #print(paths)
 
-    return [1, paths, problem, subList]
-
+    return [1, paths, problem, subList, useCasesAPI.getProbTournaments(probId)]
