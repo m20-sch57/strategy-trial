@@ -22,6 +22,9 @@
             <a href="/logout">Log out</a>
             <a href="/settings">{{ info.username }}</a>
             {% endif %}
+            {% if info.admin == 1 %}
+            <b>(admin)</b>
+            {% endif %}
         </div>
         {% with messages = get_flashed_messages() %}
         {% for message in messages %}

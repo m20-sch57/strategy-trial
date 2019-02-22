@@ -49,7 +49,7 @@ def getCertainField(cursor, tableName, id, fieldName):
 
 
 #user
-#saving: [id, username, password, submissions]
+#saving: [id, username, password, type, submissions]
 
 def createUsersTable(cursor):
     cursor.execute('''CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, 

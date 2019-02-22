@@ -1,12 +1,13 @@
 from flask import request
-import server.structures as structures
+from server.structures import UserType
 from server.storage import storage
 
 def unauthorized():
     return {
         'logged_in' : 0,
         'username' : 'Guest',
-        'id' : -1
+        'id' : -1,
+        'admin' : 0
     }
 
 def info() -> list:
@@ -22,10 +23,21 @@ def info() -> list:
         except ValueError:
             return unauthorized()
 
+    if (logged_in == 0):
+        return unauthorized()
+
+    intUserType = storage.getCertainField('users', id, 'type')
+    userType = UserType(intUserType)
+    if (userType == UserType.Admin):
+        admin = 1
+    else:
+        admin = 0
+
     return {
         'logged_in' : logged_in,
         'username' : username,
-        'id' : id
+        'id' : id,
+        'admin' : admin
     }
 
 def isAdmin() -> bool:
