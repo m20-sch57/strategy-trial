@@ -1,5 +1,5 @@
 from app.forRoutes.info import info
-from flask import render_template, redirect, send_file, request
+from flask import render_template, redirect, send_file, request, flash
 from app import app
 from app.forRoutes.problemsetId import problemsetId
 from app.forms import ProblemsetID
@@ -47,10 +47,12 @@ def test(strId):
     try:
         tourId = int(strId)
     except ValueError:
+        flash('Incorrect tournament id')
         return redirect('/home')
 
     tourDict = useCasesAPI.getTournament(tourId)
     if (tourDict is None):
+        flash('Incorrect tournament id')
         return redirect('/home')
 
     title = 'Standings #' + strId
