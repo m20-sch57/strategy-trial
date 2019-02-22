@@ -32,9 +32,12 @@ def problemset_id(strId):
 @app.route("/source/<subId>")
 def showSource(subId):
     submission = storage.getSubmission(subId)
+    if (submission is None):
+        flash('No such submission')
+        return redirect('/home')
     Info = info()
     title = "Code #" + subId
-    if (Info.logged_in == 1 and Info.id == submission.userId):
+    if (Info['logged_in'] == 1 and Info['id'] == submission.userId):
         return render_template('source.html.j2', id = subId, code = useCasesAPI.getSubmissionCode(subId), info = info())
     return render_template('message.html.j2', text = "You can't see this source :)", info = info())
 

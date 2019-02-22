@@ -23,7 +23,8 @@
             <a href="/settings">{{ info.username }}</a>
             {% endif %}
             {% if info.admin == 1 %}
-            <b>(admin)</b>
+                <b>(admin)</b>
+                <a href="/add_tournament">Add tournament</a>
             {% endif %}
         </div>
         {% with messages = get_flashed_messages() %}
