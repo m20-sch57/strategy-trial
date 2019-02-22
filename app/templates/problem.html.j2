@@ -55,7 +55,7 @@
             <tr>
                 <td>{{ tour.id }}</td>
                 <td>{{ tour.time }}</td>
-                <td>{{ tour.tour_id }}</td>
+                <td><a href=/{{ "tournament" + "/" + tour.tour_id|string }}><b>Look</b></td>
             </tr>
         {% endfor %}
     </table>
