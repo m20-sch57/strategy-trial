@@ -19,7 +19,7 @@ def problemsetId(strId: str) -> list:
     if (problem is None):
         return [0, [], None, None, None]
 
-    userId = info()[2]
+    userId = info()['id']
     if userId == -1:
         subList = []
     else:
