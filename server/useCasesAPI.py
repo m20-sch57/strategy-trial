@@ -63,11 +63,11 @@ def getProbTournaments(probId):
     lst = json.loads(storage.getCertainField('problems', probId, 'tournaments'))
     res = [
         {
-            'id' : i + 1, 
+            'id' : len(lst) - i, 
             'tour_id' : lst[i], 
             'time' : stringTime(storage.getCertainField('tournaments', lst[i], 'time'))
         }
-        for i in range(len(lst))
+        for i in range(len(lst) - 1, -1, -1)
     ]
     return res
 

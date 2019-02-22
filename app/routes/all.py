@@ -27,7 +27,7 @@ def problemset_id(strId):
         return redirect("/home")
 #    smth with paths...
     return render_template('problem.html.j2', form = form, title = problem.rules.name, 
-        problem = problem, subList = subList[::-1], paths = paths, tourList = tourList[::-1], info = info())
+        problem = problem, subList = subList[::-1], paths = paths, tourList = tourList, info = info())
 
 @app.route("/source/<subId>")
 def showSource(subId):
