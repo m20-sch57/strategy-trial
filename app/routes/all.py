@@ -58,6 +58,7 @@ def test(strId):
 
     title = 'Standings #' + strId
     strtime = stringTime(tourDict['time'])
+    probId = storage.getCertainField('tournaments', tourId, 'probId')
     return render_template('standings.html.j2', standings = tourDict['list'],
-        time = strtime, title = title, info = info())
+        time = strtime, probId = probId, title = title, info = info())
   
