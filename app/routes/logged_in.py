@@ -18,9 +18,10 @@ def logout():
 
 @app.route("/submissions")
 def submissions():
-    userId = info()[2]
+    userId = info()['id']
     if userId == -1:
-        return "..."
+        flash("You haven't logged in, so you can't see your submissions")
+        return redirect('/home')
 
     lst = useCasesAPI.getSubmissionsU(userId)
     return render_template('submissions.html', title = "Submissions", info = info(), subList = lst[::-1])

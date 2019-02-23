@@ -1,6 +1,7 @@
 import json
 import time
 import os.path
+from datetime import datetime
 
 def readFile(path):
     with open(path, 'r', encoding="utf8") as myfile: #cp1251
@@ -22,3 +23,7 @@ def jsonParser(s):
 
 def unixTime():
     return int(time.time())
+
+def stringTime(unixTime):
+    return datetime.utcfromtimestamp(unixTime).strftime(
+        '%d %b %Y %I.%M %p')

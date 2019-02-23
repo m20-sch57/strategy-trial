@@ -16,7 +16,7 @@
 
     <!-- shouldn't be copypasted -->
 
-    {% if info[0] == '1' %}
+    {% if info.logged_in == 1 %}
         <h3>Submissions</h3>
 
         <table border="1">
@@ -47,5 +47,22 @@
     {% else %}
         <h3>In order to send strategy you have to <a href="/login">log in</a> or <a href="/sign_up"> sign up</a></h3>
     {% endif %}
+
+    <h3>Tournaments</h3>
+    <table border="1">
+        <tr><th>Id</th><th>Time</th><th>Link</th></tr>
+        {% for tour in tourList %}
+            <tr>
+                <td>{{ tour.id }}</td>
+                <td>{{ tour.time }}</td>
+                <td><a href=/{{ "tournament" + "/" + tour.tour_id|string }}><b>Look</b></a></td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    {% if info.admin == 1 %}
+        <h2><a href=/{{ "add_tournament?probId" + "=" + problem.id|string }}>Run tournament...</a></h2>
+    {% endif %}
+
 {% endblock %}
 

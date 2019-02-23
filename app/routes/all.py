@@ -4,8 +4,8 @@ from app import app
 from app.forRoutes.problemsetId import problemsetId
 from app.forms import ProblemsetID
 from server.storage import storage
+from server.commonFunctions import stringTime
 import server.useCasesAPI as useCasesAPI
-from datetime import datetime
 
 @app.route("/")
 @app.route("/home")
@@ -22,18 +22,22 @@ def problemset():
 @app.route("/problemset/<strId>", methods = ["GET", "POST"])
 def problemset_id(strId):
     form = ProblemsetID()
-    success, paths, problem, subList = problemsetId(form, strId)
+    success, paths, problem, subList, tourList = problemsetId(strId)
     if not success:
         return redirect("/home")
 #    smth with paths...
-    return render_template('problem.html.j2', form = form, title = problem.rules.name, problem = problem, subList = subList[::-1], paths = paths, info = info())
+    return render_template('problem.html.j2', form = form, title = problem.rules.name, 
+        problem = problem, subList = subList[::-1], paths = paths, tourList = tourList, info = info())
 
 @app.route("/source/<subId>")
 def showSource(subId):
     submission = storage.getSubmission(subId)
+    if (submission is None):
+        flash('No such submission')
+        return redirect('/home')
     Info = info()
     title = "Code #" + subId
-    if Info[0] and Info[2] == submission.userId:
+    if (Info['logged_in'] == 1 and Info['id'] == submission.userId):
         return render_template('source.html.j2', id = subId, code = useCasesAPI.getSubmissionCode(subId), info = info())
     return render_template('message.html.j2', text = "You can't see this source :)", info = info())
 
@@ -56,8 +60,8 @@ def test(strId):
         return redirect('/home')
 
     title = 'Standings #' + strId
-    strtime = datetime.utcfromtimestamp(tourDict['time']).strftime(
-        '%d %b %Y %I.%M %p')
+    strtime = stringTime(tourDict['time'])
+    probId = storage.getCertainField('tournaments', tourId, 'probId')
     return render_template('standings.html.j2', standings = tourDict['list'],
-        time = strtime, title = title, info = info())
+        time = strtime, probId = probId, title = title, info = info())
   
