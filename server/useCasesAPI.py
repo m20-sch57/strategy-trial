@@ -92,6 +92,6 @@ def getTournament(tourId):
     lst = []
     for i in range(len(tournament.standings)):
         position = tournament.standings[i]
-        userId = storage.getCertainField('submissions', position[1], 'userId')
+        userId = storage.getCertaiginField('submissions', position[1], 'userId')
         lst.append([i + 1, position[0], storage.getCertainField('users', userId, 'username')])
     return {'time' : tournament.time, 'list' : lst}
