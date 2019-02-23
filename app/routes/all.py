@@ -1,4 +1,5 @@
 from app.forRoutes.info import info
+import app.forRoutes.mainChanger as mainChanger
 from flask import render_template, redirect, send_file, request, flash
 from app import app
 from app.forRoutes.problemsetId import problemsetId
@@ -21,12 +22,7 @@ def problemset():
 
 @app.route("/problemset/<strId>", methods = ["GET", "POST"])
 def problemset_id(strId):
-    Info = info()
-    try:
-        chSubId = int(request.args.get('chSubId'))
-        ret = useCasesAPI.changeMainSubmission(Info['id'], chSubId)
-    except:
-        pass
+    mainChanger.applyChange(request)
 
     form = ProblemsetID()
     success, paths, problem, subList, tourList = problemsetId(strId)
@@ -34,7 +30,7 @@ def problemset_id(strId):
         return redirect("/home")
 
     return render_template('problem.html.j2', form = form, title = problem.rules.name, 
-        problem = problem, subList = subList[::-1], paths = paths, tourList = tourList, info = Info)
+        problem = problem, subList = subList[::-1], paths = paths, tourList = tourList, info = info())
 
 @app.route("/source/<subId>")
 def showSource(subId):
