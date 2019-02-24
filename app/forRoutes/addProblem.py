@@ -8,7 +8,10 @@ def AddProblem(form: AddProblemForm) -> list:
         archiveName = "./.tmp.new_problem.zip"
         arch = form.selectfile.data
         arch.save(archiveName)
-        parseArchive(archiveName)
+        dictRes = parseArchive(archiveName)
         os.remove(archiveName)
-        return [1, "Problem successfully added"]
+        if (dictRes['ok'] == 0):
+            return [0, dictRes['error']]
+        else:
+            return [1, "Problem successfully added"]
     return [0, ""]
