@@ -29,6 +29,10 @@ def problemset_id(strId):
     if not success:
         return redirect("/home")
 
+    userId, problemId = info()['id'], int(strId)
+    message = Upload(userId, problemId, form)
+    flash(message)
+
     return render_template('problem.html.j2', form = form, title = problem.rules.name, 
         problem = problem, subList = subList[::-1], paths = paths, tourList = tourList, info = info())
 
