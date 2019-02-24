@@ -41,7 +41,7 @@ def info() -> list:
     }
 
 def isAdmin() -> bool:
-    user = storage.getUserByName(info()[1])
+    user = storage.getUser(info()["id"])
     if user == None:
         return False
     return user.type
