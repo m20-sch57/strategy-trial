@@ -1,5 +1,5 @@
 from server.structures import Problem, Rules
-from zipfile import ZipFile
+from zipfile import ZipFile, BadZipFile
 from enum import IntEnum
 from server.storage import storage
 from server.commonFunctions import readFile
@@ -46,7 +46,10 @@ def parseArchive(archivePath):
         return {'ok' : 0, 'error' : 'No such archive (internal error)'}
     if (os.path.isdir(SaveFolder)):
         shutil.rmtree(SaveFolder)
-    zip = ZipFile(archivePath)
+    try:
+        zip = ZipFile(archivePath)
+    except BadZipFile:
+        return {'ok' : 0, 'error' : 'Bad zip file'}
     zip.extractall(path = SaveFolder)
     problemPath = SaveFolder
 
