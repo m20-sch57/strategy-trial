@@ -7,7 +7,7 @@ def AddProblem(form: AddProblemForm) -> list:
     if form.validate_on_submit():
         archiveName = "./.tmp.new_problem.zip"
         arch = form.selectfile.data
-        printToFile(arch, archiveName)
+        arch.save(archiveName)
         parseArchive(archiveName)
         os.remove(archiveName)
         return [1, "Problem successfully added"]
