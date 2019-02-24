@@ -1,7 +1,8 @@
 from app.forRoutes.info import info
-from flask import make_response, render_template, redirect, flash
+from flask import make_response, render_template, redirect, flash, request
 from app import app
 import server.useCasesAPI as useCasesAPI
+import app.forRoutes.mainChanger as mainChanger
 
 @app.route("/settings")
 def settings():
@@ -18,6 +19,8 @@ def logout():
 
 @app.route("/submissions")
 def submissions():
+    mainChanger.applyChange(request)
+    
     userId = info()['id']
     if userId == -1:
         flash("You haven't logged in, so you can't see your submissions")

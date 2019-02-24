@@ -16,21 +16,35 @@ def addSubmission(userId, problemId, code):
     storage.saveUser(user)
     return idOfNewSubmission
 
+# returns:
+# 0 if this solution doesn't belong to this user
+# 1 if the main solution became nonMain
+# 2 if the main solution changed p
 def changeMainSubmission(userId, subId):
     newMainSubmission = storage.getSubmission(subId)
+    if ((newMainSubmission is None) or newMainSubmission.userId != userId):
+        return 0
     user = storage.getUser(userId)
     probId = newMainSubmission.probId
     problem = storage.getProblem(probId)
-    for anotherSubmissionId in user.submissions[probId]:
-        anotherSubmission = storage.getSubmission(anotherSubmissionId)
-        if (anotherSubmission.type == StrategyState.Main):
-            anotherSubmission.type = StrategyState.NonMain
-            storage.saveSubmission(anotherSubmission)
-            problem.submissions.remove(anotherSubmissionId)
-    newMainSubmission.type = StrategyState.Main
+    if newMainSubmission.type == StrategyState.Main:
+        newMainSubmission.type = StrategyState.NonMain
+        problem.submissions.remove(subId)
+        returnCode = 1
+    else:
+        for anotherSubmissionId in user.submissions[probId]:
+            anotherSubmission = storage.getSubmission(anotherSubmissionId)
+            if (anotherSubmission.type == StrategyState.Main):
+                anotherSubmission.type = StrategyState.NonMain
+                storage.saveSubmission(anotherSubmission)
+                problem.submissions.remove(anotherSubmissionId)
+        newMainSubmission.type = StrategyState.Main
+        problem.submissions.add(subId)
+        returnCode = 2
+
     storage.saveSubmission(newMainSubmission)
-    problem.submissions.add(subId)
     storage.saveProblem(problem)
+    return returnCode
 
 def addUser(username, password):
     newUser = User(-1, username, password, UserType.Default, dict())
@@ -78,6 +92,6 @@ def getTournament(tourId):
     lst = []
     for i in range(len(tournament.standings)):
         position = tournament.standings[i]
-        lst.append([i + 1, position[0],
-            storage.getCertainField('users', position[1], 'username')])
+        userId = storage.getCertainField('submissions', position[1], 'userId')
+        lst.append([i + 1, position[0], storage.getCertainField('users', userId, 'username')])
     return {'time' : tournament.time, 'list' : lst}

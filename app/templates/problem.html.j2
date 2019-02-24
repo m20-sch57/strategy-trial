@@ -27,7 +27,7 @@
                 <tr>
                     <td>{{ submission.id|string }}</td>
                     <td>{{ submission.probName }}</td>
-                    <td>{{ submission.type}}</td>
+                    <td><a href=/{{ "problemset" + "/" + problem.id|string + "?chSubId" + "=" + submission.id|string }}>{{ submission.type}}</td>
                     <td><a href=/{{ "source" + "/" + submission.id|string }}>
                     <b>View source</b> </td></a>
                 </tr>

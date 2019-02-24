@@ -1,4 +1,5 @@
 from app.forRoutes.info import info
+import app.forRoutes.mainChanger as mainChanger
 from flask import render_template, redirect, send_file, request, flash
 from app import app
 from app.forRoutes.problemsetId import problemsetId
@@ -21,11 +22,13 @@ def problemset():
 
 @app.route("/problemset/<strId>", methods = ["GET", "POST"])
 def problemset_id(strId):
+    mainChanger.applyChange(request)
+
     form = ProblemsetID()
     success, paths, problem, subList, tourList = problemsetId(strId)
     if not success:
         return redirect("/home")
-#    smth with paths...
+
     return render_template('problem.html.j2', form = form, title = problem.rules.name, 
         problem = problem, subList = subList[::-1], paths = paths, tourList = tourList, info = info())
 
