@@ -3,6 +3,7 @@ import app.forRoutes.mainChanger as mainChanger
 from flask import render_template, redirect, send_file, request, flash
 from app import app
 from app.forRoutes.problemsetId import problemsetId
+from app.forRoutes.upload import Upload
 from app.forms import ProblemsetID
 from server.storage import storage
 from server.commonFunctions import stringTime
@@ -26,6 +27,8 @@ def problemset_id(strId):
 
     form = ProblemsetID()
     success, paths, problem, subList, tourList = problemsetId(strId)
+    message = Upload(form)
+    flash(message)
     if not success:
         return redirect("/home")
 

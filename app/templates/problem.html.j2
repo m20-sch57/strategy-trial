@@ -35,10 +35,10 @@
             {% endfor %}
         </table>
 
-        <form action="" method="post" novalidate>
+        <form action="" method="post" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             <p>
-                {{ form.selectfile(size=32) }}
+                {{ form.selectfile() }}
             </p>
             <p>
                 {{ form.submit() }}
