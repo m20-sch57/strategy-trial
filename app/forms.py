@@ -26,7 +26,7 @@ class StrategyTester(FlaskForm):
     submit = SubmitField('Submit')
 
 class ProblemsetID(FlaskForm):
-    selectfile = FileField()
+    selectfile = FileField("Select File")
     submit = SubmitField('Submit')
 
 class TournamentForm(FlaskForm):
