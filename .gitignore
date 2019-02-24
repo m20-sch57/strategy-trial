@@ -112,3 +112,5 @@ tmp/
 
 # database
 database.db
+
+upload\.py
