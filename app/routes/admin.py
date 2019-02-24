@@ -1,8 +1,9 @@
 from app.forRoutes.info import info, isAdmin
 from flask import render_template, redirect, flash, request
 from app import app
-from app.forms import TournamentForm
+from app.forms import TournamentForm, AddProblemForm
 from app.forRoutes.tournament import Tournament
+from app.forRoutes.addProblem import AddProblem
 
 @app.route("/add_user")
 def add_user():
@@ -11,12 +12,17 @@ def add_user():
         return redirect("/home")
     return render_template('add_user.html', title = "Add user", info = info())
 
-@app.route("/add_problem")
+@app.route("/add_problem", methods = ["GET", "POST"])
 def add_problem():
     if not isAdmin():
         flash("You don't have permission to do this!")
         return redirect("/home")
-    return render_template('add_problem.html', title = "Add problem", info = info())
+    form = AddProblemForm()
+    success, message = AddProblem(form)
+    flash(message)
+    if success:
+        return redirect("/home")
+    return render_template('add_problem.html', title = "Add problem", form = form, info = info())
 
 @app.route("/users_list")
 def users_list():

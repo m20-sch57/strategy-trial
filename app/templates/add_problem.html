@@ -1,5 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+    <body>
+        <h1>Add problem</h1>
+        <form action="" method="post" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <p>
+                {{form.selectfile(size=32)}}
+            </p>
+            <p>
+                {{form.submit()}}
+            </p>
+        </form>
+    </body>
 {% endblock %}
