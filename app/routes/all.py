@@ -27,7 +27,7 @@ def problemset_id(strId):
     form = ProblemsetID()
     success, paths, problem, subList, tourList = problemsetId(strId)
     if not success:
-        return   redirect("/home")
+        return redirect("/home")
 
     userId, problemId = info()['id'], int(strId)
     message = Upload(userId, problemId, form)
