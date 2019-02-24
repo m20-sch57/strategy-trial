@@ -3,7 +3,7 @@ import app.forRoutes.mainChanger as mainChanger
 from flask import render_template, redirect, send_file, request, flash
 from app import app
 from app.forRoutes.problemsetId import problemsetId
-from app.forRoutes.upload   import Upload
+from app.forRoutes.upload import Upload
 from app.forms import ProblemsetID
 from server.storage import storage
 from server.commonFunctions import stringTime
@@ -27,12 +27,12 @@ def problemset_id(strId):
 
     form = ProblemsetID()
     success, paths, problem, subList, tourList = problemsetId(strId)
-    if not   success:
+    if not success:
         return   redirect("/home")
 
-    userId,   problemId = info()['id'], int(strId)
-    message =   Upload(userId, problemId, form)
-     flash(message)
+    userId, problemId = info()['id'], int(strId)
+    message = Upload(userId, problemId, form)
+    flash(message)
 
     return render_template('problem.html.j2', form = form, title = problem.rules.name, 
         problem = problem, subList = subList[::-1], paths = paths, tourList = tourList, info = info())
