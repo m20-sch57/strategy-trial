@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileRequired
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, FileField
 from wtforms.validators import DataRequired
 from wtforms.widgets import TextArea
@@ -26,7 +27,7 @@ class StrategyTester(FlaskForm):
     submit = SubmitField('Submit')
 
 class ProblemsetID(FlaskForm):
-    selectfile = FileField("Select File")
+    selectfile = FileField("Select File", validators = [FileRequired()])
     submit = SubmitField('Submit')
 
 class TournamentForm(FlaskForm):
@@ -34,5 +35,5 @@ class TournamentForm(FlaskForm):
     submit = SubmitField("Submit")
 
 class AddProblemForm(FlaskForm):
-    selectfile = FileField("Select File")
+    selectfile = FileField("Select File", validators = [FileRequired()])
     submit = SubmitField("Submit")
