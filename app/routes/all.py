@@ -13,13 +13,13 @@ import server.useCasesAPI as useCasesAPI
 @app.route("/home")
 def home():
     title = "ST Home Page"
-    return render_template('home.html', title = title, info = info())
+    return render_template('home.html.j2', title = title, info = info())
 
 @app.route("/problemset")
 def problemset():
     title = "Problems"
     problemList = useCasesAPI.getProblemset()
-    return render_template('problemset.html', problemList = problemList[::-1], title = title, info = info())
+    return render_template('problemset.html.j2', problemList = problemList[::-1], title = title, info = info())
 
 @app.route("/problemset/<strId>", methods = ["GET", "POST"])
 def problemset_id(strId):

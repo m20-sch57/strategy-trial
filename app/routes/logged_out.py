@@ -16,7 +16,7 @@ def login():
         resp.set_cookie("username", username)
         resp.set_cookie("user_id", userId)
         return resp
-    return render_template('login.html', title = "Sign In", form = form, info = info())
+    return render_template('login.html.j2', title = "Sign In", form = form, info = info())
 
 @app.route("/sign_up", methods = ["GET", "POST"])
 def sign_up():
@@ -25,5 +25,5 @@ def sign_up():
     flash(message)
     if success:
         return redirect("home")
-    return render_template('sign_up.html', title = "Sign Up", form = form, info = info())
+    return render_template('sign_up.html.j2', title = "Sign Up", form = form, info = info())
 
