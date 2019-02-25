@@ -6,7 +6,7 @@ import app.forRoutes.mainChanger as mainChanger
 
 @app.route("/settings")
 def settings():
-    return render_template('settings.html', title = "Settings", info = info())
+    return render_template('settings.html.j2', title = "Settings", info = info())
 
 @app.route("/logout")
 def logout():
@@ -27,5 +27,5 @@ def submissions():
         return redirect('/home')
 
     lst = useCasesAPI.getSubmissionsU(userId)
-    return render_template('submissions.html', title = "Submissions", info = info(), subList = lst[::-1])
+    return render_template('submissions.html.j2', title = "Submissions", info = info(), subList = lst[::-1])
 
