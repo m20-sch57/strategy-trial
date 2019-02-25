@@ -113,4 +113,7 @@ tmp/
 # database
 database.db
 
-upload\.py
+# vim tmp files
+*.swp
+*.swo
+
