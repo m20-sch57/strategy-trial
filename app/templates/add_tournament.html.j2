@@ -1,0 +1,18 @@
+{% extends "base.html.j2" %}
+
+{% block content %}
+    <body>
+        <h1>Create tournament</h1>
+        <form action="", method="post">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.probId.label }}<br>
+                {{ form.probId(size=32, value=default) }}
+            </p>
+            <p>
+                {{ form.submit() }}
+            </p>
+        </form>
+    </body>
+{% endblock %}
+

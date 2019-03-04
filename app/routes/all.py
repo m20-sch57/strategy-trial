@@ -1,41 +1,53 @@
 from app.forRoutes.info import info
-from flask import render_template, redirect, send_file, request
+import app.forRoutes.mainChanger as mainChanger
+from flask import render_template, redirect, send_file, request, flash
 from app import app
 from app.forRoutes.problemsetId import problemsetId
+from app.forRoutes.upload import Upload
 from app.forms import ProblemsetID
 from server.storage import storage
+from server.commonFunctions import stringTime
 import server.useCasesAPI as useCasesAPI
 
 @app.route("/")
 @app.route("/home")
 def home():
     title = "ST Home Page"
-    return render_template('home.html', title = title, info = info())
+    return render_template('home.html.j2', title = title, info = info())
 
 @app.route("/problemset")
 def problemset():
     title = "Problems"
     problemList = useCasesAPI.getProblemset()
-    return render_template('problemset.html', problemList = problemList, title = title, info = info())
+    return render_template('problemset.html.j2', problemList = problemList[::-1], title = title, info = info())
 
 @app.route("/problemset/<strId>", methods = ["GET", "POST"])
 def problemset_id(strId):
+    mainChanger.applyChange(request)
+
     form = ProblemsetID()
-    success, paths, problem, subList = problemsetId(form, strId)
+    success, paths, problem, subList, tourList = problemsetId(strId)
     if not success:
         return redirect("/home")
-#    smth with paths...
-    return render_template('problem.html.j2', form = form, title = problem.rules.name, problem = problem, subList = subList, paths = paths, info = info())
+
+    userId, problemId = info()['id'], int(strId)
+    message = Upload(userId, problemId, form)
+    flash(message)
+
+    return render_template('problem.html.j2', form = form, title = problem.rules.name, 
+        problem = problem, subList = subList[::-1], paths = paths, tourList = tourList, info = info())
 
 @app.route("/source/<subId>")
 def showSource(subId):
     submission = storage.getSubmission(subId)
+    if (submission is None):
+        flash('No such submission')
+        return redirect('/home')
     Info = info()
     title = "Code #" + subId
-    print(Info)
-    if Info[0] and Info[2] == submission.userId:
+    if (Info['logged_in'] == 1 and Info['id'] == submission.userId):
         return render_template('source.html.j2', id = subId, code = useCasesAPI.getSubmissionCode(subId), info = info())
-    return render_template('ban.html.j2', info = info())
+    return render_template('message.html.j2', text = "You can't see this source :)", info = info())
 
 @app.route("/download")
 def download():
@@ -46,3 +58,23 @@ def download():
 def test():
     standings = [[1,2,'dfberfvbrf'],[3,4,'dwecwefwe'],[5,6,'sdfvbdjfv'],[7,8,'scvwef'],[9,10,'cvb df f']]
     return render_template('temp.html', standings = standings, info = info())
+
+@app.route("/tournament/<strId>")
+def test(strId):
+    try:
+        tourId = int(strId)
+    except ValueError:
+        flash('Incorrect tournament id')
+        return redirect('/home')
+
+    tourDict = useCasesAPI.getTournament(tourId)
+    if (tourDict is None):
+        flash('Incorrect tournament id')
+        return redirect('/home')
+
+    title = 'Standings #' + strId
+    strtime = stringTime(tourDict['time'])
+    probId = storage.getCertainField('tournaments', tourId, 'probId')
+    return render_template('standings.html.j2', standings = tourDict['list'],
+        time = strtime, probId = probId, title = title, info = info())
+        

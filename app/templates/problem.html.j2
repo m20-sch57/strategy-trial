@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base.html.j2" %}
 
 {% block content %}
     <table border="1">
@@ -16,7 +16,7 @@
 
     <!-- shouldn't be copypasted -->
 
-    {% if info[0] == '1' %}
+    {% if info.logged_in == 1 %}
         <h3>Submissions</h3>
 
         <table border="1">
@@ -27,7 +27,7 @@
                 <tr>
                     <td>{{ submission.id|string }}</td>
                     <td>{{ submission.probName }}</td>
-                    <td>{{ submission.type}}</td>
+                    <td><a href=/{{ "problemset" + "/" + problem.id|string + "?chSubId" + "=" + submission.id|string }}>{{ submission.type}}</td>
                     <td><a href=/{{ "source" + "/" + submission.id|string }}>
                     <b>View source</b> </td></a>
                 </tr>
@@ -35,7 +35,7 @@
             {% endfor %}
         </table>
 
-        <form action="" method="post" novalidate>
+        <form action="" method="post" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             <p>
                 {{ form.selectfile(size=32) }}
@@ -47,5 +47,22 @@
     {% else %}
         <h3>In order to send strategy you have to <a href="/login">log in</a> or <a href="/sign_up"> sign up</a></h3>
     {% endif %}
+
+    <h3>Tournaments</h3>
+    <table border="1">
+        <tr><th>Id</th><th>Time</th><th>Link</th></tr>
+        {% for tour in tourList %}
+            <tr>
+                <td>{{ tour.id }}</td>
+                <td>{{ tour.time }}</td>
+                <td><a href=/{{ "tournament" + "/" + tour.tour_id|string }}><b>Look</b></a></td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    {% if info.admin == 1 %}
+        <h2><a href=/{{ "add_tournament?probId" + "=" + problem.id|string }}>Run tournament...</a></h2>
+    {% endif %}
+
 {% endblock %}
 

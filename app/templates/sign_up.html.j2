@@ -1,8 +1,8 @@
-{% extends "base.html" %}
+{% extends "base.html.j2" %}
 
 {% block content %}
     <h1>Sign up</h1>
-    <form action="" method="post" novalidate>
+    <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>
             {{ form.name.label }}<br>

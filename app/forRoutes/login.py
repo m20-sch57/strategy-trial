@@ -11,5 +11,5 @@ def Login(form: LoginForm) -> list:
         if user.password != password:
             return [0, "Incorrect password", "Guest", "-1"]
         return [1, "Logged in successfully", username, str(user.id)]
-    return [0, "", "Guest", "-1"]
+    return [0, "You must fill all fields", "Guest", "-1"]
 

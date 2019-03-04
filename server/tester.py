@@ -15,22 +15,32 @@ def loadSources(sources):
         printToFile(source[1], path)
 
 def loadProblem(problem):
-    problempath = "problems/" + str(problem.id)
-    sys.path.append(problempath)
-    sys.path.append(problempath + "/strategies")
+    problempath = os.path.join('problems', str(problem.id))
     loadSources(problem.rules.sources)
 
 def loadProblemDownloads(problem):
     loadSources(problem.rules.downloads)
 
+def getName(submission):
+    return "sub" + str(submission.id)
+
+def getModuleName(submission):
+    return getName(submission)
+
 def getFilename(submission):
-    return "sub" + str(submission.id) + ".py"
+    return getName(submission) + ".py"
 
 def loadSubmission(submission, problem):
-    #TODO use os.path.join
-    filename = "problems/" + str(problem.id) + "/strategies/" + getFilename(submission)
+    filename = os.path.join('problems', str(problem.id),
+        'strategies', getFilename(submission))
     print(filename)
     printToFile(submission.code, filename)
+
+def getProblemPath(probId):
+    return os.path.join('problems', str(probId))
+
+def getProblemStrategiesPath(probId):
+    return os.path.join(getProblemPath(probId), 'strategies')
 
 def testStrategies(id1, id2, saveLogs = False):
     sub1 = storage.getSubmission(id1)
@@ -45,7 +55,14 @@ def testStrategies(id1, id2, saveLogs = False):
 
     loadSubmission(sub1, problem)
     loadSubmission(sub2, problem)
-    invocationResult = judge.run("game.py", "classes.py", [getFilename(sub1), getFilename(sub2)], saveLogs = saveLogs)
+
+    invocationResult = judge.run(
+        'game',
+        'classes',
+        [getModuleName(sub1), getModuleName(sub2)],
+        [getProblemPath(problemId), getProblemStrategiesPath(problemId)],
+        saveLogs = saveLogs
+    )
     return invocationResult
 
 def tournament(problemId):
@@ -56,21 +73,30 @@ def tournament(problemId):
 
     subCnt = len(problem.submissions)
     subs = [storage.getSubmission(subId) for subId in problem.submissions]
-    scores = [[0, i] for i in range(subCnt)]
+    scores = [[0, subs[i].id] for i in range(subCnt)]
 
     for i in range(subCnt):
         loadSubmission(subs[i], problem)
+
+    problemPath = os.path.join('problems', str(problemId))
 
     for i in range(subCnt):
         for j in range(subCnt):
             if (i != j):
                 print("judging ", i, j)
-                invocationResult = judge.run("game.py", "classes.py", [getFilename(subs[i]), getFilename(subs[j])])
+                invocationResult = judge.run(
+                    'game',
+                    'classes',
+                    [getModuleName(subs[i]), getModuleName(subs[j])],
+                    [getProblemPath(problemId), getProblemStrategiesPath(problemId)]
+                )
+                print(invocationResult.results[0].goodStr())
+                print(invocationResult.results[1].goodStr())
                 scores[i][0] += invocationResult.results[0].score
                 scores[j][0] += invocationResult.results[1].score
 
     scores.sort(reverse = True)
-    newTournament = Tournament(-1, unixTime(), scores)
+    newTournament = Tournament(-1, problemId, unixTime(), scores)
     newTournamentId = storage.saveTournament(newTournament)
     problem.tournaments.append(newTournamentId)
     storage.saveProblem(problem)

@@ -27,6 +27,7 @@ class UserType(IntEnum):
     Default = 0
     Admin = 1
 
+
 #database functions
 
 def saveList(cursor, tableName, lst):
@@ -38,9 +39,17 @@ def getFromDatabase(cursor, tableName, id: int):
     cursor.execute('SELECT * FROM ' + tableName + ' WHERE id=?', [id])
     return cursor.fetchone();
 
+def getCertainField(cursor, tableName, id, fieldName):
+    cursor.execute('SELECT ' + fieldName + ' FROM ' + tableName + ' WHERE id=?', [id])
+    lst = cursor.fetchone()
+    if (lst is None):
+        return None
+    else:
+        return lst[0]
+
 
 #user
-#saving: [id, username, password, submissions]
+#saving: [id, username, password, type, submissions]
 
 def createUsersTable(cursor):
     cursor.execute('''CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, 
@@ -195,31 +204,33 @@ def getSubmission(cursor, id):
 
 
 #tournament
-#saving: [id, time, standings]
+#saving: [id, probId, time, standings]
 
 def createTournamentsTable(cursor):
     cursor.execute('''CREATE TABLE IF NOT EXISTS tournaments (id integer PRIMARY KEY, 
-        t integer, standings TEXT)''')
+        probId integer, time integer, standings TEXT)''')
 
 class Tournament:
-    def __init__(self, id, time, standings):
+    def __init__(self, id, probId, time, standings):
         self.id = id
+        self.probId = probId
         self.time = time
         self.standings = standings
 
     def getList(self):
-        return [self.id, self.time, json.dumps(self.standings)]
+        return [self.id, self.probId, self.time, json.dumps(self.standings)]
 
     def save(self, cursor):
         saveList(cursor, 'tournaments', self.getList())
 
     def print(self):
         print("id:", self.id)
+        print("probId:", self.probId)
         print("time:", self.time)
         print("standings:", self.standings)
 
 def tournamentFromList(lst):
-    return Tournament(lst[0], lst[1], json.loads(lst[2]))
+    return Tournament(lst[0], lst[1], lst[2], json.loads(lst[3]))
 
 def getTournament(cursor, id):
     lst = getFromDatabase(cursor, 'tournaments', id)

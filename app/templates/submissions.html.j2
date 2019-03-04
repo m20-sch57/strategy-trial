@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base.html.j2" %}
 
 {% block content %}
 
@@ -10,9 +10,9 @@
             <tr>
                 <td>{{ submission.id|string }}</td>
                 <td>{{ submission.probName }}</td>
-                <td>{{ submission.type}}</td>
+                <td><a href=/{{ "submissions" + "?chSubId" + "=" + submission.id|string }}>{{ submission.type}}</td>
                 <td><a href=/{{ "source" + "/" + submission.id|string }}>
-                <b>View source</b> </td>
+                <b>View source</b> </td></a>
             </tr>
 
         {% endfor %}

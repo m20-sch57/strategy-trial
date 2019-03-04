@@ -1,19 +1,48 @@
 from flask import request
+from server.structures import UserType
+from server.storage import storage
 
 def unauthorized():
-    return ['0', 'Guest', -1]
+    return {
+        'logged_in' : 0,
+        'username' : 'Guest',
+        'id' : -1,
+        'admin' : 0
+    }
 
 def info() -> list:
-    logged_in = request.cookies.get("logged_in")
+    loggedInStr = request.cookies.get("logged_in")
     username = request.cookies.get("username")
     strId = request.cookies.get("user_id")
-    if logged_in == None:
+    if loggedInStr == None:
         return unauthorized()
     else:
         try:
             id = int(strId)
+            logged_in = int(loggedInStr)
         except ValueError:
             return unauthorized()
 
-    return [logged_in, username, id]
+    if (logged_in == 0):
+        return unauthorized()
+
+    intUserType = storage.getCertainField('users', id, 'type')
+    userType = UserType(intUserType)
+    if (userType == UserType.Admin):
+        admin = 1
+    else:
+        admin = 0
+
+    return {
+        'logged_in' : logged_in,
+        'username' : username,
+        'id' : id,
+        'admin' : admin
+    }
+
+def isAdmin() -> bool:
+    user = storage.getUser(info()["id"])
+    if user == None:
+        return False
+    return user.type
 

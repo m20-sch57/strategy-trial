@@ -88,5 +88,8 @@ class Storage:
     def getSubmissionListUP(self, userId, probId):
         return structures.getSubmissionListUP(self.cursor, userId, probId)
 
+    def getCertainField(self, tableName, id, fieldName):
+        return structures.getCertainField(self.cursor, tableName, id, fieldName)
+
 storage = Storage()
 
