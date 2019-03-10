@@ -93,5 +93,5 @@ def test():
 
     title = strId1 + ' vs ' + strId2
     invocationResult = tester.testStrategies(id1, id2, saveLogs = True)
-    return invocationResult.logs.show(probId1, {'info' : info()})
+    return invocationResult.logs.show(probId1, {'info': info(), 'title': title})
 

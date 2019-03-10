@@ -33,7 +33,6 @@ class Logs:
     def show(self, probId, baseParams):
         with app.app_context():
             logPath = os.path.join('problems', str(probId), 'logs.html.j2')
-            print("probId =", probId)
             data = render_template(logPath, fieldLog = self.fieldLog,
                 res1 = self.results[0].goodStr(), res2 = self.results[1].goodStr(),
                 strId = str(probId), **baseParams
