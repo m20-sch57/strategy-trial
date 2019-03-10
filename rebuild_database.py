@@ -14,7 +14,7 @@ import server.useCasesAPI as useCasesAPI
 StrategyCnt = 10
 
 import server.parser as parser
-os.system('zip tic_tac_toe.zip -r tic_tac_toe')   # ...
+os.system('zip tic_tac_toe.zip -r tic_tac_toe >/dev/null')   # ...
 parser.parseArchive('tic_tac_toe.zip')
 
 subs = [i for i in range(10)]
