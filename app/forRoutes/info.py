@@ -1,6 +1,8 @@
 from flask import request
-from server.structures import UserType
+from server.structures import UserType, SecurityError
 from server.storage import storage
+from app.forRoutes import *
+from app.forRoutes.hash import *
 
 def unauthorized():
     return {
@@ -11,9 +13,13 @@ def unauthorized():
     }
 
 def info() -> list:
-    loggedInStr = request.cookies.get("logged_in")
-    username = request.cookies.get("username")
-    strId = request.cookies.get("user_id")
+    cookies = request.cookies.get("all")
+    if cookies == None:
+        return unauthorized()
+    a = decrypt(cookies).split()
+    if len(a) != 4:
+        raise SecurityError("You are trying to forge a cookie! YOU GOT BAN!!!")
+    loggedInStr, username, strId = a[0], a[1], a[2]
     if loggedInStr == None:
         return unauthorized()
     else:
@@ -26,8 +32,11 @@ def info() -> list:
     if (logged_in == 0):
         return unauthorized()
 
-    intUserType = storage.getCertainField('users', id, 'type')
-    userType = UserType(intUserType)
+    # intUserType = storage.getCertainField('users', id, 'type')
+    user = storage.getUser(id)
+    if username != user.username and username != "Guest":
+        raise SecurityError("You are trying to forge a cookie! YOU GOT BAN!!!")
+    userType = user.type #UserType(intUserType)
     if (userType == UserType.Admin):
         admin = 1
     else:
@@ -41,8 +50,5 @@ def info() -> list:
     }
 
 def isAdmin() -> bool:
-    user = storage.getUser(info()["id"])
-    if user == None:
-        return False
-    return user.type
+    return info()["admin"]
 
