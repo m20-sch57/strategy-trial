@@ -8,6 +8,7 @@ from app.forms import ProblemsetID
 from server.storage import storage
 from server.commonFunctions import stringTime
 import server.useCasesAPI as useCasesAPI
+import server.tester as tester
 
 @app.route("/")
 @app.route("/home")
@@ -55,7 +56,7 @@ def download():
     return send_file(request.args.get('path'), as_attachment = True)
 
 @app.route("/tournament/<strId>")
-def test(strId):
+def showStandings(strId):
     try:
         tourId = int(strId)
     except ValueError:
@@ -73,3 +74,24 @@ def test(strId):
     return render_template('standings.html.j2', standings = tourDict['list'],
         time = strtime, probId = probId, title = title, info = info())
   
+@app.route("/test")
+def test():
+    strId1 = request.args.get('id1')
+    strId2 = request.args.get('id2')
+    try:
+        id1 = int(strId1)
+        id2 = int(strId2)
+    except ValueError:
+        flash('Incorrect strategy id')
+        return redirect('/home')
+
+    probId1 = storage.getCertainField('submissions', id1, 'probId')
+    probId2 = storage.getCertainField('submissions', id2, 'probId')
+    if ((probId1 is None) or (probId2 is None) or probId1 != probId2):
+        flash('Incorrect pair of strategies')
+        return redirect('/home')
+
+    title = strId1 + ' vs ' + strId2
+    invocationResult = tester.testStrategies(id1, id2, saveLogs = True)
+    return invocationResult.logs.show(probId1, {'info' : info()})
+

@@ -1,10 +1,12 @@
-﻿<html>
+﻿{% extends "base.html.j2" %}
+
+{% block content %}
 	<head>
-		<title>ЛОГИ</title>
 		<link rel="stylesheet" href="{{ url_for('static',
-			filename='problems/{{ probId }}/style.css') }}">
+			filename='problems/' + strId + '/style.css') }}">
 	</head>
 	<body>
+	<span class="log">
 		{% for state in fieldLog %}
 			{% for line in state %}
 				{% for c in line %}
@@ -22,5 +24,6 @@
 		<p>The first solution got {{ res1 }}</p>
 		<p>The second soulution got {{ res2 }}</p>
 		<p class="highlited">KEK</p>
+	</span>
 	</body>
-</html>
+{% endblock %}
