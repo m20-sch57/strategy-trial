@@ -18,7 +18,7 @@ def info() -> list:
         return unauthorized()
     a = decrypt(cookies).split()
     if len(a) != 4:
-        raise SecurityError("YOU GOT BAN!!!")
+        raise SecurityError("You are trying to forge a cookie! YOU GOT BAN!!!")
     loggedInStr, username, strId = a[0], a[1], a[2]
     if loggedInStr == None:
         return unauthorized()
@@ -35,7 +35,7 @@ def info() -> list:
     # intUserType = storage.getCertainField('users', id, 'type')
     user = storage.getUser(id)
     if username != user.username and username != "Guest":
-        raise SecurityError("YOU GOT BAN!!!")
+        raise SecurityError("You are trying to forge a cookie! YOU GOT BAN!!!")
     userType = user.type #UserType(intUserType)
     if (userType == UserType.Admin):
         admin = 1
