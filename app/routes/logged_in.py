@@ -3,6 +3,7 @@ from flask import make_response, render_template, redirect, flash, request
 from app import app
 import server.useCasesAPI as useCasesAPI
 import app.forRoutes.mainChanger as mainChanger
+from app.forRoutes.hash import *
 
 @app.route("/settings")
 def settings():
@@ -12,9 +13,7 @@ def settings():
 def logout():
     resp = make_response(redirect("/home"))
     flash("Logged out successfully")
-    resp.set_cookie("logged_in", "0")
-    resp.set_cookie("username", "Guest")
-    resp.set_cookie("user_id", "-1")
+    resp.set_cookie(encrypt("0 Guest -1"))
     return resp
 
 @app.route("/submissions")
