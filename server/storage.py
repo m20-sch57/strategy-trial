@@ -91,5 +91,8 @@ class Storage:
     def getCertainField(self, tableName, id, fieldName):
         return structures.getCertainField(self.cursor, tableName, id, fieldName)
 
+    def getSubDict(subId, probName):
+        return structures.getSubDict(self.cursor, subId, probName)
+
 storage = Storage()
 

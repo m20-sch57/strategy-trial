@@ -9,6 +9,8 @@ from server.storage import storage
 from server.commonFunctions import stringTime
 import server.useCasesAPI as useCasesAPI
 import server.tester as tester
+import server.structures as structures
+import json
 
 @app.route("/")
 @app.route("/home")
@@ -73,6 +75,27 @@ def showStandings(strId):
     probId = storage.getCertainField('tournaments', tourId, 'probId')
     return render_template('standings.html.j2', standings = tourDict['list'],
         time = strtime, probId = probId, title = title, info = info())
+
+
+#returns page where user can choose which strategies he wants to run
+#strId - id of problem (string)
+@app.route("/problemset/<strId>/run", methods = ["GET", "POST"])
+def runPage(strId):
+    try:
+        probId = int(strId)
+        idList = json.loads(storage.getCertainField('problems', probId, 'allSubmissions'))
+    except:
+        flash('Incorrect problem id')
+        return redirect('/home')
+
+    probName = storage.getCertainField('problems', probId, 'name')
+    subList = []
+    for id in idList:
+        submission = storage.getSubmission(id)
+        subList.append({'id': id, 'username': storage.getCertainField('users', submission.userId, 'username'),
+            'probName': probName, 'type': structures.visualize(submission.type)})
+
+    return render_template('runPage.html.j2', subList = subList, probId = probId, info = info(), title = 'Run invocation')
   
 @app.route("/test")
 def test():
