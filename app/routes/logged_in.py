@@ -13,7 +13,7 @@ def settings():
 def logout():
     resp = make_response(redirect("/home"))
     flash("Logged out successfully")
-    resp.set_cookie(encrypt("0 Guest -1"))
+    resp.set_cookie("all", encrypt("0 Guest -1"))
     return resp
 
 @app.route("/submissions")

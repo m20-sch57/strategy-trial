@@ -15,12 +15,11 @@ def keygen() -> None:
 
 def encrypt(message: str) -> str:
     pub_key = rsa.PublicKey(*map(int, readFile(os.path.join("server", "key.pub")).split()))
-    print(pub_key)
     hashed = str(rsa.encrypt(bytes(message, "utf-8"), pub_key).hex())
     return hashed
 
 def decrypt(hashed: str) -> str:
     key = rsa.PrivateKey(*map(int, readFile(os.path.join("server", "key")).split()))
-    message = str(rsa.decrypt(bytes.fromhex(hashed), key))[1:]
+    message = str(rsa.decrypt(bytes.fromhex(hashed), key))[2:-1]
     return message
 
