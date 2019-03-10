@@ -4,6 +4,7 @@ from app import app
 import server.useCasesAPI as useCasesAPI
 import app.forRoutes.mainChanger as mainChanger
 from app.forRoutes.hash import *
+from random import randint
 
 @app.route("/settings")
 def settings():
@@ -13,7 +14,7 @@ def settings():
 def logout():
     resp = make_response(redirect("/home"))
     flash("Logged out successfully")
-    resp.set_cookie("all", encrypt("0 Guest -1"))
+    resp.set_cookie("all", encrypt("0 Guest -1 " + str(randint(0, 100000))))
     return resp
 
 @app.route("/submissions")

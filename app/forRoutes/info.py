@@ -17,7 +17,7 @@ def info() -> list:
     if cookies == None:
         return unauthorized()
     a = decrypt(cookies).split()
-    if len(a) != 3:
+    if len(a) != 4:
         raise SecurityError("YOU GOT BAN!!!")
     loggedInStr, username, strId = a[0], a[1], a[2]
     if loggedInStr == None:

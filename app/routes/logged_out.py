@@ -5,6 +5,7 @@ from app.forms import LoginForm, SignUp
 from app.forRoutes.login import Login
 from app.forRoutes.sign_up import Sign_up
 from app.forRoutes.hash import *
+from random import randint
 
 @app.route("/login", methods = ["GET", "POST"])
 def login():
@@ -13,7 +14,7 @@ def login():
     flash(message)
     if success:
         resp = make_response(redirect('/home'))
-        resp.set_cookie("all", encrypt("1 " + username + ' ' + str(userId)))
+        resp.set_cookie("all", encrypt("1 " + username + ' ' + str(userId) + ' ' + str(randint(0, 100000))))
         return resp
     return render_template('login.html.j2', title = "Sign In", form = form, info = info())
 
