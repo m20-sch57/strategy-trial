@@ -82,7 +82,6 @@ def showStandings(strId):
 @app.route("/problemset/<strId>/run", methods = ["GET", "POST"])
 def runPage(strId):
     if (request.method == 'POST'):
-        print(request.form)
         st1 = request.form.get('st1')
         st2 = request.form.get('st2')
         if ((st1 is not None) and (st2 is not None)):
