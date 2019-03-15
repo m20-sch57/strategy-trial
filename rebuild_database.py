@@ -2,6 +2,7 @@ from server.structures import ProblemState, StrategyState, UserType
 from server.structures import User, Rules, Problem, Submission, Tournament
 from server.commonFunctions import readFile, printToFile
 import os
+#from app.forRoutes.hash import keygen
 
 try:
     os.remove('database.db')
@@ -10,6 +11,8 @@ except:
 
 from server.storage import storage
 import server.useCasesAPI as useCasesAPI
+
+#keygen()
 
 StrategyCnt = 10
 

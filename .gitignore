@@ -117,3 +117,6 @@ database.db
 *.swp
 *.swo
 
+# public and private keys
+server/key
+server/key.pub

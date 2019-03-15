@@ -27,6 +27,11 @@ class UserType(IntEnum):
     Default = 0
     Admin = 1
 
+class SecurityError(Exception):
+    status_code = 999
+
+    def __init__(self, message):
+        Exception.__init__(self)
 
 #database functions
 
