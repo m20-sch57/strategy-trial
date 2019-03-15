@@ -1,6 +1,6 @@
 from app.forRoutes.info import info
 import app.forRoutes.mainChanger as mainChanger
-from flask import render_template, redirect, send_file, request, flash
+from flask import render_template, redirect, send_file, request, flash, url_for
 from app import app
 from app.forRoutes.problemsetId import problemsetId
 from app.forRoutes.upload import Upload
@@ -81,6 +81,13 @@ def showStandings(strId):
 #strId - id of problem (string)
 @app.route("/problemset/<strId>/run", methods = ["GET", "POST"])
 def runPage(strId):
+    if (request.method == 'POST'):
+        print(request.form)
+        st1 = request.form.get('st1')
+        st2 = request.form.get('st2')
+        if ((st1 is not None) and (st2 is not None)):
+            return redirect('/test?id1=' + st1 + '&id2=' + st2)
+
     try:
         probId = int(strId)
         idList = json.loads(storage.getCertainField('problems', probId, 'allSubmissions'))
@@ -104,7 +111,7 @@ def test():
     try:
         id1 = int(strId1)
         id2 = int(strId2)
-    except ValueError:
+    except (ValueError, TypeError) as error:
         flash('Incorrect strategy id')
         return redirect('/home')
 
