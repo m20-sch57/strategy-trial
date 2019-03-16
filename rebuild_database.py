@@ -34,9 +34,9 @@ for i in range(StrategyCnt):
     storage.saveUser(user)
 
 for i in range(StrategyCnt):
-    useCasesAPI.addSubmission(i, 0, readFile("ticTacToeStrategies/st" + str(i + 1) + ".py"))
-    useCasesAPI.changeMainSubmission(i, i)
+    useCasesAPI.addSubmission(i + 1, 0, readFile("ticTacToeStrategies/st" + str(i + 1) + ".py"))
+    useCasesAPI.changeMainSubmission(i + 1, i)
 
-useCasesAPI.addSubmission(10, 0, readFile("ticTacToeStrategies/st1.py"))
-useCasesAPI.addSubmission(10, 0, readFile("ticTacToeStrategies/st2.py"))
-useCasesAPI.addSubmission(10, 0, readFile("ticTacToeStrategies/st3.py"))
+useCasesAPI.addSubmission(0, 0, readFile("ticTacToeStrategies/st1.py"))
+useCasesAPI.addSubmission(0, 0, readFile("ticTacToeStrategies/st2.py"))
+useCasesAPI.addSubmission(0, 0, readFile("ticTacToeStrategies/st3.py"))
