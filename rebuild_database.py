@@ -21,8 +21,11 @@ import server.parser as parser
 shutil.make_archive('tic_tac_toe', 'zip', 'tic_tac_toe')
 parsingResult = parser.parseArchive('tic_tac_toe.zip')
 if (parsingResult['ok'] != 1):
-	print("Can't parse archive tic_tac_toe")
-	sys.exit(0)
+    print("Can't parse archive tic_tac_toe")
+    sys.exit(0)
+
+root = User(-1, "root", "123", UserType.Admin, {}) # It's hard coded user, type can't be changed
+storage.saveUser(root)
 
 subs = [i for i in range(10)]
 
@@ -34,8 +37,6 @@ for i in range(StrategyCnt):
     useCasesAPI.addSubmission(i, 0, readFile("ticTacToeStrategies/st" + str(i + 1) + ".py"))
     useCasesAPI.changeMainSubmission(i, i)
 
-root = User(-1, "test", "123", UserType.Admin, {})
-storage.saveUser(root)
 useCasesAPI.addSubmission(10, 0, readFile("ticTacToeStrategies/st1.py"))
 useCasesAPI.addSubmission(10, 0, readFile("ticTacToeStrategies/st2.py"))
 useCasesAPI.addSubmission(10, 0, readFile("ticTacToeStrategies/st3.py"))

@@ -111,6 +111,9 @@ def getUserByName(cursor, username):
         return None
     return userFromList(lst)
 
+def getAllUsers(cursor):
+    cursor.execute("SELECT id, username, type FROM users")
+    return cursor.fetchall()
 
 #problem
 #saving: [id, name, sources, downloads, statement, submissions, allSubmissions, tournaments]

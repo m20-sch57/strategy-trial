@@ -49,6 +49,19 @@ def changeMainSubmission(userId, subId):
     storage.saveProblem(problem)
     return returnCode
 
+def changeUserType(userId: int) -> str:
+    user = storage.getUser(userId)
+    if (user == None):
+        return "There is no user with this id"
+    if (user.username == "root" and user.id == 0):
+        return "Type of root can't be changed!"
+    if (user.type == UserType.Admin):
+        user.type = UserType.Default
+    else:
+        user.type = UserType.Admin
+    storage.saveUser(user)
+    return "Type successfully changed"
+
 def addUser(username, password):
     newUser = User(-1, username, password, UserType.Default, dict())
     idOfNewUser = storage.saveUser(newUser)
@@ -62,6 +75,9 @@ def getSubmissionsU(userId):
 
 def getSubmissionsUP(userId, probId):
     return storage.getSubmissionListUP(userId, probId)
+
+def getAllUsers():
+    return storage.getAllUsers()
 
 def makeTornament(probId):
     return tournament(probId)

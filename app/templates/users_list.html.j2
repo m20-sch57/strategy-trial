@@ -1,1 +1,18 @@
-"base.html.j2"
+{% extends "base.html.j2" %}
+
+{% block content %}
+
+	<table border="1">
+
+	<tr><th>Username</th><th>Type</th></tr>
+
+	{% for user in lst %}
+		<tr>
+			<td>{{ user[1] }}</td>
+			<td><a href=/{{"users_list?chUserId=" + user[0]|string }}>{% if user[2] == 1 %}Admin{% else %}Default{%endif%}</a></td>
+		</tr>
+	{% endfor %}
+
+	</table>
+
+{% endblock %}
