@@ -19,7 +19,10 @@ StrategyCnt = 10
 
 import server.parser as parser
 shutil.make_archive('tic_tac_toe', 'zip', 'tic_tac_toe')
-parser.parseArchive('tic_tac_toe.zip')
+parsingResult = parser.parseArchive('tic_tac_toe.zip')
+if (parsingResult['ok'] != 1):
+	print("Can't parse archive tic_tac_toe")
+	sys.exit(0)
 
 subs = [i for i in range(10)]
 
