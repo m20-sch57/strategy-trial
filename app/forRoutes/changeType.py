@@ -3,6 +3,8 @@ import server.useCasesAPI as useCasesAPI
 
 def changeType(request):
     strUserId = request.args.get("chUserId")
+    if strUserId == None:
+        return ""
     try:
         userId = int(strUserId)
     except:
