@@ -50,6 +50,9 @@ class Storage:
     def getUserByName(self, username):
         return structures.getUserByName(self.cursor, username)
 
+    def getAllUsers(self):
+        return structures.getAllUsers(self.cursor)
+
     def saveUser(self, user):
         self.updateId(user, 'users')
         user.save(self.cursor)
