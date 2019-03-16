@@ -120,6 +120,10 @@ database.db
 server/key
 server/key.pub
 
-# files which user can downloadß
+# files which user can download
 
 app/downloads
+
+#packed problem archive
+
+tic_tac_toe.zip
