@@ -30,7 +30,7 @@ storage.saveUser(root)
 subs = [i for i in range(10)]
 
 for i in range(StrategyCnt):
-    user = User(-1, "hlebushek" + str(i), "12345", UserType.Default, {0 : [i]})
+    user = User(-1, "hlebushek" + str(i), "12345", UserType.Default, {0 : []})
     storage.saveUser(user)
 
 for i in range(StrategyCnt):
