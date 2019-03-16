@@ -1,6 +1,6 @@
 from app.forRoutes.info import info
 import app.forRoutes.mainChanger as mainChanger
-from flask import render_template, redirect, send_file, request, flash
+from flask import render_template, redirect, send_file, request, flash, url_for
 from app import app
 from app.forRoutes.problemsetId import problemsetId
 from app.forRoutes.upload import Upload
@@ -8,6 +8,9 @@ from app.forms import ProblemsetID
 from server.storage import storage
 from server.commonFunctions import stringTime
 import server.useCasesAPI as useCasesAPI
+import server.tester as tester
+import server.structures as structures
+import json
 
 @app.route("/")
 @app.route("/home")
@@ -55,7 +58,7 @@ def download():
     return send_file(request.args.get('path'), as_attachment = True)
 
 @app.route("/tournament/<strId>")
-def test(strId):
+def showStandings(strId):
     try:
         tourId = int(strId)
     except ValueError:
@@ -72,4 +75,52 @@ def test(strId):
     probId = storage.getCertainField('tournaments', tourId, 'probId')
     return render_template('standings.html.j2', standings = tourDict['list'],
         time = strtime, probId = probId, title = title, info = info())
+
+
+#returns page where user can choose which strategies he wants to run
+#strId - id of problem (string)
+@app.route("/problemset/<strId>/run", methods = ["GET", "POST"])
+def runPage(strId):
+    if (request.method == 'POST'):
+        st1 = request.form.get('st1')
+        st2 = request.form.get('st2')
+        if ((st1 is not None) and (st2 is not None)):
+            return redirect('/test?id1=' + st1 + '&id2=' + st2)
+
+    try:
+        probId = int(strId)
+        idList = json.loads(storage.getCertainField('problems', probId, 'allSubmissions'))
+    except:
+        flash('Incorrect problem id')
+        return redirect('/home')
+
+    probName = storage.getCertainField('problems', probId, 'name')
+    subList = []
+    for id in idList:
+        submission = storage.getSubmission(id)
+        subList.append({'id': id, 'username': storage.getCertainField('users', submission.userId, 'username'),
+            'probName': probName, 'type': structures.visualize(submission.type)})
+
+    return render_template('runPage.html.j2', subList = subList, probId = probId, info = info(), title = 'Run invocation')
   
+@app.route("/test")
+def test():
+    strId1 = request.args.get('id1')
+    strId2 = request.args.get('id2')
+    try:
+        id1 = int(strId1)
+        id2 = int(strId2)
+    except (ValueError, TypeError) as error:
+        flash('Incorrect strategy id')
+        return redirect('/home')
+
+    probId1 = storage.getCertainField('submissions', id1, 'probId')
+    probId2 = storage.getCertainField('submissions', id2, 'probId')
+    if ((probId1 is None) or (probId2 is None) or probId1 != probId2):
+        flash('Incorrect pair of strategies')
+        return redirect('/home')
+
+    title = strId1 + ' vs ' + strId2
+    invocationResult = tester.testStrategies(id1, id2, saveLogs = True)
+    return invocationResult.logs.show(probId1, {'info': info(), 'title': title})
+

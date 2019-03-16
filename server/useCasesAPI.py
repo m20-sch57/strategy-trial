@@ -8,18 +8,21 @@ import json
 
 def addSubmission(userId, problemId, code):
     user = storage.getUser(userId)
+    problem = storage.getProblem(problemId)
     newSubmission = Submission(-1, userId, problemId, code, StrategyState.NonMain)
     idOfNewSubmission = storage.saveSubmission(newSubmission)
     if (problemId not in user.submissions):
         user.submissions[problemId] = []
     user.submissions[problemId].append(idOfNewSubmission)
+    problem.allSubmissions.append(idOfNewSubmission)
     storage.saveUser(user)
+    storage.saveProblem(problem)
     return idOfNewSubmission
 
 # returns:
 # 0 if this solution doesn't belong to this user
 # 1 if the main solution became nonMain
-# 2 if the main solution changed p
+# 2 if the main solution changed
 def changeMainSubmission(userId, subId):
     newMainSubmission = storage.getSubmission(subId)
     if ((newMainSubmission is None) or newMainSubmission.userId != userId):

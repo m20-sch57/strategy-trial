@@ -30,12 +30,12 @@ class Logs:
                     b[i][j][1] = 1
         self.fieldLog.append(b)
 
-    def show(self, probId):
+    def show(self, probId, baseParams):
         with app.app_context():
             logPath = os.path.join('problems', str(probId), 'logs.html.j2')
             data = render_template(logPath, fieldLog = self.fieldLog,
-                res1 = self.results[0].goodStr(MaxScore), res2 = self.results[1].goodStr(MaxScore),
-                strId = str(probId)
+                res1 = self.results[0].goodStr(), res2 = self.results[1].goodStr(),
+                strId = str(probId), **baseParams
             )
         return data
 

@@ -85,7 +85,7 @@ def parseArchive(archivePath):
         return {'ok' : 0, 'error' : 'Source file is too large'}
 
     sources = sources1 + sources2 + sources3
-    problem = Problem(probId, Rules(name, sources, downloads, statement), [], [])
+    problem = Problem(probId, Rules(name, sources, downloads, statement), {}, [], [])
     storage.saveProblem(problem)
     return {'ok' : 1}
 
