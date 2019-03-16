@@ -2,6 +2,7 @@ from server.structures import ProblemState, StrategyState, UserType
 from server.structures import User, Rules, Problem, Submission, Tournament
 from server.commonFunctions import readFile, printToFile
 import os
+import shutil
 #from app.forRoutes.hash import keygen
 
 try:
@@ -17,7 +18,7 @@ import server.useCasesAPI as useCasesAPI
 StrategyCnt = 10
 
 import server.parser as parser
-os.system('zip tic_tac_toe.zip -r tic_tac_toe >/dev/null')   # ...
+shutil.make_archive('tic_tac_toe', 'zip', 'tic_tac_toe')
 parser.parseArchive('tic_tac_toe.zip')
 
 subs = [i for i in range(10)]
