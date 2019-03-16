@@ -3,6 +3,8 @@ import server.parser as parser
 from server.commonFunctions import readFile
 from server.storage import storage
 
+#kek
+
 def isInt(x):
     try:
         y = int(x)
