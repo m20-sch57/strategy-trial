@@ -11,7 +11,6 @@ __pycache__/
 build/
 develop-eggs/
 dist/
-downloads/
 eggs/
 .eggs/
 lib/
@@ -120,3 +119,7 @@ database.db
 # public and private keys
 server/key
 server/key.pub
+
+# files which user can downloadß
+
+app/downloads
