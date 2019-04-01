@@ -97,5 +97,24 @@ class Storage:
     def getSubDict(subId, probName):
         return structures.getSubDict(self.cursor, subId, probName)
 
-storage = Storage()
+class Status:
+    def __init__(self):
+        self.runningTournament = False # don't change them manually, call special functions
+        self.runningTournamentId = -1
+    
+    def tournamentStarted(self, tournamentId: int) -> None:
+        self.runningTournament = True
+        self.runningTournamentId = tournamentId
 
+    def tournamentStopped(self, tournamentId: int) -> None:
+        if self.runningTournamentId == tournamentId:
+            self.runningTournament = False
+            self.runningTournamentId = -1
+        else:
+            raise ValueError("Invalid tournament Id")
+
+    def RunningTournament(self) -> bool:
+        return self.runningTournament
+
+storage = Storage()
+status = Status()
