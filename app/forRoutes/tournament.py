@@ -1,6 +1,6 @@
 from app.forms import TournamentForm
 import server.useCasesAPI as useCasesAPI
-from server.storage import storage
+from server.storage import storage, status
 
 def Tournament(form: TournamentForm) -> list:
     if form.validate_on_submit():
@@ -12,7 +12,11 @@ def Tournament(form: TournamentForm) -> list:
                 raise ValueError()
         except ValueError:
             return [0, "No problem with this id!"]
+        while (status.RunningTournament()):
+            pass
+        status.tournamentStarted(id)
         useCasesAPI.tournament(id)
+        status.tournamentStopped(id)
         return [1, "Tournament Successfully created."]
     return [0, "Enter id of problem."]
 
