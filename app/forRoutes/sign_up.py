@@ -8,8 +8,8 @@ def validateUsername(username):
 
 def Sign_up(form: SignUp) -> list:
     if form.validate_on_submit():
-        name = form.username.data
-        secondname = form.username.data
+        name = form.name.data
+        secondname = form.secondname.data
         username = form.username.data
         password = form.password.data
         passwordRet = form.passwordRet.data
