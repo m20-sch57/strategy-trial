@@ -1,23 +1,24 @@
 {% extends "base.html.j2" %}
 
 {% block content %}
-    <table border="1">
-        <tr><th>Problem {{ problem.rules.name }}</th></tr>
-    </table>
+    <div class="headdarkgreen"> Problem {{ problem.rules.name }} </div>
     <p><pre>{{ problem.rules.statement }}</pre></p>
+<hr>
+    <div class="headdarkgreen"> Files to download:</div>
+    <p></p>
     <table border="1">
-        <tr><th>Files to download:</th></tr>
         {% for path in paths %}
-        <tr>
-            <td><a href=/{{"download?path=" + path}} target="_blank">{{ path.split('/')[-1] }}</a></td>
-        </tr>
+            <th></th>
+            <tr>
+                <td><a href=/{{"download?path=" + path}} target="_blank">{{ path.split('/')[-1] }}</a></td>
+            </tr>
         {% endfor %}
     </table>
 
     <!-- shouldn't be copypasted -->
-
+<hr>
     {% if info.logged_in == 1 %}
-        <h3>Submissions</h3>
+        <br><div class="headdarkgreen"> Your submissions:</div><br>
 
         <table border="1">
             <tr><th>Id</th><th>ProbName</th><th>Type</th><th>Source</th></tr>
@@ -34,7 +35,8 @@
 
             {% endfor %}
         </table>
-
+<hr>        
+        <div class="headdarkgreen">Send new strategy:</div>
         <form action="" method="post" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             <p>
@@ -47,10 +49,11 @@
     {% else %}
         <h3>In order to send strategy you have to <a href="/login">log in</a> or <a href="/sign_up"> sign up</a></h3>
     {% endif %}
-
+<hr>
+    <div class="headdarkgreen">Test your strategy:</div>
     <h2><a href=/{{ "problemset" + "/" + problem.id|string + "/run" }}>Test strategies</a></h2>
-
-    <h3>Tournaments</h3>
+<hr>        
+    <div class="headdarkgreen"> Tournaments</div><br>
     <table border="1">
         <tr><th>Id</th><th>Time</th><th>Link</th></tr>
         {% for tour in tourList %}

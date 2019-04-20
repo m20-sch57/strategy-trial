@@ -16,3 +16,31 @@ th
     background-color: #4CAF50;
     color: white;
 }
+
+.headdarkgreen
+{
+    border: 1px solid #752791; 
+    padding: 10px;
+    background-color: #C597D3;
+    color: #752791;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 20%;
+
+}
+
+.message
+{
+    border-radius: 6px;
+    padding: 5px;
+    background-color: #cd5c5c;
+    border-collapse: collapse;
+    width: 30%;
+    color: white;
+
+}
+
+.login
+{
+    color: #00008B; font-style: italic
+}
