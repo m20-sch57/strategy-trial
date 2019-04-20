@@ -58,7 +58,7 @@ def getCertainField(cursor, tableName, id, fieldName):
 
 def createUsersTable(cursor):
     cursor.execute('''CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, 
-        username TEXT, password TEXT, type integer, submissions TEXT)''')
+        username TEXT, password TEXT, type integer, submissions TEXT, name TEXT, secondname TEXT)''')
 
 def toJSON(submissions):
     stringDict = {}
@@ -74,29 +74,33 @@ def fromJSON(string):
     return res
 
 class User:
-    def __init__(self, Id, username, password, userType, submissions):
+    def __init__(self, Id, username, password, userType, submissions, name, secondname):
         self.id = Id # id of user
         self.username = username # username of user
         self.password = password # password of user
         self.type = userType # type of user (Defalut or Admin)
         self.submissions = submissions # dictionary {problemId : list of submissions}
+        self.name = name
+        self.secondname = secondname
 
     def getList(self):
         return [self.id, self.username, self.password, int(self.type), 
-            toJSON(self.submissions)]
+            toJSON(self.submissions), self.name, self.secondname]
 
     def save(self, cursor):
         saveList(cursor, 'users', self.getList())
 
     def print(self):
         print("id:", self.id)
-        print("name:", self.username)
+        print("username:", self.username)
         print("password:", self.password)
         print("type:", self.type)
         print("submissions:", self.submissions)
+        print("name:", self.name)
+        print("second name:", self.secondname)
 
 def userFromList(lst):
-    return User(lst[0], lst[1], lst[2], UserType(lst[3]), fromJSON(lst[4]))
+    return User(lst[0], lst[1], lst[2], UserType(lst[3]), fromJSON(lst[4]), lst[5], lst[6])
 
 def getUser(cursor, id):
     lst = getFromDatabase(cursor, 'users', id)
@@ -112,7 +116,7 @@ def getUserByName(cursor, username):
     return userFromList(lst)
 
 def getAllUsers(cursor):
-    cursor.execute("SELECT id, username, type FROM users")
+    cursor.execute("SELECT id, username, type, name, secondname FROM users")
     return cursor.fetchall()
 
 #problem

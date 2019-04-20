@@ -24,13 +24,13 @@ if (parsingResult['ok'] != 1):
     print("Can't parse archive tic_tac_toe")
     sys.exit(0)
 
-root = User(-1, "root", "123", UserType.Admin, {}) # It's hard coded user, type can't be changed
+root = User(-1, "root", "123", UserType.Admin, {}, "ROOT", "ROOT") # It's hard coded user, type can't be changed
 storage.saveUser(root)
 
 subs = [i for i in range(10)]
 
 for i in range(StrategyCnt):
-    user = User(-1, "hlebushek" + str(i), "12345", UserType.Default, {0 : []})
+    user = User(-1, "hlebushek" + str(i), "12345", UserType.Default, {0 : []}, "HLEBUSHEK" + str(i), "HLEBUSHEK")
     storage.saveUser(user)
 
 for i in range(StrategyCnt):

@@ -8,6 +8,8 @@ def validateUsername(username):
 
 def Sign_up(form: SignUp) -> list:
     if form.validate_on_submit():
+        name = form.name.data
+        secondname = form.secondname.data
         username = form.username.data
         password = form.password.data
         passwordRet = form.passwordRet.data
@@ -17,7 +19,7 @@ def Sign_up(form: SignUp) -> list:
             return [0, "There is a user with this username"]
         if password != passwordRet:
             return [0, "Passwords don't match"]
-        user = structures.User(storage.storage.getUsersCount(), username, password, structures.UserType.Default, {})
+        user = structures.User(storage.storage.getUsersCount(), username, password, structures.UserType.Default, {}, name, secondname)
         storage.storage.saveUser(user)
         return [1, "Signed up successfully"]
     return [0, "You must fill all fields with *"]
