@@ -5,10 +5,17 @@ import server.useCasesAPI as useCasesAPI
 import app.forRoutes.mainChanger as mainChanger
 from app.forRoutes.hash import *
 from random import randint
+from app.forRoutes.changePassword import ChangePassword
+from app.forms import ChangePasswordForm
 
-@app.route("/settings")
+@app.route("/settings", methods = ["GET", "POST"])
 def settings():
-    return render_template('settings.html.j2', title = "Settings", info = info())
+    form = ChangePasswordForm()
+    success, message = ChangePassword(form)
+    flash(message)
+    if success:
+        return redirect("/home")
+    return render_template("settings.html.j2", title = "Settings", info = info())
 
 @app.route("/logout")
 def logout():

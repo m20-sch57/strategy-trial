@@ -1,6 +1,24 @@
 {% extends "base.html.j2" %}
 
 {% block content %}
-    <b>(Soon)</b> Here you can change your settings.
+<!--    <b>(Soon)</b> Here you can change your settings. -->
+    <h1>Change your password</h1>
+    <form action="" method="post">
+        <p>
+            {{ form.oldpassword.label }}
+            {{ form.oldpassword(size=32) }}
+        </p>
+        <p>
+            {{ form.newpassword.label }}
+            {{ form.newpassword(size=32) }}
+        </p>
+        <p>
+            {{ form.retpassword.label }}
+            {{ form.retpassword(size=32) }}
+        </p>
+        <p>
+            {{ form.submit() }}
+        </p>
+    </form>
 {% endblock %}
 
