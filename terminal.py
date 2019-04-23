@@ -1,6 +1,7 @@
 import server.useCasesAPI as useCasesAPI
 import server.parser as parser
-from server.commonFunctions import readFile
+import server.timer as timer
+from server.commonFunctions import readFile, unixTime
 from server.storage import storage
 
 #kek
@@ -106,5 +107,21 @@ while (True):
         if (len(params) == 2):
             print(parser.parseArchive(params[1]))
 
+    if (command == 'time'):
+        print(unixTime())
+
+    if (command == 'upd'):
+        timer.update()
+
+    if (command == 'delayTour'):
+        if (len(params) < 3 or not(isInt(params[1])) or not(isInt(params[2]))):
+            continue
+
+        try:
+            useCasesAPI.createDelayedTournament(int(params[1]), int(params[2]))
+        except:
+            pass
+
     if (command == 'close'):
         break
+

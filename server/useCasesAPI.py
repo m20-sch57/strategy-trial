@@ -114,3 +114,8 @@ def getTournament(tourId):
         userId = storage.getCertainField('submissions', position[1], 'userId')
         lst.append([i + 1, position[0], storage.getCertainField('users', userId, 'username')])
     return {'time' : tournament.time, 'list' : lst}
+
+def createDelayedTournament(probId, time):
+    prob = storage.getProblem(probId)
+    prob.nextTournament = time
+    storage.saveProblem(prob)

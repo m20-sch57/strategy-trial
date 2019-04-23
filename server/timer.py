@@ -8,7 +8,7 @@ def update():
 	problemCnt = storage.getProblemsCount()
 	for i in range(problemCnt):
 		tourTime = storage.getCertainField('problems', i, 'nextTournament')
-		if (tourTime != -1 or tourTime <= time):
+		if (tourTime != -1 and tourTime <= time):
 			tester.tournament(i)
 			prob = storage.getProblem(i)
 			prob.nextTournament = -1
