@@ -24,9 +24,7 @@ def Tournament(form: TournamentForm) -> list:
                 return [0, "Incorrect time"]
             if (startTime < unixTime()):
                 return [0, "Too early"]
-            problem = storage.getProblem(id)
-            problem.nextTournament = startTime
-            storage.saveProblem(problem)
+            useCasesAPI.createDelayedTournament(id, startTime)
             return [1, "Looking forward for tournament start"]
     return [0, "Enter id of problem."]
 
