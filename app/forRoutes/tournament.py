@@ -1,6 +1,6 @@
 from app.forms import TournamentForm
 import server.useCasesAPI as useCasesAPI
-from server.storage import storage, status
+from server.storage import storage
 from server.commonFunctions import unixTime
 
 def Tournament(form: TournamentForm) -> list:
@@ -15,11 +15,7 @@ def Tournament(form: TournamentForm) -> list:
         except ValueError:
             return [0, "No problem with this id!"]
         if (startTimeStr == ''):
-            while (status.RunningTournament()):
-                pass
-            status.tournamentStarted(id)
-            useCasesAPI.tournament(id)
-            status.tournamentStopped(id)
+            useCasesAPI.makeTournament(id)
             return [1, "Tournament Successfully created."]
         else:
             try:

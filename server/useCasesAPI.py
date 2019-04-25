@@ -1,6 +1,6 @@
 from server.structures import ProblemState, StrategyState, UserType
 from server.structures import User, Rules, Problem, Submission, Tournament
-from server.storage import storage
+from server.storage import storage, status
 from server.tester import tournament, testStrategies
 from server.tester import loadProblemDownloads as TesterLPD
 from server.commonFunctions import stringTime
@@ -79,8 +79,13 @@ def getSubmissionsUP(userId, probId):
 def getAllUsers():
     return storage.getAllUsers()
 
-def makeTornament(probId):
-    return tournament(probId)
+def makeTournament(id):
+    while (status.RunningTournament()):
+        pass
+    status.tournamentStarted(id)
+    result = tournament(id)
+    status.tournamentStopped(id)
+    return result
 
 def judge(id1, id2):
     return testStrategies(id1, id2, saveLogs = True)
