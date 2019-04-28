@@ -14,7 +14,7 @@
         {% endfor %}
     </table>
 
-    <!-- shouldn't be copypasted -->
+    <!--shouldn't be copypasted-->
 
     {% if info.logged_in == 1 %}
         <h3>Submissions</h3>
@@ -62,9 +62,13 @@
         {% endfor %}
     </table>
 
+    {% if nextTournamentTime != "" %}
+        <h2>Next tournament starts at {{ nextTournamentTime }}</h2>
+    {% endif %}
+
     {% if info.admin == 1 %}
         <h2><a href=/{{ "add_tournament?probId" + "=" + problem.id|string }}>Run tournament...</a></h2>
-    {% endif %}
+    {% endif %}-
 
 {% endblock %}
 
