@@ -10,12 +10,15 @@ from app.forms import ChangePasswordForm
 
 @app.route("/settings", methods = ["GET", "POST"])
 def settings():
+    if info()["id"] == -1:
+        flash("You haven't logged in, so you can't change your password")
+        return redirect("/home")
     form = ChangePasswordForm()
     success, message = ChangePassword(form)
     flash(message)
     if success:
         return redirect("/home")
-    return render_template("settings.html.j2", title = "Settings", info = info())
+    return render_template("settings.html.j2", title = "Settings", info = info(), form = form)
 
 @app.route("/logout")
 def logout():
