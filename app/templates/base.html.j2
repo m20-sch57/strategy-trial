@@ -8,27 +8,26 @@
         <title>Need Title</title>
         {% endif %}
     </head>
-    <body bgcolor="#DCDCDC">
+    <body bgcolor=#ECE8D4>
         <div>
             <img src="{{ url_for('static',filename='pictures/headpicture.png') }}" alt="-_-">
-            <font size="5"><b><u>Strategy trial</u></b></font>
             <a> </a>
-            <a href="/home">Home</a>
-            <a href="/problemset">Problemset</a>
+            <a class="button27" href="/home">Home</a>
+            <a class="button27" href="/problemset">Problemset</a>
             {% if info.logged_in == 0 %}
-            <a href="/login">Login</a>
-            <a href="/sign_up">Sign up</a>
+            <a class="button27" href="/login">Login</a>
+            <a class="button27" href="/sign_up">Sign up</a>
             <a>{{ info.username }}</a>
             {% else %}
-            <a href="/submissions">Submissions</a>
-            <a href="/logout">Log out</a>
-            <a href="/settings">{{ info.username }}</a>
+            <a class="button27" href="/submissions">Submissions</a>
+            <a class="button27" href="/logout">Log out</a>
+            <a class="button27" href="/settings">{{ info.username }}</a>
             {% endif %}
             {% if info.admin == 1 %}
                 <b>(admin)</b>
-                <a href="/add_tournament">Add tournament</a> 
-                <a href="/add_problem">Add problem</a>
-                <a href="/users_list">List of users</a>
+                <a class="button27" href="/add_tournament">Add tournament</a> 
+                <a class="button27" href="/add_problem">Add problem</a>
+                <a class="button27" href="/users_list">List of users</a>
             {% endif %}
         </div>
         {% with messages = get_flashed_messages() %}
