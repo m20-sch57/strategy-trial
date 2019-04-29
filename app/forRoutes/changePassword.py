@@ -16,8 +16,4 @@ def ChangePassword(form: ChangePasswordForm) -> list: # success, message
         user.password = new_passwd
         storage.saveUser(user)
         return [1, "Password successfully changed"]
-    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-    print(form.oldpassword.data)
-    print(form.newpassword.data)
-    print(form.retpassword.data)
-    return [0, "Fill ..."]
+    return [0, "Fill in all fields"]
