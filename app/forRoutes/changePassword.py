@@ -16,4 +16,4 @@ def ChangePassword(form: ChangePasswordForm) -> list: # success, message
         user.password = new_passwd
         storage.saveUser(user)
         return [1, "Password successfully changed"]
-    return [0, "Fill in all fields"]
+    return [0, "Fill all fields"]
