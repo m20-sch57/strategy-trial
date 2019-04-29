@@ -14,4 +14,4 @@ def AddProblem(form: AddProblemForm) -> list:
             return [0, (dictRes['error'], 'message red')]
         else:
             return [1, ("Problem successfully added", 'message green')]
-    return [0, ""]
+    return [0, ("", 'message blue')]
