@@ -72,6 +72,9 @@ def parseArchive(archivePath):
 
     name = config['name']
 
+    if storage.getProblemByName(name) != None:
+        return {"ok": 0, "error": "You can't add problem with same name"}
+
     try:
         downloads = readFiles(os.path.join(problemPath, 'downloads'),
             os.path.join('app', 'downloads', str(probId)))

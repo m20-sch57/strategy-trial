@@ -50,6 +50,9 @@ class Storage:
     def getUserByName(self, username):
         return structures.getUserByName(self.cursor, username)
 
+    def getProblemByName(self, name):
+        return structures.getProblemByName(self.cursor, name)
+
     def getAllUsers(self):
         return structures.getAllUsers(self.cursor)
 
