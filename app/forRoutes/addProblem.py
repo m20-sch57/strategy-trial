@@ -11,7 +11,7 @@ def AddProblem(form: AddProblemForm) -> list:
         dictRes = parseArchive(archiveName)
         os.remove(archiveName)
         if (dictRes['ok'] == 0):
-            return [0, dictRes['error']]
+            return [0, (dictRes['error'], 'message red')]
         else:
-            return [1, "Problem successfully added"]
+            return [1, ("Problem successfully added", 'message green')]
     return [0, ""]

@@ -11,7 +11,7 @@ from random import randint
 def login():
     form = LoginForm()
     success, message, username, userId = Login(form)
-    flash(message)
+    flash(message[0], message[1])
     if success:
         resp = make_response(redirect('/home'))
         resp.set_cookie("all", encrypt("1 " + username + ' ' + str(userId) + ' ' + str(randint(0, 100000))))
@@ -22,7 +22,7 @@ def login():
 def sign_up():
     form = SignUp()
     success, message = Sign_up(form)
-    flash(message)
+    flash(message[0], message[1])
     if success:
         return redirect("home")
     return render_template('sign_up.html.j2', title = "Sign Up", form = form, info = info())
