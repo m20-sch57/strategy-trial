@@ -2,7 +2,7 @@ table
 {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
-    width: 100%;
+    width: 80%;
 }
 th, tr
 {
@@ -15,4 +15,49 @@ th
 {
     background-color: #4CAF50;
     color: white;
+}
+
+.headblue
+{
+    border: 1px solid #041949; 
+    padding: 10px;
+    background-color: #2754B4;
+    color: #ffffff;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 20%;
+
+}
+
+.message
+{
+    border-radius: 6px;
+    padding: 5px;
+    background-color: #cd5c5c;
+    border-collapse: collapse;
+    width: 30%;
+    color: white;
+
+}
+
+.login
+{
+    color: #00008B; font-style: italic
+}
+
+a.button27 {
+    position: relative; 
+    top: -8;
+    font-family: "Times New Roman", Arial, Helvetica, sans-serif;
+    padding: 8px;
+    text-decoration: none;
+    background: #9FD5C2;
+    color: black;
+    box-shadow: 0 0 0 1px #278191 inset, 0 1px 1px black;
+}
+
+a.button27:hover {
+    background: #278191;
+    color: white;
+    box-shadow: 0 0 0 1px black inset, 0 1px 1px black;
 }
