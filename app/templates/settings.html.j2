@@ -4,6 +4,7 @@
 <!--    <b>(Soon)</b> Here you can change your settings. -->
     <h1>Change your password</h1>
     <form action="" method="post">
+        {{ form.hidden_tag() }}
         <p>
             {{ form.oldpassword.label }}
             {{ form.oldpassword(size=32) }}

@@ -42,6 +42,6 @@ class AddProblemForm(FlaskForm):
 class ChangePasswordForm(FlaskForm):
     oldpassword = PasswordField("Old Password", validators = [DataRequired()])
     newpassword = PasswordField("New Password", validators = [DataRequired()])
-    retpassword = PasswordField(" Retype password", validators = [DataRequired()])
+    retpassword = PasswordField("Retype password", validators = [DataRequired()])
     submit = SubmitField("Submit")
 
