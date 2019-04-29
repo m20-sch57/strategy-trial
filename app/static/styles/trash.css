@@ -46,7 +46,8 @@ th
 }
 
 a.button27 {
-    display: inline-block;
+    position: relative; 
+    top: -8;
     font-family: "Times New Roman", Arial, Helvetica, sans-serif;
     padding: 8px;
     text-decoration: none;

@@ -21,10 +21,13 @@
             {% else %}
             <a class="button27" href="/submissions">Submissions</a>
             <a class="button27" href="/logout">Log out</a>
+            {% if info.admin == 1 %}
+            <a class="button27" href="/settings">{{ info.username }} (admin)</a>
+            {% else %}
             <a class="button27" href="/settings">{{ info.username }}</a>
             {% endif %}
+            {% endif %}
             {% if info.admin == 1 %}
-                <b>(admin)</b>
                 <a class="button27" href="/add_tournament">Add tournament</a> 
                 <a class="button27" href="/add_problem">Add problem</a>
                 <a class="button27" href="/users_list">List of users</a>
