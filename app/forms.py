@@ -32,9 +32,9 @@ class ProblemsetID(FlaskForm):
 
 class TournamentForm(FlaskForm):
     probId = StringField("Id of problem", validators = [DataRequired()])
+    start = StringField("Tournament start time (put unix time if you want to use this)")
     submit = SubmitField("Submit")
 
 class AddProblemForm(FlaskForm):
     selectfile = FileField("Select File", validators = [FileRequired()])
     submit = SubmitField("Submit")
-
