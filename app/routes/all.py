@@ -37,8 +37,13 @@ def problemset_id(strId):
     message = Upload(userId, problemId, form)
     flash(message[0], message[1])
 
+    nextTournamentStrTime = ''
+    if (problem.nextTournament != -1):
+        nextTournamentStrTime = stringTime(problem.nextTournament)
+
     return render_template('problem.html.j2', form = form, title = problem.rules.name, 
-        problem = problem, subList = subList[::-1], paths = paths, tourList = tourList, info = info())
+        problem = problem, subList = subList[::-1], paths = paths, tourList = tourList, 
+        nextTournamentTime = nextTournamentStrTime, info = info())
 
 @app.route("/source/<subId>")
 def showSource(subId):
