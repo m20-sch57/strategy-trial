@@ -176,6 +176,10 @@ def getProblem(cursor, id):
         return None
     return problemFromList(lst)
 
+def getProblemByName(cursor, name):
+    cursor.execute('SELECT * FROM problems WHERE name=?', [name])
+    return cursor.fetchone()
+
 def getProblemset(cursor):
     cursor.execute('SELECT id, name FROM problems')
     response = cursor.fetchall()
