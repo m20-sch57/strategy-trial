@@ -23,7 +23,7 @@ def settings():
 @app.route("/logout")
 def logout():
     resp = make_response(redirect("/home"))
-    flash("Logged out successfully")
+    flash("Logged out successfully", 'message green')
     resp.set_cookie("all", encrypt("0 Guest -1 " + str(randint(0, 100000))))
     return resp
 
@@ -33,7 +33,7 @@ def submissions():
     
     userId = info()['id']
     if userId == -1:
-        flash("You haven't logged in, so you can't see your submissions")
+        flash("You haven't logged in, so you can't see your submissions", 'message red')
         return redirect('/home')
 
     lst = useCasesAPI.getSubmissionsU(userId)

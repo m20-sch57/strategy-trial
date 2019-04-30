@@ -14,13 +14,13 @@ def Sign_up(form: SignUp) -> list:
         password = form.password.data
         passwordRet = form.passwordRet.data
         if (not validateUsername(username)):
-            return [0, "Username is not correct"]
+            return [0, ("Username is not correct", 'message red')]
         if storage.storage.getUserByName(username) != None:
-            return [0, "There is a user with this username"]
+            return [0, ("There is a user with this username", 'message red')]
         if password != passwordRet:
-            return [0, "Passwords don't match"]
+            return [0, ("Passwords don't match", 'message red')]
         user = structures.User(storage.storage.getUsersCount(), username, password, structures.UserType.Default, {}, name, secondname)
         storage.storage.saveUser(user)
-        return [1, "Signed up successfully"]
-    return [0, "You must fill all fields with *"]
+        return [1, ("Signed up successfully", 'message green')]
+    return [0, ("You must fill all fields with *", 'message blue')]
 

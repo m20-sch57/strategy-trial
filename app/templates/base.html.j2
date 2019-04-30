@@ -33,10 +33,10 @@
                 <a class="button27" href="/users_list">List of users</a>
             {% endif %}
         </div>
-        {% with messages = get_flashed_messages() %}
-        {% for message in messages %}
+        {% with messages = get_flashed_messages(with_categories = true) %}
+        {% for category, message in messages %}
             {% if message != "" %}
-                <p class="message">{{ message }}</p>
+                <p class="{{ category }}">{{ message }}</p>
             {% endif %}
         {% endfor %}
         {% endwith %}

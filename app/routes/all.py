@@ -35,7 +35,11 @@ def problemset_id(strId):
 
     userId, problemId = info()['id'], int(strId)
     message = Upload(userId, problemId, form)
-    flash(message)
+    flash(message[0], message[1])
+
+    nextTournamentStrTime = ''
+    if (problem.nextTournament != -1):
+        nextTournamentStrTime = stringTime(problem.nextTournament)
 
     nextTournamentStrTime = ''
     if (problem.nextTournament != -1):
@@ -49,7 +53,7 @@ def problemset_id(strId):
 def showSource(subId):
     submission = storage.getSubmission(subId)
     if (submission is None):
-        flash('No such submission')
+        flash('No such submission', 'message red')
         return redirect('/home')
     Info = info()
     title = "Code #" + subId
@@ -67,12 +71,12 @@ def showStandings(strId):
     try:
         tourId = int(strId)
     except ValueError:
-        flash('Incorrect tournament id')
+        flash('Incorrect tournament id', 'message red')
         return redirect('/home')
 
     tourDict = useCasesAPI.getTournament(tourId)
     if (tourDict is None):
-        flash('Incorrect tournament id')
+        flash('Incorrect tournament id', 'message red')
         return redirect('/home')
 
     title = 'Standings #' + strId
@@ -96,7 +100,7 @@ def runPage(strId):
         probId = int(strId)
         idList = json.loads(storage.getCertainField('problems', probId, 'allSubmissions'))
     except:
-        flash('Incorrect problem id')
+        flash('Incorrect problem id', 'message red')
         return redirect('/home')
 
     probName = storage.getCertainField('problems', probId, 'name')
@@ -116,13 +120,13 @@ def test():
         id1 = int(strId1)
         id2 = int(strId2)
     except (ValueError, TypeError) as error:
-        flash('Incorrect strategy id')
+        flash('Incorrect strategy id', 'message red')
         return redirect('/home')
 
     probId1 = storage.getCertainField('submissions', id1, 'probId')
     probId2 = storage.getCertainField('submissions', id2, 'probId')
     if ((probId1 is None) or (probId2 is None) or probId1 != probId2):
-        flash('Incorrect pair of strategies')
+        flash('Incorrect pair of strategies', 'message red')
         return redirect('/home')
 
     title = strId1 + ' vs ' + strId2

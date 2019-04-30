@@ -52,15 +52,15 @@ def changeMainSubmission(userId, subId):
 def changeUserType(userId: int) -> str:
     user = storage.getUser(userId)
     if (user == None):
-        return "There is no user with this id"
+        return ("There is no user with this id", 'message red')
     if (user.username == "root" and user.id == 0):
-        return "Type of root can't be changed!"
+        return ("Type of root can't be changed!", 'message red')
     if (user.type == UserType.Admin):
         user.type = UserType.Default
     else:
         user.type = UserType.Admin
     storage.saveUser(user)
-    return "Type successfully changed"
+    return ("Type successfully changed", 'message green')
 
 def addUser(username, password):
     newUser = User(-1, username, password, UserType.Default, dict())
