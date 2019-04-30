@@ -41,6 +41,10 @@ def problemset_id(strId):
     if (problem.nextTournament != -1):
         nextTournamentStrTime = stringTime(problem.nextTournament)
 
+    nextTournamentStrTime = ''
+    if (problem.nextTournament != -1):
+        nextTournamentStrTime = stringTime(problem.nextTournament)
+
     return render_template('problem.html.j2', form = form, title = problem.rules.name, 
         problem = problem, subList = subList[::-1], paths = paths, tourList = tourList, 
         nextTournamentTime = nextTournamentStrTime, info = info())
