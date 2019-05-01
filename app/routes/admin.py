@@ -10,18 +10,18 @@ from app.forRoutes.changeType import changeType
 @app.route("/add_user")
 def add_user():
     if not isAdmin():
-        flash("You don't have permission to do this!")
+        flash("You don't have permission to do this!", 'message red')
         return redirect("/home")
     return render_template('add_user.html.j2', title = "Add user", info = info())
 
 @app.route("/add_problem", methods = ["GET", "POST"])
 def add_problem():
     if not isAdmin():
-        flash("You don't have permission to do this!")
+        flash("You don't have permission to do this!", 'message red')
         return redirect("/home")
     form = AddProblemForm()
     success, message = AddProblem(form)
-    flash(message)
+    flash(message[0], message[1])
     if success:
         return redirect("/home")
     return render_template('add_problem.html.j2', title = "Add problem", form = form, info = info())
@@ -41,7 +41,7 @@ def users_list():
 def add_tournament():
     Info = info()
     if (not Info['admin']):
-        flash("You don't have permission to do this!")
+        flash("You don't have permission to do this!", 'message red')
         return redirect("/home")
 
     default = request.args.get('probId')
@@ -50,7 +50,7 @@ def add_tournament():
 
     form = TournamentForm()
     success, message = Tournament(form)
-    flash(message)
+    flash(message[0], message[1])
     if success:
         return redirect("/home")
     return render_template("add_tournament.html.j2", title = "Add tournament", form = form,
@@ -60,11 +60,11 @@ def add_tournament():
 def usersList():
     Info = info()
     if (not isAdmin()):
-        flash("You don't have permission to do this!")
+        flash("You don't have permission to do this!", 'message red')
         return redirect("/home")
     message = changeType(request)
     if message != None:
-        flash(message)
+        flash(message[0], message[1])
     lst = useCasesAPI.getAllUsers()
     return render_template("users_list.html.j2", title = "List of users", info = Info, lst = lst)
 

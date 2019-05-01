@@ -13,7 +13,7 @@ def Tournament(form: TournamentForm) -> list:
             if storage.getProblem(id) == None:
                 raise ValueError()
         except ValueError:
-            return [0, "No problem with this id!"]
+            return [0, ("No problem with this id!", "message red")]
         if (startTimeStr == ''):
             useCasesAPI.makeTournament(id)
             return [1, "Tournament Successfully created."]
@@ -21,10 +21,10 @@ def Tournament(form: TournamentForm) -> list:
             try:
                 startTime = int(startTimeStr)
             except ValueError:
-                return [0, "Incorrect time"]
+                return [0, "Incorrect time", ("message red")]
             if (startTime < unixTime()):
-                return [0, "Too early"]
+                return [0, ("Too early", "message red")]
             useCasesAPI.createDelayedTournament(id, startTime)
-            return [1, "Looking forward for tournament start"]
-    return [0, "Enter id of problem."]
+            return [1, ("Looking forward for tournament start", "message green")]
+    return [0, ("Enter id of problem", "message blue")]
 
