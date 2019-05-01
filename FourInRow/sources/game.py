@@ -1,9 +1,13 @@
 from classes import *
 from server.gameStuff import *
 
-class FullGameState:
-    def __init__(self):
-        self.field = [['.' for i in range(6)] for i in range(7)]
+class FullGameState(GameState):
+    pass
+
+def gameStateRep(full: FullGameState, playerId: int) -> GameState:
+    result = GameState()
+    result.field = full.field
+    return result
 
 '''
 .......
@@ -11,7 +15,7 @@ class FullGameState:
 .......
 .......
 .......
-.......
+.......[0]
 '''
 
 def check(gameState: FullGameState) -> str:
