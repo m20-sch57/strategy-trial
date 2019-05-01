@@ -16,12 +16,12 @@ def Tournament(form: TournamentForm) -> list:
             return [0, ("No problem with this id!", "message red")]
         if (startTimeStr == ''):
             useCasesAPI.makeTournament(id)
-            return [1, "Tournament Successfully created."]
+            return [1, ("Tournament Successfully created.", "message green")]
         else:
             try:
                 startTime = int(startTimeStr)
             except ValueError:
-                return [0, "Incorrect time", ("message red")]
+                return [0, ("Incorrect time", "message red")]
             if (startTime < unixTime()):
                 return [0, ("Too early", "message red")]
             useCasesAPI.createDelayedTournament(id, startTime)
