@@ -1,7 +1,7 @@
 {% extends "base.html.j2" %}
 
 {% block content %}
-    <div class="headblue"> Problem {{ problem.rules.name }} </div>
+    <div class="headblue"> Problem {{ problem.rules.name }} (Rev. {{ problem.revisionId }})</div>
     <p><pre>{{ problem.rules.statement }}</pre></p>
 <hr>
     <div class="headblue"> Files to download:</div>

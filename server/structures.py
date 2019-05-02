@@ -167,8 +167,8 @@ class Problem:
         print("submissions:", self.submissions)
         print("allSubmissions: ", self.allSubmissions)
         print("tournaments:", self.tournaments)
-        print("nextTournament: ", self.nextTournament)
-        print("revisionId: ", self.revisionId)
+        print("nextTournament:", self.nextTournament)
+        print("revisionId:", self.revisionId)
 
 def problemFromList(lst):
     return Problem(lst[0], Rules(lst[1], json.loads(lst[2]), json.loads(lst[3]), lst[4]), 
