@@ -138,3 +138,10 @@ def test():
     invocationResult = tester.testStrategies(id1, id2, saveLogs = True)
     return invocationResult.logs.show(probId1, {'info': info(), 'title': title})
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('error404.html.j2', info = info()), 404
+
+@app.errorhandler(500)
+def page_not_found(e):
+    return render_template('error500.html.j2'), 500
