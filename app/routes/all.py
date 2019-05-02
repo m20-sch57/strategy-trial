@@ -82,8 +82,13 @@ def showStandings(strId):
     title = 'Standings #' + strId
     strtime = stringTime(tourDict['time'])
     probId = storage.getCertainField('tournaments', tourId, 'probId')
+
+    additionalArgs = {}
+    probRev = storage.getCertainField('tournaments', tourId, 'probRev')
+    if (probRev != storage.getCertainField('problems', probId, 'revisionId')):
+        additionalArgs['oldRev'] = probRev
     return render_template('standings.html.j2', standings = tourDict['list'],
-        time = strtime, probId = probId, title = title, info = info())
+        time = strtime, probId = probId, title = title, info = info(), **additionalArgs)
 
 
 #returns page where user can choose which strategies he wants to run
@@ -133,3 +138,10 @@ def test():
     invocationResult = tester.testStrategies(id1, id2, saveLogs = True)
     return invocationResult.logs.show(probId1, {'info': info(), 'title': title})
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('error404.html.j2', info = info()), 404
+
+@app.errorhandler(500)
+def page_not_found(e):
+    return render_template('error500.html.j2'), 500

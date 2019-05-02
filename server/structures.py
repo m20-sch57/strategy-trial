@@ -124,7 +124,9 @@ def getAllUsers(cursor):
 
 def createProblemsTable(cursor):
     cursor.execute('''CREATE TABLE IF NOT EXISTS problems 
-        (id integer PRIMARY KEY, name TEXT, sources TEXT, downloads TEXT, statement TEXT, submissions TEXT, allSubmissions TEXT, tournaments TEXT, nextTournament INT)''')
+        (id integer PRIMARY KEY, name TEXT, sources TEXT, downloads TEXT, 
+        statement TEXT, submissions TEXT, allSubmissions TEXT, 
+        tournaments TEXT, nextTournament INT, revisionId INT)''')
 
 class Rules:
     def __init__(self, Name, Sources, Downloads, statement):
@@ -134,20 +136,21 @@ class Rules:
         self.statement = statement # text needed to be published (in html)
 
 class Problem:
-    def __init__(self, Id, rules, submissions, allSubmissions, tournaments, nextTournament):
+    def __init__(self, Id, rules, submissions, allSubmissions, tournaments, nextTournament, revisionId):
         self.id = Id # id of problem
         self.rules = rules # description of rules, interaction with strategy
         self.submissions = submissions # set of main strategies' ids (startegies that will play with each other, selected by user)
         self.allSubmissions = allSubmissions # list of all sent strategies
         self.tournaments = tournaments # standings: sortedby score list of results of all strategies
         self.nextTournament = nextTournament
+        self.revisionId = revisionId
 
     def getList(self):
         return [
             self.id, self.rules.name, json.dumps(self.rules.sources),
             json.dumps(self.rules.downloads), self.rules.statement,
             json.dumps(list(self.submissions)), json.dumps(self.allSubmissions),
-            json.dumps(self.tournaments), self.nextTournament
+            json.dumps(self.tournaments), self.nextTournament, self.revisionId
         ]
 
     def save(self, cursor):
@@ -164,11 +167,12 @@ class Problem:
         print("submissions:", self.submissions)
         print("allSubmissions: ", self.allSubmissions)
         print("tournaments:", self.tournaments)
-        print("nextTournament: ", self.nextTournament)
+        print("nextTournament:", self.nextTournament)
+        print("revisionId:", self.revisionId)
 
 def problemFromList(lst):
     return Problem(lst[0], Rules(lst[1], json.loads(lst[2]), json.loads(lst[3]), lst[4]), 
-        set(json.loads(lst[5])), json.loads(lst[6]), json.loads(lst[7]), lst[8])
+        set(json.loads(lst[5])), json.loads(lst[6]), json.loads(lst[7]), lst[8], lst[9])
 
 def getProblem(cursor, id):
     lst = getFromDatabase(cursor, 'problems', id)
@@ -225,21 +229,22 @@ def getSubmission(cursor, id):
 
 
 #tournament
-#saving: [id, probId, time, standings]
+#saving: [id, probId, probRev, time, standings]
 
 def createTournamentsTable(cursor):
-    cursor.execute('''CREATE TABLE IF NOT EXISTS tournaments (id integer PRIMARY KEY, 
-        probId integer, time integer, standings TEXT)''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS tournaments (id INT PRIMARY KEY, 
+        probId INT, probRev INT, time INT, standings TEXT)''')
 
 class Tournament:
-    def __init__(self, id, probId, time, standings):
+    def __init__(self, id, probId, probRev, time, standings):
         self.id = id
         self.probId = probId
+        self.probRev = probRev
         self.time = time
         self.standings = standings
 
     def getList(self):
-        return [self.id, self.probId, self.time, json.dumps(self.standings)]
+        return [self.id, self.probId, self.probRev, self.time, json.dumps(self.standings)]
 
     def save(self, cursor):
         saveList(cursor, 'tournaments', self.getList())
@@ -247,11 +252,12 @@ class Tournament:
     def print(self):
         print("id:", self.id)
         print("probId:", self.probId)
+        print("probRev:", self.probRev)
         print("time:", self.time)
         print("standings:", self.standings)
 
 def tournamentFromList(lst):
-    return Tournament(lst[0], lst[1], lst[2], json.loads(lst[3]))
+    return Tournament(lst[0], lst[1], lst[2], lst[3], json.loads(lst[4]))
 
 def getTournament(cursor, id):
     lst = getFromDatabase(cursor, 'tournaments', id)

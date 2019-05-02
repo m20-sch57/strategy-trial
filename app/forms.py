@@ -37,11 +37,13 @@ class TournamentForm(FlaskForm):
 
 class AddProblemForm(FlaskForm):
     selectfile = FileField("Select File", validators = [FileRequired()])
+    probId = StringField("Write over problem with id... (leave empty if you want to create a new one)")
     submit = SubmitField("Submit")
 
 class ChangePasswordForm(FlaskForm):
-    oldpassword = PasswordField("Old Password", validators = [DataRequired()])
+    oldpassword = PasswordField("Old Password", validators = []) #this field isn't used sometimes
     newpassword = PasswordField("New Password", validators = [DataRequired()])
     retpassword = PasswordField("Retype password", validators = [DataRequired()])
     submit = SubmitField("Submit")
+
 
