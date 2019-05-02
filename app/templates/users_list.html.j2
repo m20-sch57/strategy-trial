@@ -4,7 +4,7 @@
 
 	<table border="1">
 
-	<tr><th>Username</th><th>Type</th><th>Name</th><th>Second Name</th></tr>
+	<tr><th>Username</th><th>Type</th><th>Name</th><th>Second Name</th><th>Change Password</th></tr>
 
 	{% for user in lst %}
 		<tr>
@@ -12,6 +12,9 @@
 			<td><a href=/{{"users_list?chUserId=" + user[0]|string }}>{% if user[2] == 1 %}Admin{% else %}Default{%endif%}</a></td>
             <td>{{ user[3] }}</td>    
             <td>{{ user[4] }}</td>
+            <td>
+            	<a href=/{{"changePassword?userId=" + user[0]|string }}>Change password...</a>
+            </td>
         </tr>
 	{% endfor %}
 
