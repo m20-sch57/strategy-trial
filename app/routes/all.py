@@ -144,4 +144,6 @@ def page_not_found(e):
 
 @app.errorhandler(500)
 def page_not_found(e):
+    if e is structures.SecurityError:
+        return render_template("security.html.j2", title = "Strategy trial", message = message)
     return render_template('error500.html.j2'), 500
