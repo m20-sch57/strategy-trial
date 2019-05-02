@@ -2,10 +2,15 @@
 
 {% block content %}
     <body>
-        <h1>Add problem</h1>
+        <h1>Add/Edit problem</h1>
         <form action="" method="post" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             <p>
+                {{form.probId.label}}<br>
+                {{form.probId(size=32)}}<br>
+            </p>
+            <p>
+                Upload problem archive:<br>
                 {{form.selectfile(size=32)}}
             </p>
             <p>
