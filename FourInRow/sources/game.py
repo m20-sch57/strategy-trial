@@ -15,12 +15,12 @@ def gameStateRep(full: FullGameState, playerId: int) -> GameState:
 .......
 .......
 .......
-.......[0]
+.......
 '''
 
 def check(gameState: FullGameState) -> str:
     winner = '.'
-
+    
 
 def makeTurn(gameState: FullGameState, playerId: int, turn: Turn, logs = None) -> list:
     charList = ['X', 'O']
