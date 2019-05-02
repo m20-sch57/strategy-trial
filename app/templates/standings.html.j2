@@ -3,6 +3,9 @@
 {% block content %}
 <div>
     <h2>Time: {{ time }}</h2>
+    {% if oldRev != None %}
+        <p class="login">This tournament was created for problem revision {{ oldRev }}</p>
+    {% endif %}
     <table style="width:100%" border="1">
         <tr>
             <th>Place</th>
