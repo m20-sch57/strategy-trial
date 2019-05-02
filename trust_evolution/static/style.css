@@ -1,0 +1,9 @@
+.log {
+    font-family: monospace;
+    font-size: 3em;
+}
+
+.highlited {
+    color: red;
+    font-weight: bold;
+}

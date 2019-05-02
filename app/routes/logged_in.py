@@ -15,7 +15,7 @@ def settings():
         return redirect("/home")
     form = ChangePasswordForm()
     success, message = ChangePassword(form)
-    flash(message)
+    flash(message[0], message[1])
     if success:
         return redirect("/home")
     return render_template("settings.html.j2", title = "Settings", info = info(), form = form)

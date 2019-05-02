@@ -1,0 +1,33 @@
+﻿{% extends "base.html.j2" %}
+
+{% block content %}
+	<head>
+		<link rel="stylesheet" href="{{ url_for('static',
+			filename='problems/' + strId + '/style.css') }}">
+	</head>
+	<body>
+	<span class="log">
+		{% for i in range(5) %}
+			<p>
+			{% if turns[0][i] == 1 %}
+				COOPERATE
+			{% else %}
+				CHEAT
+			{% endif %}
+			<text> | </text>
+			{% if turns[1][i] == 1 %}
+				COOPERATE
+			{% else %}
+				CHEAT
+			{% endif %}
+			</p>
+		{% endfor %}
+
+		<p>Coins: {{ coins[0] }} | {{ coins[1] }}</p>
+
+		<p>The first solution got {{ res1 }}</p>
+		<p>The second soulution got {{ res2 }}</p>
+		<p class="highlited">KEK</p>
+	</span>
+	</body>
+{% endblock %}

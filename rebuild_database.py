@@ -19,9 +19,14 @@ StrategyCnt = 10
 
 import server.parser as parser
 shutil.make_archive('tic_tac_toe', 'zip', 'tic_tac_toe')
+shutil.make_archive('trust_evolution', 'zip', 'trust_evolution')
 parsingResult = parser.parseArchive('tic_tac_toe.zip')
 if (parsingResult['ok'] != 1):
     print("Can't parse archive tic_tac_toe")
+    sys.exit(0)
+parsingResult = parser.parseArchive('trust_evolution.zip')
+if (parsingResult['ok'] != 1):
+    print("Can't parse archive trust_evolution")
     sys.exit(0)
 
 root = User(-1, "root", "123", UserType.Admin, {}, "ROOT", "ROOT") # It's hard coded user, type can't be changed
@@ -40,3 +45,14 @@ for i in range(StrategyCnt):
 useCasesAPI.addSubmission(0, 0, readFile("ticTacToeStrategies/st1.py"))
 useCasesAPI.addSubmission(0, 0, readFile("ticTacToeStrategies/st2.py"))
 useCasesAPI.addSubmission(0, 0, readFile("ticTacToeStrategies/st3.py"))
+useCasesAPI.addSubmission(1, 1, readFile("trustEvolutionStrategies/st1.py"))
+useCasesAPI.addSubmission(2, 1, readFile("trustEvolutionStrategies/st2.py"))
+useCasesAPI.addSubmission(3, 1, readFile("trustEvolutionStrategies/copy.py"))
+useCasesAPI.addSubmission(4, 1, readFile("trustEvolutionStrategies/change.py"))
+useCasesAPI.addSubmission(5, 1, readFile("trustEvolutionStrategies/random.py"))
+useCasesAPI.changeMainSubmission(1, 13)
+useCasesAPI.changeMainSubmission(2, 14)
+useCasesAPI.changeMainSubmission(3, 15)
+useCasesAPI.changeMainSubmission(4, 16)
+useCasesAPI.changeMainSubmission(5, 17)
+

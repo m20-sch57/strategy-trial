@@ -10,10 +10,10 @@ def ChangePassword(form: ChangePasswordForm) -> list: # success, message
         ret_passwd = form.retpassword.data
         user = storage.getUser(info()["id"])
         if user.password != old_passwd:
-            return [0, "Incorrect old password"]
+            return [0, ("Incorrect old password", 'message red')]
         if new_passwd != ret_passwd:
-            return [0, "New passwords don't match"]
+            return [0, ("New passwords don't match", 'message red')]
         user.password = new_passwd
         storage.saveUser(user)
-        return [1, "Password successfully changed"]
-    return [0, "Fill all fields"]
+        return [1, ("Password successfully changed", 'message green')]
+    return [0, ("Fill all fields", 'message blue')]
