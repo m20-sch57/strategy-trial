@@ -41,7 +41,7 @@ def readFiles(readPath, outPath):
         res.append([os.path.join(outPath, rel), readFile(filename)])
     return res
 
-def parseArchive(archivePath):
+def parseArchive(archivePath, probId = -1):
     if (not os.path.isfile(archivePath)):
         return {'ok' : 0, 'error' : 'No such archive (internal error)'}
     if (os.path.isdir(SaveFolder)):
@@ -62,13 +62,15 @@ def parseArchive(archivePath):
         else:
             problemPath = os.path.join(problemPath, typeDict['go'])
 
-    probId = storage.getProblemsCount()
     statement = readFile(os.path.join(problemPath, 'statement'))
     rawConfig = readFile(os.path.join(problemPath, 'config.json'))
     config = json.loads(rawConfig)
 
     if ('name' not in config):
         return {'ok' : 0, 'error' : 'No name parameter in config'}
+
+    if (probId == -1):
+        
 
     name = config['name']
 
