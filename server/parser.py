@@ -70,12 +70,13 @@ def parseArchive(archivePath, probId = -1):
         return {'ok' : 0, 'error' : 'No name parameter in config'}
 
     if (probId == -1):
-        
+        probId = storage.getProblemsCount()
+        problem = Problem(probId, Rules("", [], [], ""), {}, [], [], -1, 0)
+    else:
+        problem = storage.getProblem(probId)
+        problem.revisionId += 1
 
     name = config['name']
-
-    if storage.getProblemByName(name) != None:
-        return {"ok": 0, "error": "You can't add problem with same name"}
 
     try:
         downloads = readFiles(os.path.join(problemPath, 'downloads'),
@@ -90,7 +91,13 @@ def parseArchive(archivePath, probId = -1):
         return {'ok' : 0, 'error' : 'Source file is too large'}
 
     sources = sources1 + sources2 + sources3
-    problem = Problem(probId, Rules(name, sources, downloads, statement), {}, [], [], -1)
+
+    if (name == "" or (name != problem.rules.name and storage.getProblemByName(name) != None)):
+        return {"ok": 0, "error": "You can't add problem with same name"}
+
+    newRules = Rules(name, sources, downloads, statement)
+    problem.rules = newRules
+
     storage.saveProblem(problem)
     return {'ok' : 1}
 
