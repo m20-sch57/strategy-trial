@@ -82,8 +82,13 @@ def showStandings(strId):
     title = 'Standings #' + strId
     strtime = stringTime(tourDict['time'])
     probId = storage.getCertainField('tournaments', tourId, 'probId')
+
+    additionalArgs = {}
+    probRev = storage.getCertainField('tournaments', tourId, 'probRev')
+    if (probRev != storage.getCertainField('problems', probId, 'revisionId')):
+        additionalArgs['oldRev'] = probRev
     return render_template('standings.html.j2', standings = tourDict['list'],
-        time = strtime, probId = probId, title = title, info = info())
+        time = strtime, probId = probId, title = title, info = info(), **additionalArgs)
 
 
 #returns page where user can choose which strategies he wants to run

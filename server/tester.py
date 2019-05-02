@@ -96,7 +96,7 @@ def tournament(problemId):
                 scores[j][0] += invocationResult.results[1].score
 
     scores.sort(reverse = True)
-    newTournament = Tournament(-1, problemId, unixTime(), scores)
+    newTournament = Tournament(-1, problemId, problem.revisionId, unixTime(), scores)
     newTournamentId = storage.saveTournament(newTournament)
     problem.tournaments.append(newTournamentId)
     storage.saveProblem(problem)
