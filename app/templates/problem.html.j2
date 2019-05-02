@@ -55,12 +55,13 @@
 <hr>        
     <div class="headblue"> Tournaments</div><br>
     <table border="1">
-        <tr><th>Id</th><th>Time</th><th>Link</th></tr>
+        <tr><th>Id</th><th>Time</th><th>Link</th><th>Problem revision</th></tr>
         {% for tour in tourList %}
             <tr>
                 <td>{{ tour.id }}</td>
                 <td>{{ tour.time }}</td>
                 <td><a href=/{{ "tournament" + "/" + tour.tour_id|string }}><b>Look</b></a></td>
+                <td>{{ tour.probRev }}</td>
             </tr>
         {% endfor %}
     </table>

@@ -103,7 +103,8 @@ def getProbTournaments(probId):
         {
             'id' : len(lst) - i, 
             'tour_id' : lst[i], 
-            'time' : stringTime(storage.getCertainField('tournaments', lst[i], 'time'))
+            'time' : stringTime(storage.getCertainField('tournaments', lst[i], 'time')),
+            'probRev' : storage.getCertainField('tournaments', lst[i], 'probRev')
         }
         for i in range(len(lst) - 1, -1, -1)
     ]
