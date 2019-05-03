@@ -1,6 +1,6 @@
-from app.forRoutes.info import info
+from app.forRoutes.info import *
 import app.forRoutes.mainChanger as mainChanger
-from flask import render_template, redirect, send_file, request, flash, url_for
+from flask import render_template, redirect, send_file, request, flash, url_for, make_response
 from app import app
 from app.forRoutes.problemsetId import problemsetId
 from app.forRoutes.upload import Upload
@@ -11,6 +11,7 @@ import server.useCasesAPI as useCasesAPI
 import server.tester as tester
 import server.structures as structures
 import json
+from random import randint
 
 @app.route("/")
 @app.route("/home")
@@ -138,12 +139,19 @@ def test():
     invocationResult = tester.testStrategies(id1, id2, saveLogs = True)
     return invocationResult.logs.show(probId1, {'info': info(), 'title': title})
 
+@app.route("/reset")
+def reset():
+    resp = make_response(redirect("/home"))
+    flash("Cookies successsully reseted", "message green")
+    resp.set_cookie("all", encrypt("0 Guest -1 " + str(randint(0, 100000))))
+    return resp
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('error404.html.j2', info = info()), 404
 
 @app.errorhandler(500)
 def page_not_found(e):
-    if e is structures.SecurityError:
-        return render_template("security.html.j2", title = "Strategy trial", message = message)
+    if "message" in e.__dict__:
+        return render_template("security.html.j2", title = "Strategy trial", info = unauthorized(), message = e.message)
     return render_template('error500.html.j2'), 500
