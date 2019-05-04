@@ -4,7 +4,8 @@ from flask import render_template, redirect, send_file, request, flash, url_for,
 from app import app
 from app.forRoutes.problemsetId import problemsetId
 from app.forRoutes.upload import Upload
-from app.forms import ProblemsetID
+from app.forRoutes.messagePost import sendMessage
+from app.forms import ProblemsetID, MessageForm
 from server.storage import storage
 from server.commonFunctions import stringTime
 import server.useCasesAPI as useCasesAPI
@@ -146,9 +147,15 @@ def reset():
     resp.set_cookie("all", encrypt("0 Guest -1 " + str(randint(0, 100000))))
     return resp
 
-@app.route("/chat")
+@app.route("/chat", methods = ["GET", "POST"])
 def chat():
-    return render_template("chat.html.j2", info = info(), messageCnt = storage.getMessagesCount())
+    form = MessageForm()
+    messageCnt = storage.getMessagesCount()
+    postedMessage = sendMessage(form, info())
+    if (postedMessage):
+        return redirect("/chat")
+    else:
+        return render_template("chat.html.j2", title = "Chat", info = info(), **locals())
 
 @app.errorhandler(404)
 def page_not_found(e):

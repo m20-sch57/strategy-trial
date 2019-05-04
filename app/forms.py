@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileRequired
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, FileField
-from wtforms.validators import DataRequired
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, FileField, TextAreaField
+from wtforms.validators import DataRequired, length
 from wtforms.widgets import TextArea
 
 class LoginForm(FlaskForm):
@@ -46,4 +46,7 @@ class ChangePasswordForm(FlaskForm):
     retpassword = PasswordField("Retype password", validators = [DataRequired()])
     submit = SubmitField("Submit")
 
+class MessageForm(FlaskForm):
+    contentField = TextAreaField("", validators = [DataRequired(), length(max=10000)])
+    submit = SubmitField("Post")
 

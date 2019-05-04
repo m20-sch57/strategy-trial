@@ -1,7 +1,18 @@
 {% extends "base.html.j2" %}
 
 {% block content %}
-    Here will be chat<br>
-    There are {{ messageCnt }} messages
+    <div align="center">
+        Here will be chat<br>
+        There are {{ messageCnt }} messages
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.contentField }}
+            </p>
+            <p>
+                {{ form.submit() }}
+            </p>
+        </form>
+    </div>
 {% endblock %}
 
