@@ -23,6 +23,28 @@
         {% else %}
             <h3><a href="/login">Log in</a> or <a href="/sign_up"> sign up</a> to send your message</h3>
         {% endif %}
+
+        Page {{ page }}<br>
+
+        {% if page != pageCnt - 1 %}
+            1
+            <form action="" method="post">
+                {{ nextPageForm.hidden_tag() }}
+                <p>
+                    {{ nextPageForm.submit() }}
+                </p>
+            </form>
+        {% endif %}
+
+        {% if page != 0 %}
+            -1
+            <form action="" method="post">
+                {{ prevPageForm.hidden_tag() }}
+                <p>
+                    {{ prevPageForm.submit() }}
+                </p>
+            </form>
+        {% endif %}
     </div>
 {% endblock %}
 
