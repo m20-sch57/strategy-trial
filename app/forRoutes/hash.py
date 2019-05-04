@@ -25,5 +25,7 @@ def decrypt(hashed: str) -> str:
         message = str(rsa.decrypt(bytes.fromhex(hashed), key))[2:-1]
     except rsa.pkcs1.DecryptionError:
         raise SecurityError("You are forging cookies! YOU GOT BAN!!!")
+    except ValueError:
+        raise SecurityError("You are forging cookies! YOU GOT BAN!!!")
     return message
 
