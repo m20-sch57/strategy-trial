@@ -167,6 +167,11 @@ def chat():
         page = 0
     nextPageForm = NextPageForm()
     prevPageForm = PrevPageForm()
+    print("SUBMITS!!!!!!")
+    print(form.submit.data)
+    print(nextPageForm.submit.data)
+    print(prevPageForm.submit.data)
+    print("WHY????????")
 
     nextPageId = getPageId(nextPageForm, prevPageForm, page)
     if (nextPageId is not None):

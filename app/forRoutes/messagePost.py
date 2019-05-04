@@ -3,7 +3,6 @@ from app.forRoutes.info import info
 
 def sendMessage(form, info):
 	if (form.validate_on_submit() and form.submit.data):
-		print("FCK")
 		useCasesAPI.createMessage(form.contentField.data, info)
 		return 1
 	else:
