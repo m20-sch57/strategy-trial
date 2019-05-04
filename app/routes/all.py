@@ -147,11 +147,26 @@ def reset():
     resp.set_cookie("all", encrypt("0 Guest -1 " + str(randint(0, 100000))))
     return resp
 
+MessagesOnPage = 20
+
 @app.route("/chat", methods = ["GET", "POST"])
 def chat():
     form = MessageForm()
     messageCnt = storage.getMessagesCount()
     postedMessage = sendMessage(form, info())
+    pageStr = request.args.get('page')
+    try:
+        page = int(pageStr)
+    except Exception:
+        page = 0
+    pageCnt = messageCnt // MessagesOnPage
+    if (page < 0):
+        page = pageCnt - 1
+    if (page >= pageCnt):
+        page = 0
+    beginMessageId = max(0, messageCnt - (page + 1) * MessagesOnPage)
+    endMessageId = messageCnt - page * MessagesOnPage
+    messages = [useCasesAPI.getMessageDict(i) for i in range(beginMessageId, endMessageId)]
     if (postedMessage):
         return redirect("/chat")
     else:

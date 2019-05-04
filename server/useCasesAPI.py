@@ -129,3 +129,10 @@ def createDelayedTournament(probId, time):
 def createMessage(content, info):
     message = Message(-1, info['id'], unixTime(), content)
     storage.saveMessage(message)
+
+def getMessageDict(messageId):
+    message = storage.getMessage(messageId)
+    return {
+        'id' : messageId, 'username' : storage.getCertainField('users', message.userId, 'username'),
+        'strTime' : stringTime(message.time), 'content' : message.content
+    }

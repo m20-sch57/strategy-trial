@@ -2,8 +2,14 @@
 
 {% block content %}
     <div align="center">
-        Here will be chat<br>
-        There are {{ messageCnt }} messages
+        {% for msg in messages %}
+            <p>
+                {{ msg.id }}<br>
+                {{ msg.username }}<br>
+                {{ msg.strTime }}<br>
+                {{ msg.content }}
+            </p>
+        {% endfor %}
         <form action="" method="post">
             {{ form.hidden_tag() }}
             <p>
