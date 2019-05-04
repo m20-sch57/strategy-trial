@@ -148,7 +148,7 @@ def reset():
 
 @app.route("/chat")
 def chat():
-    return render_template("chat.html.j2", info = info())
+    return render_template("chat.html.j2", info = info(), messageCnt = storage.getMessagesCount())
 
 @app.errorhandler(404)
 def page_not_found(e):
