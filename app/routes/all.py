@@ -147,7 +147,7 @@ def reset():
     resp.set_cookie("all", encrypt("0 Guest -1 " + str(randint(0, 100000))))
     return resp
 
-MessagesOnPage = 20
+MessagesOnPage = 2
 
 @app.route("/chat", methods = ["GET", "POST"])
 def chat():
@@ -159,7 +159,7 @@ def chat():
         page = int(pageStr)
     except Exception:
         page = 0
-    pageCnt = messageCnt // MessagesOnPage
+    pageCnt = (messageCnt + MessagesOnPage - 1) // MessagesOnPage
     if (page < 0):
         page = pageCnt - 1
     if (page >= pageCnt):

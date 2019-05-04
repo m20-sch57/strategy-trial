@@ -7,18 +7,22 @@
                 {{ msg.id }}<br>
                 {{ msg.username }}<br>
                 {{ msg.strTime }}<br>
-                {{ msg.content }}
+                <code><pre>{{msg.content}}</pre></code>
             </p>
         {% endfor %}
-        <form action="" method="post">
-            {{ form.hidden_tag() }}
-            <p>
-                {{ form.contentField }}
-            </p>
-            <p>
-                {{ form.submit() }}
-            </p>
-        </form>
+        {% if info.logged_in %}
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.contentField }}
+                </p>
+                <p>
+                    {{ form.submit() }}
+                </p>
+            </form>
+        {% else %}
+            <h3><a href="/login">Log in</a> or <a href="/sign_up"> sign up</a> to send your message</h3>
+        {% endif %}
     </div>
 {% endblock %}
 
