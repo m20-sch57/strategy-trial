@@ -2,7 +2,15 @@
 
 {% block content %}
     <body>
-        <code><pre>{{ code }}</pre></code>
+    <code>
+        <table class="number_table">
+            {% for line in code %}
+            <tr>
+                <td><pre>{{ line }}</pre></td>
+            </tr>
+            {% endfor %}
+        </table>
+     </code>
     </body>
 {% endblock %}
 

@@ -1,17 +1,27 @@
-table
+.green_table
 {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 80%;
 }
-th, tr
+
+.green_table th, tr
 {
     padding: 15px;
     text-align: left;
 }
-tr:nth-child(even) {background-color: #f2f2f2;}
-tr:hover {background-color: #ffdddd;}
-th
+
+.green_table tr:nth-child(even) 
+{
+    background-color: #f2f2f2;
+}
+
+.green_table tr:hover 
+{
+    background-color: #ffdddd;
+}
+
+.green_table th
 {
     background-color: #4CAF50;
     color: white;
@@ -73,4 +83,31 @@ a.button27:hover {
     background: #278191;
     color: white;
     box-shadow: 0 0 0 1px black inset, 0 1px 1px black;
+}
+
+.number_table
+{
+    border-collapse: collapse;
+    counter-reset: number;
+}
+
+.number_table tr
+{
+    counter-increment: number;
+}
+
+.number_table td,
+.number_table tr:before
+{
+    padding: .1em .8em;
+    border: 1px;
+}
+
+.number_table tr:before
+{
+    content: counter(number);
+    display: table-cell;
+    color: #828282;
+    text-align: right;
+    font-family: monospace;
 }

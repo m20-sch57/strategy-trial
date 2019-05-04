@@ -6,7 +6,7 @@
 <hr>
     <div class="headblue"> Files to download:</div>
     <p></p>
-    <table border="1">
+    <table class="green_table" border="1">
         {% for path in paths %}
             <th></th>
             <tr>
@@ -20,7 +20,7 @@
     {% if info.logged_in == 1 %}
         <br><div class="headblue"> Your submissions:</div><br>
 
-        <table border="1">
+        <table class="green_table" border="1">
             <tr><th>Id</th><th>ProbName</th><th>Type</th><th>Source</th></tr>
 
             {% for submission in subList %}
@@ -54,7 +54,7 @@
     <h2><a href=/{{ "problemset" + "/" + problem.id|string + "/run" }}>Test strategies</a></h2>
 <hr>        
     <div class="headblue"> Tournaments</div><br>
-    <table border="1">
+    <table class="green_table" border="1">
         <tr><th>Id</th><th>Time</th><th>Link</th><th>Problem revision</th></tr>
         {% for tour in tourList %}
             <tr>
