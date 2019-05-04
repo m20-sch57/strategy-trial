@@ -146,6 +146,10 @@ def reset():
     resp.set_cookie("all", encrypt("0 Guest -1 " + str(randint(0, 100000))))
     return resp
 
+@app.route("/chat")
+def chat():
+    return render_template("chat.html.j2", info = info())
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('error404.html.j2', info = info()), 404
