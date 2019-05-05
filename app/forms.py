@@ -50,8 +50,3 @@ class MessageForm(FlaskForm):
     contentField = TextAreaField("", validators = [DataRequired(), length(max=10000)])
     submit = SubmitField("Post")
 
-class NextPageForm(FlaskForm):
-    submit = SubmitField(">")
-
-class PrevPageForm(FlaskForm):
-    submit = SubmitField("<")

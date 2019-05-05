@@ -6,7 +6,7 @@ from app.forRoutes.problemsetId import problemsetId
 from app.forRoutes.upload import Upload
 from app.forRoutes.messagePost import sendMessage
 from app.forRoutes.changeChatPage import getPageId
-from app.forms import ProblemsetID, MessageForm, NextPageForm, PrevPageForm
+from app.forms import ProblemsetID, MessageForm
 from server.storage import storage
 from server.commonFunctions import stringTime
 import server.useCasesAPI as useCasesAPI
@@ -165,17 +165,6 @@ def chat():
         page = pageCnt - 1
     if (page >= pageCnt):
         page = 0
-    nextPageForm = NextPageForm()
-    prevPageForm = PrevPageForm()
-    print("SUBMITS!!!!!!")
-    print(form.submit.data)
-    print(nextPageForm.submit.data)
-    print(prevPageForm.submit.data)
-    print("WHY????????")
-
-    nextPageId = getPageId(nextPageForm, prevPageForm, page)
-    if (nextPageId is not None):
-        return redirect("/chat?page=" + str(nextPageId))
 
     beginMessageId = max(0, messageCnt - (page + 1) * MessagesOnPage)
     endMessageId = messageCnt - page * MessagesOnPage

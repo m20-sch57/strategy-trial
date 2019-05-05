@@ -27,23 +27,11 @@
         Page {{ page }}<br>
 
         {% if page != pageCnt - 1 %}
-            1
-            <form action="" method="post">
-                {{ nextPageForm.hidden_tag() }}
-                <p>
-                    {{ nextPageForm.submit() }}
-                </p>
-            </form>
+            <a href=/chat?page={{ page + 1 }}>Older</a>
         {% endif %}
 
         {% if page != 0 %}
-            -1
-            <form action="" method="post">
-                {{ prevPageForm.hidden_tag() }}
-                <p>
-                    {{ prevPageForm.submit() }}
-                </p>
-            </form>
+            <a href=/chat?page={{ page - 1 }}>Newer</a>
         {% endif %}
     </div>
 {% endblock %}
