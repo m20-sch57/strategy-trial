@@ -3,6 +3,7 @@ from server.structures import User, Rules, Problem, Submission, Tournament
 from server.commonFunctions import readFile, printToFile
 import os
 import shutil
+import sys
 #from app.forRoutes.hash import keygen
 
 try:
