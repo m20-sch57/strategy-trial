@@ -1,0 +1,17 @@
+.container{
+    background-color:#ededed; 
+    padding:20px; 
+    text-align:left; 
+    width:600px; 
+    border:1px 
+    solid grey; 
+    margin:auto;
+}
+
+.username {
+	font-weight: bold
+}
+
+.date {
+	color: #d1d3d4;
+}
