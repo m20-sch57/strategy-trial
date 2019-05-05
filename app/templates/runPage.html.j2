@@ -2,7 +2,7 @@
 
 {% block content %}
     <form action="" method="post">
-        <table class="green_table" border="1">
+        <table class="green_table">
             <tr><th>Id</th><th>Username</th><th>ProbName</th><th>Type</th><th>First</th><th>Second</th></tr>
 
             {% for submission in subList %}
@@ -23,6 +23,6 @@
         <input type="submit" name="run">
     </form>
 
-    <h2><a href={{ "/problemset/" + probId|string }}>Go back</a></h2>
+    <h2><a class="roundred" href={{ "/problemset/" + probId|string }}>Go back</a></h2>
 
 {% endblock %}

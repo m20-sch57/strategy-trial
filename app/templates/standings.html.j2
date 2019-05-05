@@ -6,7 +6,7 @@
     {% if oldRev is defined %}
         <p class="login">This tournament was created for problem revision {{ oldRev }}</p>
     {% endif %}
-    <table class="green_table" border="1">
+    <table class="green_table">
         <tr>
             <th>Place</th>
             <th>Score</th>
@@ -22,6 +22,6 @@
     </table>
 </div>
 
-<h3><a href=/{{ "problemset" + "/" + probId|string }}><b>Back to the problem</b></a></h3>
+<h3><a class="roundred" href=/{{ "problemset" + "/" + probId|string }}><b>Back to the problem</b></a></h3>
 
 {% endblock %}
