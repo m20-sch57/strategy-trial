@@ -32,7 +32,7 @@ if (parsingResult['ok'] != 1):
     sys.exit(0)
 parsingResult = parser.parseArchive('FourInRow.zip')
 if (parsingResult['ok'] != 1):
-    print("Can't parse archive trust_evolution")
+    print("Can't parse archive FourInRow")
     sys.exit(0)
 
 root = User(-1, "root", "123", UserType.Admin, {}, "ROOT", "ROOT") # It's hard coded user, type can't be changed
