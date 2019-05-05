@@ -4,7 +4,9 @@ from flask import render_template, redirect, send_file, request, flash, url_for,
 from app import app
 from app.forRoutes.problemsetId import problemsetId
 from app.forRoutes.upload import Upload
-from app.forms import ProblemsetID
+from app.forRoutes.messagePost import sendMessage
+from app.forRoutes.changeChatPage import getPageId
+from app.forms import ProblemsetID, MessageForm
 from server.storage import storage
 from server.commonFunctions import stringTime
 import server.useCasesAPI as useCasesAPI
@@ -145,6 +147,35 @@ def reset():
     flash("Cookies successsully reseted", "message green")
     resp.set_cookie("all", encrypt("0 Guest -1 " + str(randint(0, 100000))))
     return resp
+
+MessagesOnPage = 8
+
+@app.route("/chat", methods = ["GET", "POST"])
+def chat():
+    form = MessageForm()
+    messageCnt = storage.getMessagesCount()
+    postedMessage = sendMessage(form, info())
+    pageStr = request.args.get('page')
+    try:
+        page = int(pageStr)
+    except Exception:
+        page = 0
+    pageCnt = (messageCnt + MessagesOnPage - 1) // MessagesOnPage
+    if (messageCnt):
+        if (page < 0):
+            page = pageCnt - 1
+        if (page >= pageCnt):
+            page = 0
+    else:
+        page = 0
+
+    beginMessageId = max(0, messageCnt - (page + 1) * MessagesOnPage)
+    endMessageId = messageCnt - page * MessagesOnPage
+    messages = [useCasesAPI.getMessageDict(i) for i in range(beginMessageId, endMessageId)]
+    if (postedMessage):
+        return redirect("/chat")
+    else:
+        return render_template("chat.html.j2", title = "Chat", info = info(), **locals())
 
 @app.errorhandler(404)
 def page_not_found(e):

@@ -1,0 +1,43 @@
+{% extends "base.html.j2" %}
+
+{% block content %}
+    <div align="center">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/chat.css') }}">
+        <div class="container">
+            {% if pageCnt %}
+                <span align="center"><h2>Page {{ page }}</h2></span>
+
+                {% if page != 0 %}
+                    <a class="button27" href=/chat?page={{ page - 1 }}>Newer</a>
+                {% endif %}
+
+                {% if page != pageCnt - 1 %}
+                    <a class="button27" href=/chat?page={{ page + 1 }}>Older</a>
+                {% endif %}
+
+                <br>
+            {% endif %}
+            {% for msg in messages %}
+                <p>
+                    <span class="username">{{ msg.username }}</span>
+                    <snan class="date">{{ msg.strTime }}</snan><br>
+                    <code><pre>{{msg.content}}</pre></code>
+                </p>
+            {% endfor %}
+            {% if info.logged_in %}
+                <form action="" method="post">
+                    {{ form.hidden_tag() }}
+                    <p>
+                        {{ form.contentField }}
+                    </p>
+                    <p>
+                        {{ form.submit() }}
+                    </p>
+                </form>
+            {% else %}
+                <h3><a href="/login">Log in</a> or <a href="/sign_up"> sign up</a> to send your message</h3>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+

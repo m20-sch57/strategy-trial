@@ -268,6 +268,42 @@ def getTournament(cursor, id):
     return tournamentFromList(lst)
 
 
+#message
+#saving: [id, userId, time, content]
+
+def createMessagesTable(cursor):
+    cursor.execute('''CREATE TABLE IF NOT EXISTS messages (id INT PRIMARY KEY, 
+        userId INT, time INT, content TEXT)''')
+
+class Message:
+    def __init__(self, id, userId, time, content):
+        self.id = id
+        self.userId = userId
+        self.time = time
+        self.content = content
+
+    def getList(self):
+        return [self.id, self.userId, self.time, self.content]
+
+    def save(self, cursor):
+        saveList(cursor, 'messages', self.getList())
+
+    def print(self):
+        print("id:", self.id)
+        print("userId:", self.userId)
+        print("time:", self.time)
+        print("content:", self.content)
+
+def messageFromList(lst):
+    return Message(lst[0], lst[1], lst[2], lst[3])
+
+def getMessage(cursor, id):
+    lst = getFromDatabase(cursor, 'messages', id)
+    if (lst is None):
+        return None
+    return messageFromList(lst)
+
+
 #getSumissionLists
 
 def getProblemName(cursor, probId):
