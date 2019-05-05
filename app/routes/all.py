@@ -185,4 +185,4 @@ def page_not_found(e):
 def page_not_found(e):
     if "message" in e.__dict__:
         return render_template("security.html.j2", title = "Strategy trial", info = unauthorized(), message = e.message)
-    return render_template('error500.html.j2'), 500
+    return render_template('error500.html.j2', info = info()), 500
