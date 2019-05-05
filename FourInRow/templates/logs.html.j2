@@ -2,8 +2,22 @@
 
 {% block content %}
     <body>
-        <p>{{ res1 }}</p>
-        <p>{{ res2 }}</p>
+        {% for field in logs %}
+            {% for row in field %}
+                {% for item in row%}
+                    {% if item[1] %}
+                        <tt><b>{{ item[0] }} </b></tt>
+                    {% else %}
+                        <tt>{{ item[0] }} </tt>
+                    {% endif %}
+                {% endfor %}
+                <br>
+            {% endfor %}
+            <p> </p><br>
+        {% endfor %}
+        <br>
+        <p>First strategy: {{ res1 }}</p>
+        <p>Second strategy: {{ res2 }}</p>
     </body>
 {% endblock %}
 

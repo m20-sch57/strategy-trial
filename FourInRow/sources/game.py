@@ -15,15 +15,24 @@ def gameStateRep(full: FullGameState, playerId: int) -> GameState:
 
 class Logs:
     def __init__(self):
-        pass
+        self.logs = []
 
     def processResults(self, results):
         self.results = results
 
+    def update(self, game: FullGameState, fullTurn: list):
+        new_field = [['.' for i in range(7)] for i in range(6)]
+        for i in range(7):
+            for j in range(6):
+                new_field[j][i] = [game.field[i][5 - j]]
+                if [j, i] == fullTurn:
+                    new_field[j][i].append(1)
+        self.logs.append(new_field)
+
     def show(self, probId, baseParams):
         with app.app_context():
             logPath = os.path.join('problems', str(probId), 'logs.html.j2')
-            data = render_template(logPath, res1 = self.results[0].goodStr(), res2 = self.results[1].goodStr(), strId = str(probId), **baseParams)
+            data = render_template(logPath, logs = self.logs, res1 = self.results[0].goodStr(), res2 = self.results[1].goodStr(), strId = str(probId), **baseParams)
         return data
 
 '''
@@ -75,6 +84,7 @@ def nextPlayer(playerId: int) -> int:
 
 def makeTurn(gameState: FullGameState, playerId: int, turn: Turn, logs = None) -> list:
     charList = ['X', 'O']
+    fullTurn = [None, turn.column]
     if turn.column not in range(0, 7):
         return [TurnState.Incorrect]
     if gameState.field[turn.column][-1] != '.':
@@ -82,19 +92,20 @@ def makeTurn(gameState: FullGameState, playerId: int, turn: Turn, logs = None) -
     for i in range(6):
         if gameState.field[turn.column][i] == '.':
             gameState.field[turn.column][i] = charList[playerId]
+            fullTurn[0] = 5 - i
             break
+    if (logs != None):
+        logs.update(gameState, fullTurn)
     full = 1
     for i in range(7):
         if gameState.field[i][-1] == '.':
             full = 0
             break
-    print("full", full)
     if full:
         return [TurnState.Last, Result(StrategyVerdict.Ok, MaxScore // 2), Result(StrategyVerdict.Ok, MaxScore // 2)]
     winner = check(gameState)
     if winner == '.':
         return [TurnState.Correct, gameState, nextPlayer(playerId)]
-    print(winner)
     result = [Result(StrategyVerdict.Ok, 0), Result(StrategyVerdict.Ok, 0)]
     if charList[playerId] == winner:
         result[playerId].score = MaxScore
