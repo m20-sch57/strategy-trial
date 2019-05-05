@@ -1,4 +1,4 @@
-import classes
+from classes import *
 import random
 
 def Strategy(a: GameState, b: int) -> Turn:

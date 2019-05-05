@@ -4,8 +4,9 @@ from app import app
 from flask import render_template
 import os
 
-class FullGameState(GameState):
-    pass
+class FullGameState:
+    def __init__(self):
+        self.field = [['.' for i in range(6)] for i in range(7)]
 
 def gameStateRep(full: FullGameState, playerId: int) -> GameState:
     result = GameState()
@@ -22,7 +23,7 @@ class Logs:
     def show(self, probId, baseParams):
         with app.app_context():
             logPath = os.path.join('problems', str(probId), 'logs.html.j2')
-            data = render_template(logPath, results = self.results, strId = str(probId), **baseParams)
+            data = render_template(logPath, res1 = self.results[0].goodStr(), res2 = self.results[1].goodStr(), strId = str(probId), **baseParams)
         return data
 
 '''
@@ -45,7 +46,7 @@ def lineCheck(gameState: FullGameState, x: int, y: int, dx: int, dy: int) -> str
             return '.'
         x += dx
         y += dy
-        if ((x < 0 or x > 6 or y < 0 or y > 5) and i != 3):
+        if ((x < 0 or x > 6 or y < 0 or y > 5)):
             return '.'
     return ans
 
@@ -58,7 +59,7 @@ def check(gameState: FullGameState) -> str:
                 winner = lineCheck(gameState, i, j, Dir[0], Dir[1])
                 if winner != '.':
                     return winner
-        for j in range(3, 7):
+        for j in range(3, 6):
             winner = lineCheck(gameState, i, j, 1, 0)
             if winner != '.':
                 return winner
@@ -75,9 +76,9 @@ def nextPlayer(playerId: int) -> int:
 def makeTurn(gameState: FullGameState, playerId: int, turn: Turn, logs = None) -> list:
     charList = ['X', 'O']
     if turn.column not in range(0, 7):
-        return [turnState.Incorrect]
+        return [TurnState.Incorrect]
     if gameState.field[turn.column][-1] != '.':
-        return [turnState.Incorrect] #gameState.field[turn.column]
+        return [TurnState.Incorrect] #gameState.field[turn.column]
     for i in range(6):
         if gameState.field[turn.column] == '.':
             gameState.field[turn.column] = charList[playerId]
@@ -92,10 +93,11 @@ def makeTurn(gameState: FullGameState, playerId: int, turn: Turn, logs = None) -
     winner = check(gameState)
     if winner == '.':
         return [TurnState.Correct, gameState, nextPlayer(playerId)]
+    print(winner)
     result = [Result(StrategyVerdict.Ok, 0), Result(StrategyVerdict.Ok, 0)]
     if charList[playerId] == winner:
         result[playerId].score = MaxScore
     else:
         result[nextPlayer(playerId)].score = MaxScore
-    return [TurnState.Last, [Result()]]
+    return [TurnState.Last, result]
 
