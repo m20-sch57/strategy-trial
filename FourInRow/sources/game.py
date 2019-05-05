@@ -80,14 +80,15 @@ def makeTurn(gameState: FullGameState, playerId: int, turn: Turn, logs = None) -
     if gameState.field[turn.column][-1] != '.':
         return [TurnState.Incorrect] #gameState.field[turn.column]
     for i in range(6):
-        if gameState.field[turn.column] == '.':
-            gameState.field[turn.column] = charList[playerId]
+        if gameState.field[turn.column][i] == '.':
+            gameState.field[turn.column][i] = charList[playerId]
             break
     full = 1
     for i in range(7):
         if gameState.field[i][-1] == '.':
             full = 0
             break
+    print("full", full)
     if full:
         return [TurnState.Last, Result(StrategyVerdict.Ok, MaxScore // 2), Result(StrategyVerdict.Ok, MaxScore // 2)]
     winner = check(gameState)
