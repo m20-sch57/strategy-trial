@@ -29,8 +29,10 @@ class UserType(IntEnum):
 
 class SecurityError(Exception):
     status_code = 999
+    message = ""
 
     def __init__(self, message):
+        self.message = message
         Exception.__init__(self)
 
 #database functions
