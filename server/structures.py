@@ -4,6 +4,19 @@ from server.gameStuff import Result
 from server.gameStuff import resultFromStr
 from server.commonFunctions import jsonParser
 import json
+import threading
+
+lock = threading.Lock()
+
+
+#corrcet execute
+
+def execute(cursor, *args):
+    try:
+        lock.acquire(True)
+        res = cursor.execute(*args)
+    finally:
+        lock.release()
 
 
 #additional structures
@@ -38,16 +51,16 @@ class SecurityError(Exception):
 #database functions
 
 def saveList(cursor, tableName, lst):
-    cursor.execute('DELETE FROM ' + tableName + ' WHERE id=?', [lst[0]])
+    execute(cursor, 'DELETE FROM ' + tableName + ' WHERE id=?', [lst[0]])
     strArr = '(' + '?, ' * (len(lst) - 1) + '?)'
-    cursor.execute('INSERT INTO ' + tableName + ' VALUES ' + strArr, lst)
+    execute(cursor, 'INSERT INTO ' + tableName + ' VALUES ' + strArr, lst)
 
 def getFromDatabase(cursor, tableName, id: int):
-    cursor.execute('SELECT * FROM ' + tableName + ' WHERE id=?', [id])
+    execute(cursor, 'SELECT * FROM ' + tableName + ' WHERE id=?', [id])
     return cursor.fetchone();
 
 def getCertainField(cursor, tableName, id, fieldName):
-    cursor.execute('SELECT ' + fieldName + ' FROM ' + tableName + ' WHERE id=?', [id])
+    execute(cursor, 'SELECT ' + fieldName + ' FROM ' + tableName + ' WHERE id=?', [id])
     lst = cursor.fetchone()
     if (lst is None):
         return None
@@ -59,7 +72,7 @@ def getCertainField(cursor, tableName, id, fieldName):
 #saving: [id, username, password, type, submissions]
 
 def createUsersTable(cursor):
-    cursor.execute('''CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, 
+    execute(cursor, '''CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, 
         username TEXT, password TEXT, type integer, submissions TEXT, name TEXT, secondname TEXT)''')
 
 def toJSON(submissions):
@@ -111,21 +124,21 @@ def getUser(cursor, id):
     return userFromList(lst)
 
 def getUserByName(cursor, username):
-    cursor.execute('SELECT * FROM users WHERE username=?', [username])
+    execute(cursor, 'SELECT * FROM users WHERE username=?', [username])
     lst = cursor.fetchone()
     if lst == None:
         return None
     return userFromList(lst)
 
 def getAllUsers(cursor):
-    cursor.execute("SELECT id, username, type, name, secondname FROM users")
+    execute(cursor, "SELECT id, username, type, name, secondname FROM users")
     return cursor.fetchall()
 
 #problem
 #saving: [id, name, sources, downloads, statement, submissions, allSubmissions, tournaments, nextTournament]
 
 def createProblemsTable(cursor):
-    cursor.execute('''CREATE TABLE IF NOT EXISTS problems 
+    execute(cursor, '''CREATE TABLE IF NOT EXISTS problems 
         (id integer PRIMARY KEY, name TEXT, sources TEXT, downloads TEXT, 
         statement TEXT, submissions TEXT, allSubmissions TEXT, 
         tournaments TEXT, nextTournament INT, revisionId INT)''')
@@ -183,11 +196,11 @@ def getProblem(cursor, id):
     return problemFromList(lst)
 
 def getProblemByName(cursor, name):
-    cursor.execute('SELECT * FROM problems WHERE name=?', [name])
+    execute(cursor, 'SELECT * FROM problems WHERE name=?', [name])
     return cursor.fetchone()
 
 def getProblemset(cursor):
-    cursor.execute('SELECT id, name FROM problems')
+    execute(cursor, 'SELECT id, name FROM problems')
     response = cursor.fetchall()
     return response
 
@@ -195,7 +208,7 @@ def getProblemset(cursor):
 #saving: [id, userId, probId, code, type]
 
 def createSubmissionsTable(cursor):
-    cursor.execute('''CREATE TABLE IF NOT EXISTS submissions (id integer PRIMARY KEY, 
+    execute(cursor, '''CREATE TABLE IF NOT EXISTS submissions (id integer PRIMARY KEY, 
         userId integer, probId integer, code TEXT, type integer)''')
 
 class Submission:
@@ -234,7 +247,7 @@ def getSubmission(cursor, id):
 #saving: [id, probId, probRev, time, standings]
 
 def createTournamentsTable(cursor):
-    cursor.execute('''CREATE TABLE IF NOT EXISTS tournaments (id INT PRIMARY KEY, 
+    execute(cursor, '''CREATE TABLE IF NOT EXISTS tournaments (id INT PRIMARY KEY, 
         probId INT, probRev INT, time INT, standings TEXT)''')
 
 class Tournament:
@@ -272,7 +285,7 @@ def getTournament(cursor, id):
 #saving: [id, userId, time, content]
 
 def createMessagesTable(cursor):
-    cursor.execute('''CREATE TABLE IF NOT EXISTS messages (id INT PRIMARY KEY, 
+    execute(cursor, '''CREATE TABLE IF NOT EXISTS messages (id INT PRIMARY KEY, 
         userId INT, time INT, content TEXT)''')
 
 class Message:
@@ -307,11 +320,11 @@ def getMessage(cursor, id):
 #getSumissionLists
 
 def getProblemName(cursor, probId):
-    cursor.execute('SELECT name FROM problems WHERE id=?', [probId])
+    execute(cursor, 'SELECT name FROM problems WHERE id=?', [probId])
     return cursor.fetchone()[0]
 
 def getSubDict(cursor, subId, probName):
-    cursor.execute('SELECT type FROM submissions WHERE id=?', [subId])
+    execute(cursor, 'SELECT type FROM submissions WHERE id=?', [subId])
     status = cursor.fetchone()[0]
     return {'id' : subId, 'probName' : probName, 'type' : visualize(status)}
 
