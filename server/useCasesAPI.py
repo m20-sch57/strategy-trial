@@ -1,9 +1,9 @@
 from server.structures import ProblemState, StrategyState, UserType
-from server.structures import User, Rules, Problem, Submission, Tournament
+from server.structures import User, Rules, Problem, Submission, Tournament, Message
 from server.storage import storage, status
 from server.tester import tournament, testStrategies
 from server.tester import loadProblemDownloads as TesterLPD
-from server.commonFunctions import stringTime
+from server.commonFunctions import stringTime, unixTime
 import json
 
 def addSubmission(userId, problemId, code):
@@ -125,3 +125,14 @@ def createDelayedTournament(probId, time):
     prob = storage.getProblem(probId)
     prob.nextTournament = time
     storage.saveProblem(prob)
+
+def createMessage(content, info):
+    message = Message(-1, info['id'], unixTime(), content)
+    storage.saveMessage(message)
+
+def getMessageDict(messageId):
+    message = storage.getMessage(messageId)
+    return {
+        'id' : messageId, 'username' : storage.getCertainField('users', message.userId, 'username'),
+        'strTime' : stringTime(message.time), 'content' : message.content
+    }
