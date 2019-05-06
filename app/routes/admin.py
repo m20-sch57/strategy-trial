@@ -7,6 +7,7 @@ from app.forRoutes.addProblem import AddProblem
 import server.useCasesAPI as useCasesAPI
 from app.forRoutes.changeType import changeType
 from app.forRoutes.changePassword import UserChangePassword
+from server.storage import storage
 
 @app.route("/add_user")
 def add_user():
@@ -76,6 +77,9 @@ def changePassword():
         flash("You don't have permission to do this!", 'message red')
         return redirect("/home")
     userId = request.args.get('userId')
+    if storage.getUser(userId).username == "root":
+        flash("You can't change root password", "message red")
+        return redirect("/users_list")
     if (userId is None):
         flash("You have to specify user id", 'message red')
         return redirect("/users_list")
