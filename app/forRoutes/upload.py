@@ -13,6 +13,6 @@ def Upload(userId, problemId, form: ProblemsetID) -> str:
         f.save('upload.py')
         addSubmission(userId, problemId, readFile('upload.py'))
         os.remove("upload.py")
-        return ('Your submission succesfully saved', 'message green')
-    return ('', 'message blue')
+        return [1, ('Your submission succesfully saved', 'message green')]
+    return [0, ('', 'message blue')]
 

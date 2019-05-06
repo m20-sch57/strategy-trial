@@ -35,8 +35,10 @@ def problemset_id(strId):
         return redirect("/home")
 
     userId, problemId = info()['id'], int(strId)
-    message = Upload(userId, problemId, form)
+    isFileUploaded, message = Upload(userId, problemId, form)
     flash(message[0], message[1])
+    if (isFileUploaded):
+        return redirect('/problemset/' + strId)
 
     nextTournamentStrTime = ''
     if (problem.nextTournament != -1):
