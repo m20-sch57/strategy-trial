@@ -1,7 +1,7 @@
 {% extends "base.html.j2" %}
 
 {% block content %}
-    <h1>Sign up</h1>
+    <h1 class="headblue" >Sign up</h1>
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>
@@ -27,7 +27,7 @@
         </p>
 
         <p>
-            {{ form.submit() }}
+            <input class="button_submit" id="submit" name="submit" type="submit" value="Sign In">
         </p>
     </form>
     <div>

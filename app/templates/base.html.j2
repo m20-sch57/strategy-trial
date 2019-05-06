@@ -1,16 +1,16 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='styles/trash.css')}}">
-        <link rel="shortcut icon" href="{{url_for('static', filename='pictures/iconpicture.png')}}" type="image/x-icon">
+        <link rel="shortcut icon" href="{{url_for('static', filename='pictures/iconsmall.png')}}" type="image/x-icon">
         {% if title %}
         <title>{{ title }}</title>
         {% else %}
         <title>Need Title</title>
         {% endif %}
     </head>
-    <body bgcolor=#ECE8D4>
+    <body bgcolor=#EDE4CF>
         <div>
-            <img src="{{ url_for('static',filename='pictures/headpicture.png') }}" alt="-_-">
+            <img src="{{ url_for('static',filename='pictures/icon.svg') }}" alt="-_-">
             <a> </a>
             <a class="button27" href="/home">Home</a>
             <a class="button27" href="/problemset">Problemset</a>
@@ -18,7 +18,6 @@
             {% if info.logged_in == 0 %}
             <a class="button27" href="/login">Login</a>
             <a class="button27" href="/sign_up">Sign up</a>
-            <a>{{ info.username }}</a>
             {% else %}
             <a class="button27" href="/submissions">Submissions</a>
             <a class="button27" href="/logout">Log out</a>

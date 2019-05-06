@@ -1,32 +1,79 @@
-table
+h1, h2, h3, h4, h5, a, div, p
 {
-    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
-    width: 80%;
+    font-family: Arial, Helvetica, sans-serif;
+    text-decoration: none;
 }
-th, tr
+
+.green_table
+{
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 98%;
+}
+
+.green_table th, tr
 {
     padding: 15px;
+    text-decoration: none;
     text-align: left;
 }
-tr:nth-child(even) {background-color: #f2f2f2;}
-tr:hover {background-color: #ffdddd;}
-th
+
+.green_table tr:nth-child(even) 
 {
-    background-color: #4CAF50;
+    background-color: #f2f2f2;
+}
+
+.green_table tr:nth-child(odd) 
+{
+    background-color: #D9D9D9;
+}
+
+.green_table tr:hover 
+{
+    background-color: #ffdddd;
+}
+
+.green_table th
+{
+    background-color: #64A861;
     color: white;
 }
 
 .headblue
-{
-    border: 1px solid #041949; 
+{   
+    border: 1px; 
     padding: 10px;
-    background-color: #2754B4;
+    font-size: 20;
+    background: #8181f7;
     color: #ffffff;
-    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
-    width: 20%;
+    width: 60%;
 
+}
+
+.roundred
+{
+    border: 1px;   
+    border-radius: 10px;
+    font-size: 14px;
+    padding: 6px;
+    background-color: #D7B679;
+    color: #3C1610;
+    border-collapse: collapse;
+    width: 30%;
+    text-decoration: none;
+}
+
+.button_submit
+{
+    border: 1px;   
+    border-radius: 10px;
+    font-size: 14px;
+    padding: 6px;
+    background-color: #D7B679;
+    color: #3C1610;
+    border-collapse: collapse;
+    text-decoration: none;
 }
 
 .message
@@ -38,20 +85,9 @@ th
     color: white;
 }
 
-.red
-{
-    background-color: #cd5c5c;
-}
-
-.green
-{
-    background-color: #75d770;
-}
-
-.blue
-{
-    background-color: #6eb3de;
-}
+.red {background-color: #cd5c5c;}
+.green{background-color: #75d770;}
+.blue{background-color: #6eb3de;}
 
 .login
 {
@@ -60,17 +96,51 @@ th
 
 a.button27 {
     position: relative; 
-    top: -8;
-    font-family: "Times New Roman", Arial, Helvetica, sans-serif;
+    top: -14;
+    font-family: Arial, Helvetica, sans-serif;
     padding: 8px;
     text-decoration: none;
     background: #9FD5C2;
-    color: black;
-    box-shadow: 0 0 0 1px #278191 inset, 0 1px 1px black;
+    color: #14384D;
 }
 
 a.button27:hover {
     background: #278191;
     color: white;
-    box-shadow: 0 0 0 1px black inset, 0 1px 1px black;
+}
+
+.number_table
+{
+    border-collapse: collapse;
+    counter-reset: number;
+}
+
+.number_table tr
+{
+    counter-increment: number;
+}
+
+.number_table td,
+.number_table tr:before
+{
+    padding: .1em .8em;
+    border: 1px;
+}
+
+.number_table tr:before
+{
+    content: counter(number);
+    display: table-cell;
+    color: #828282;
+    text-align: right;
+    font-family: monospace;
+}
+
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
 }

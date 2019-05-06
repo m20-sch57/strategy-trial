@@ -1,78 +1,87 @@
 {% extends "base.html.j2" %}
 
 {% block content %}
-    <div class="headblue"> Problem {{ problem.rules.name }} (Rev. {{ problem.revisionId }})</div>
-    <p><pre>{{ problem.rules.statement }}</pre></p>
-<hr>
-    <div class="headblue"> Files to download:</div>
-    <p></p>
-    <table border="1">
-        {% for path in paths %}
-            <th></th>
-            <tr>
-                <td><a href=/{{"download?path=" + path}} target="_blank">{{ path.split('/')[-1] }}</a></td>
-            </tr>
-        {% endfor %}
-    </table>
+<table width="100%">
+    <tr>
+        <td valign="top", align="left" width="60%">
+            <div class="headblue"> Problem {{ problem.rules.name }} (Rev. {{ problem.revisionId }}):</div><p><pre>{{ problem.rules.statement }}</pre></p></th>
+        <td valign="top">
+            <div class="headblue"> Files to download:</div>
+            <p></p>
+            <table class="green_table">
+                {% for path in paths %}
+                    <th></th>
+                    <tr>
+                        <td><a href=/{{"download?path=" + path}} target="_blank">{{ path.split('/')[-1] }}</a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <br>
+            {% if info.logged_in == 1 %}
+                <br><div class="headblue">Send new strategy:</div>
+                <form action="" method="post" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+                    <p>
+                        <input id="selectfile" name="selectfile" required="" size="32" type="file" class="inputfile">
+                        <label for="selectfile" class="button_submit">Choose a file</label>
+                    </p>
+                    <p>
+                        <input class="button_submit" id="submit" name="submit" type="submit" value="Submit">
+                    </p>
+                </form>
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td valign="top", align="left">
+        {% if info.logged_in == 1 %}
+            <div class="headblue"> Your submissions:</div><br>
+            <table class="green_table">
+                <tr><th>Id</th><th>ProbName</th><th>Type</th><th>Source</th></tr>
 
-<hr>
+                {% for submission in subList %}
 
-    {% if info.logged_in == 1 %}
-        <br><div class="headblue"> Your submissions:</div><br>
+                    <tr>
+                        <td>{{ submission.id|string }}</td>
+                        <td>{{ submission.probName }}</td>
+                        <td><a href=/{{ "problemset" + "/" + problem.id|string + "?chSubId" + "=" + submission.id|string }}>{{ submission.type}}</td>
+                        <td><a href=/{{ "source" + "/" + submission.id|string }}>
+                        <b>View source</b> </td></a>
+                    </tr>
 
-        <table border="1">
-            <tr><th>Id</th><th>ProbName</th><th>Type</th><th>Source</th></tr>
+                {% endfor %}
+            </table>
 
-            {% for submission in subList %}
-
+            {% else %}
+                <h3>In order to send strategy you have to <a href="/login" class="roundred">log in</a> or <a href="/sign_up" class="roundred"> sign up</a></h3>
+            {% endif %}
+        </td>
+        <td valign="top", align="left">
+        <div class="headblue">Test strategies:</div>
+        <h2><a class="roundred" href=/{{ "problemset" + "/" + problem.id|string + "/run" }}>Test strategies</a></h2>
+          
+        <div class="headblue">Tournaments:</div><br>
+        <table class="green_table">
+            <tr><th>Id</th><th>Time</th><th>Link</th><th>Problem revision</th></tr>
+            {% for tour in tourList %}
                 <tr>
-                    <td>{{ submission.id|string }}</td>
-                    <td>{{ submission.probName }}</td>
-                    <td><a href=/{{ "problemset" + "/" + problem.id|string + "?chSubId" + "=" + submission.id|string }}>{{ submission.type}}</td>
-                    <td><a href=/{{ "source" + "/" + submission.id|string }}>
-                    <b>View source</b> </td></a>
+                    <td>{{ tour.id }}</td>
+                    <td>{{ tour.time }}</td>
+                    <td><a href=/{{ "tournament" + "/" + tour.tour_id|string }}><b>Look</b></a></td>
+                    <td>{{ tour.probRev }}</td>
                 </tr>
-
             {% endfor %}
         </table>
-<hr>        
-        <div class="headblue">Send new strategy:</div>
-        <form action="" method="post" enctype="multipart/form-data">
-            {{ form.hidden_tag() }}
-            <p>
-                {{ form.selectfile(size=32) }}
-            </p>
-            <p>
-                {{ form.submit() }}
-            </p>
-        </form>
-    {% else %}
-        <h3>In order to send strategy you have to <a href="/login">log in</a> or <a href="/sign_up"> sign up</a></h3>
-    {% endif %}
-<hr>
-    <div class="headblue">Test your strategy:</div>
-    <h2><a href=/{{ "problemset" + "/" + problem.id|string + "/run" }}>Test strategies</a></h2>
-<hr>        
-    <div class="headblue"> Tournaments</div><br>
-    <table border="1">
-        <tr><th>Id</th><th>Time</th><th>Link</th><th>Problem revision</th></tr>
-        {% for tour in tourList %}
-            <tr>
-                <td>{{ tour.id }}</td>
-                <td>{{ tour.time }}</td>
-                <td><a href=/{{ "tournament" + "/" + tour.tour_id|string }}><b>Look</b></a></td>
-                <td>{{ tour.probRev }}</td>
-            </tr>
-        {% endfor %}
-    </table>
 
-    {% if nextTournamentTime != "" %}
-        <h2>Next tournament starts at {{ nextTournamentTime }}</h2>
-    {% endif %}
+        {% if nextTournamentTime != "" %}
+            <h2>Next tournament starts at {{ nextTournamentTime }}</h2>
+        {% endif %}
 
-    {% if info.admin == 1 %}
-        <h2><a href=/{{ "add_tournament?probId" + "=" + problem.id|string }}>Run tournament...</a></h2>
-    {% endif %}-
-
+        {% if info.admin == 1 %}
+            <h2><a class="roundred" href=/{{ "add_tournament?probId" + "=" + problem.id|string }}>Run tournament...</a></h2>
+        {% endif %}-
+        </td>
+    </tr>
+</table>
 {% endblock %}
 
