@@ -1,4 +1,4 @@
-h1, h2, h3, h4, h5, a, div
+h1, h2, h3, h4, h5, a, div, p
 {
     font-family: Arial, Helvetica, sans-serif;
     text-decoration: none;
@@ -44,7 +44,7 @@ h1, h2, h3, h4, h5, a, div
     border: 1px; 
     padding: 10px;
     font-size: 20;
-    background: linear-gradient(to right, #71A1DA, #EDE4CF);
+    background: #8181f7;
     color: #ffffff;
     border-collapse: collapse;
     width: 60%;
@@ -122,4 +122,10 @@ a.button27:hover {
     color: #828282;
     text-align: right;
     font-family: monospace;
+}
+
+input [type=submit]
+{
+    background-color: blue;
+    color: white;
 }
