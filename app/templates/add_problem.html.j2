@@ -10,11 +10,12 @@
                 {{form.probId(size=32)}}<br>
             </p>
             <p>
-                Upload problem archive:<br>
-                {{form.selectfile(size=32)}}
+                Upload problem archive:<br><br>
+                <input id="selectfile" name="selectfile" required="" size="32" type="file" class="inputfile">
+                <label for="selectfile" class="button_submit">Choose a file</label>
             </p>
             <p>
-                {{form.submit()}}
+                <input class="button_submit" id="submit" name="submit" type="submit" value="Submit">
             </p>
         </form>
     </body>

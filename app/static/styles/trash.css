@@ -64,6 +64,18 @@ h1, h2, h3, h4, h5, a, div, p
     text-decoration: none;
 }
 
+.button_submit
+{
+    border: 1px;   
+    border-radius: 10px;
+    font-size: 14px;
+    padding: 6px;
+    background-color: #D7B679;
+    color: #3C1610;
+    border-collapse: collapse;
+    text-decoration: none;
+}
+
 .message
 {
     border-radius: 6px;
@@ -124,8 +136,11 @@ a.button27:hover {
     font-family: monospace;
 }
 
-input [type=submit]
-{
-    background-color: blue;
-    color: white;
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
 }
