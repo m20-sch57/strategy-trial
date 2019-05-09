@@ -29,7 +29,14 @@ def problemset():
 
 @app.route("/problemset/<strId>", methods = ["GET", "POST"])
 def problemset_id(strId):
-    mainChanger.applyChange(request)
+    retcode = mainChanger.applyChange(request)
+
+    if retcode > 0:
+        pass # message needed: success
+        return redirect("/problemset/" + strId)
+
+    if retcode < 0:
+        pass # message needed fail
 
     form = ProblemsetID()
     success, paths, problem, subList, tourList = problemsetId(strId)
