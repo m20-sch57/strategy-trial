@@ -31,7 +31,7 @@ def addText(text, i, symbol, counter):
         counter, add = len(add), '\n' + add
     return [add, i + j + 1]
 
-def parcer(text):
+def parser(text):
     counter = 0
     len_text, i = len(text), 0
     newtext = ''
@@ -58,7 +58,7 @@ def parcer(text):
         i += 1
     return newtext
 
-def easyParcer(text):
+def easyParser(text):
     newtext = ''
     for el in text:
         if el == '<':
