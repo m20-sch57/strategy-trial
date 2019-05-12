@@ -27,7 +27,6 @@ def addText(text, i, symbol, counter):
     else:
         add = text[i]
     counter += j + 1
-    print(counter)
     if counter >= stringlong:
         counter, add = len(add), '\n' + add
     return [add, i + j + 1]
@@ -38,10 +37,10 @@ def parcer(text):
     newtext = ''
     while i < len_text:
         if text[i] == '<':
-            newtext += '"<"'
+            newtext += '&lt;'
             counter += 1
         elif text[i] == '>':
-            newtext += '">"'
+            newtext += '&gt;'
             counter += 1
         elif text[i] == '[' or (i + 1 < len_text and (text[i] + text[i+1] in ['**', '__'])):
             symbol = text[i]
@@ -59,3 +58,13 @@ def parcer(text):
         i += 1
     return newtext
 
+def easyParcer(text):
+    newtext = ''
+    for el in text:
+        if el == '<':
+            newtext += '&lt;'
+        elif el == '>':
+            newtext += '&gt;'
+        else:
+            newtext += el
+    return newtext
