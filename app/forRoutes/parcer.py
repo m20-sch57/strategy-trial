@@ -2,15 +2,14 @@
 #__text__ - underlined text
 #**text** - bold text
 
-stringlong = 60
-linenumber = 0
+stringlong = 70
 def anti(symbol):
     if symbol == '[':
         return ']'
     else:
         return symbol
 
-def addText(text, i, symbol):
+def addText(text, i, symbol, counter):
     add = ''
     j = text[i+1:].find(anti(symbol))
     if j != -1:
@@ -27,25 +26,36 @@ def addText(text, i, symbol):
             add = '[SOMETHING IS WRONG]'
     else:
         add = text[i]
+    counter += j + 1
+    print(counter)
+    if counter >= stringlong:
+        counter, add = len(add), '\n' + add
     return [add, i + j + 1]
 
 def parcer(text):
+    counter = 0
     len_text, i = len(text), 0
     newtext = ''
     while i < len_text:
         if text[i] == '<':
             newtext += '"<"'
+            counter += 1
         elif text[i] == '>':
             newtext += '">"'
+            counter += 1
         elif text[i] == '[' or (i + 1 < len_text and (text[i] + text[i+1] in ['**', '__'])):
             symbol = text[i]
             if text[i] in ['*', '_']:
                 symbol += text[i]
-            list_n = addText(text, i, symbol)
+            list_n = addText(text, i, symbol, counter)
             newtext += list_n[0]
             i = list_n[1]
         else:
             newtext += text[i]
+            counter += 1
+        if counter >= stringlong:
+            newtext += '\n'
+            counter = 0
         i += 1
     return newtext
 
