@@ -10,17 +10,22 @@ def runStrategy(game, gameState, playerId: int, logs):
     partialGameState = game.gameStateRep(gameState, playerId)
     result = [StrategyVerdict.Ok]
     process = subprocess.Popen(["python3", "shell.py"], bufsize=-1, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-    inp = json.dumps([partialGameState, playerId])
+    inp = partialGameState.toString() + '\n' + playerId.toString()
     try:
         out, err = process.communicate(input=inp, timeout=game.TimeLimit)
     except subprocess.TimeoutExpired:
         out, err = process.communicate()
         process.kill()
         result[0] = StrategyVerdict.TimeLimitExceeded
-    turn = json.loads(out)
+        return result
     if process.returncode != 0:
         result[0] = StrategyVerdict.Failed
-    //
+    turn = classes.Turn()
+    turn.fromString(out)
+    if err != "":
+        result[0] = StrategyVerdict.PresentationError
+    result.append(turn)
+    return result
 
 def strategyFailResults(game, strategyId : int, verdict) -> list:
     results = [Result() for i in range(PlayesCount)]
@@ -72,8 +77,25 @@ def run(gamePath, classesPath, strategyPathes, importPathes, saveLogs = False):
     fullGameState = game.FullGameState()
     whoseTurn = 0
     for i in range(game.TurnLimit):
-        turnList = runStrategy(game, fullGameState, whoseTurn, logs)
-        //
+        turnList = runStrategy(classes, game, fullGameState, whoseTurn, logs)
+        if (turnList[0] != StrategyVerdict.Ok):
+            result.results = strategyFailResults(game, whoseTurn, turnList[0])
+            endJudge(pools, logs, result.results, importPathes)
+            return result
+        turnResult = game.makeTurn(fullGameState, whoseTurn, turnList[1], logs)
+        if (turnResult[0] == TurnState.Incorrect):
+            result.results = strategyFailResults(game, whoseTurn, StrategyVerdict.IncorrectTurn)
+            endJudge(pools, logs, result.results, importPathes)
+            return result
+        if (turnResult[0] == TurnState.Last):
+            result.results = turnResult[1]
+            endJudge(pools, logs, result.results, importPathes)
+            return result
+        fullGameState = turnResult[1]
+        whoseTurn = turnResult[2]
+    result.results = [Result() for i in range(PlayesCount)]
+    endJudge(pools, logs, result.results, importPathes)
+    return resul
 
 if __name__ == '__main__':
     gamePath = input()
