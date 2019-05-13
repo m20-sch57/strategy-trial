@@ -6,17 +6,21 @@ from server.stringStuff import *
 
 import subprocess
 
-def runStrategy(game, strategy, gameState, playerId: int, logs):
+def runStrategy(game, gameState, playerId: int, logs):
     partialGameState = game.gameStateRep(gameState, playerId)
     result = [StrategyVerdict.Ok]
     process = subprocess.Popen(["python3", "shell.py"], bufsize=-1, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-    inp = toString([partialGameState, playerId])
+    inp = json.dumps([partialGameState, playerId])
     try:
         out, err = process.communicate(input=inp, timeout=game.TimeLimit)
     except subprocess.TimeoutExpired:
         out, err = process.communicate()
         process.kill()
-    turn = fromString([out])
+        result[0] = StrategyVerdict.TimeLimitExceeded
+    turn = json.loads(out)
+    if process.returncode != 0:
+        result[0] = StrategyVerdict.Failed
+    //
 
 def strategyFailResults(game, strategyId : int, verdict) -> list:
     results = [Result() for i in range(PlayesCount)]
@@ -53,6 +57,7 @@ def run(gamePath, classesPath, strategyPathes, importPathes, saveLogs = False):
     if (saveLogs):
         logs = game.Logs()
         result.logs = logs
+    '''
     strategies = []
     for i in range(len(strategyPathes)):
         try:
@@ -63,10 +68,11 @@ def run(gamePath, classesPath, strategyPathes, importPathes, saveLogs = False):
         if ("Strategy" not in dir(strategies[i])):
             badStrategy(game, i, StrategyVerdict.PresentationError, result, logs, importPathes)
         return result
+    '''
     fullGameState = game.FullGameState()
     whoseTurn = 0
     for i in range(game.TurnLimit):
-        turnList = runStrategy(game, strategies[whoseTurn], fullGameState, whoseTurn, logs)
+        turnList = runStrategy(game, fullGameState, whoseTurn, logs)
         //
 
 if __name__ == '__main__':
