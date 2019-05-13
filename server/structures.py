@@ -6,18 +6,31 @@ from server.commonFunctions import jsonParser
 import json
 import threading
 
-lock = threading.Lock()
-
-
 #corrcet execute
 
-def execute(cursor, *args):
+class DatabaseQueryType(IntEnum):
+    Commit = 0
+    Fetchall = 1
+    Fetchone = 2
+    Fetchone0 = 3
+
+lock = threading.Lock()
+
+def execute(connection, queryType, *args):
     try:
         lock.acquire(True)
-        res = cursor.execute(*args)
+        cursor = connection.cursor()
+        cursor.execute(*args)
+        if (queryType == DatabaseQueryType.Commit):
+            connection.commit()
+        elif (queryType == DatabaseQueryType.Fetchall):
+            return cursor.fetchall()
+        elif (queryType == DatabaseQueryType.Fetchone):
+            return cursor.fetchone()
+        elif (queryType == DatabaseQueryType.Fetchone0):
+            return cursor.fetchone()[0]
     finally:
         lock.release()
-
 
 #additional structures
 
@@ -50,18 +63,20 @@ class SecurityError(Exception):
 
 #database functions
 
-def saveList(cursor, tableName, lst):
-    execute(cursor, 'DELETE FROM ' + tableName + ' WHERE id=?', [lst[0]])
+def saveList(connection, tableName, lst):
+    execute(connection, DatabaseQueryType.Commit, 
+        'DELETE FROM ' + tableName + ' WHERE id=?', [lst[0]])
     strArr = '(' + '?, ' * (len(lst) - 1) + '?)'
-    execute(cursor, 'INSERT INTO ' + tableName + ' VALUES ' + strArr, lst)
+    execute(connection, DatabaseQueryType.Commit, 
+        'INSERT INTO ' + tableName + ' VALUES ' + strArr, lst)
 
-def getFromDatabase(cursor, tableName, id: int):
-    execute(cursor, 'SELECT * FROM ' + tableName + ' WHERE id=?', [id])
-    return cursor.fetchone();
+def getFromDatabase(connection, tableName, id: int):
+    return execute(connection, DatabaseQueryType.Fetchone, 
+        'SELECT * FROM ' + tableName + ' WHERE id=?', [id])
 
-def getCertainField(cursor, tableName, id, fieldName):
-    execute(cursor, 'SELECT ' + fieldName + ' FROM ' + tableName + ' WHERE id=?', [id])
-    lst = cursor.fetchone()
+def getCertainField(connection, tableName, id, fieldName):
+    lst = execute(connection, DatabaseQueryType.Fetchone, 
+        'SELECT ' + fieldName + ' FROM ' + tableName + ' WHERE id=?', [id])
     if (lst is None):
         return None
     else:
@@ -71,8 +86,9 @@ def getCertainField(cursor, tableName, id, fieldName):
 #user
 #saving: [id, username, password, type, submissions]
 
-def createUsersTable(cursor):
-    execute(cursor, '''CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, 
+def createUsersTable(connection):
+    execute(connection, DatabaseQueryType.Commit, 
+        '''CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, 
         username TEXT, password TEXT, type integer, submissions TEXT, name TEXT, secondname TEXT)''')
 
 def toJSON(submissions):
@@ -102,8 +118,8 @@ class User:
         return [self.id, self.username, self.password, int(self.type), 
             toJSON(self.submissions), self.name, self.secondname]
 
-    def save(self, cursor):
-        saveList(cursor, 'users', self.getList())
+    def save(self, connection):
+        saveList(connection, 'users', self.getList())
 
     def print(self):
         print("id:", self.id)
@@ -117,28 +133,29 @@ class User:
 def userFromList(lst):
     return User(lst[0], lst[1], lst[2], UserType(lst[3]), fromJSON(lst[4]), lst[5], lst[6])
 
-def getUser(cursor, id):
-    lst = getFromDatabase(cursor, 'users', id)
+def getUser(connection, id):
+    lst = getFromDatabase(connection, 'users', id)
     if (lst is None):
         return None
     return userFromList(lst)
 
-def getUserByName(cursor, username):
-    execute(cursor, 'SELECT * FROM users WHERE username=?', [username])
-    lst = cursor.fetchone()
+def getUserByName(connection, username):
+    lst = execute(connection, DatabaseQueryType.Fetchone,
+        'SELECT * FROM users WHERE username=?', [username])
     if lst == None:
         return None
     return userFromList(lst)
 
-def getAllUsers(cursor):
-    execute(cursor, "SELECT id, username, type, name, secondname FROM users")
-    return cursor.fetchall()
+def getAllUsers(connection):
+    return execute(connection, DatabaseQueryType.Fetchall,
+        "SELECT id, username, type, name, secondname FROM users")
 
 #problem
 #saving: [id, name, sources, downloads, statement, submissions, allSubmissions, tournaments, nextTournament]
 
-def createProblemsTable(cursor):
-    execute(cursor, '''CREATE TABLE IF NOT EXISTS problems 
+def createProblemsTable(connection):
+    execute(connection, DatabaseQueryType.Commit, 
+        '''CREATE TABLE IF NOT EXISTS problems 
         (id integer PRIMARY KEY, name TEXT, sources TEXT, downloads TEXT, 
         statement TEXT, submissions TEXT, allSubmissions TEXT, 
         tournaments TEXT, nextTournament INT, revisionId INT)''')
@@ -168,8 +185,8 @@ class Problem:
             json.dumps(self.tournaments), self.nextTournament, self.revisionId
         ]
 
-    def save(self, cursor):
-        saveList(cursor, 'problems', self.getList())
+    def save(self, connection):
+        saveList(connection, 'problems', self.getList())
 
     def print(self):
         print("id:", self.id)
@@ -189,26 +206,26 @@ def problemFromList(lst):
     return Problem(lst[0], Rules(lst[1], json.loads(lst[2]), json.loads(lst[3]), lst[4]), 
         set(json.loads(lst[5])), json.loads(lst[6]), json.loads(lst[7]), lst[8], lst[9])
 
-def getProblem(cursor, id):
-    lst = getFromDatabase(cursor, 'problems', id)
+def getProblem(connection, id):
+    lst = getFromDatabase(connection, 'problems', id)
     if (lst is None):
         return None
     return problemFromList(lst)
 
-def getProblemByName(cursor, name):
-    execute(cursor, 'SELECT * FROM problems WHERE name=?', [name])
-    return cursor.fetchone()
+def getProblemByName(connection, name):
+    return execute(connection, DatabaseQueryType.Fetchone,
+        'SELECT * FROM problems WHERE name=?', [name])
 
-def getProblemset(cursor):
-    execute(cursor, 'SELECT id, name FROM problems')
-    response = cursor.fetchall()
-    return response
+def getProblemset(connection):
+    return execute(connection, DatabaseQueryType.Fetchall,
+        'SELECT id, name FROM problems')
 
 #submission
 #saving: [id, userId, probId, code, type]
 
-def createSubmissionsTable(cursor):
-    execute(cursor, '''CREATE TABLE IF NOT EXISTS submissions (id integer PRIMARY KEY, 
+def createSubmissionsTable(connection):
+    execute(connection, DatabaseQueryType.Commit,
+        '''CREATE TABLE IF NOT EXISTS submissions (id integer PRIMARY KEY, 
         userId integer, probId integer, code TEXT, type integer)''')
 
 class Submission:
@@ -222,8 +239,8 @@ class Submission:
     def getList(self):
         return [self.id, self.userId, self.probId, self.code, int(self.type)]
 
-    def save(self, cursor):
-        saveList(cursor, 'submissions', self.getList())
+    def save(self, connection):
+        saveList(connection, 'submissions', self.getList())
 
     def print(self):
         print("id:", self.id)
@@ -236,8 +253,8 @@ class Submission:
 def submissionFromList(lst):
     return Submission(lst[0], lst[1], lst[2], lst[3], StrategyState(lst[4]))
 
-def getSubmission(cursor, id):
-    lst = getFromDatabase(cursor, 'submissions', id)
+def getSubmission(connection, id):
+    lst = getFromDatabase(connection, 'submissions', id)
     if (lst is None):
         return None
     return submissionFromList(lst)
@@ -246,8 +263,9 @@ def getSubmission(cursor, id):
 #tournament
 #saving: [id, probId, probRev, time, standings]
 
-def createTournamentsTable(cursor):
-    execute(cursor, '''CREATE TABLE IF NOT EXISTS tournaments (id INT PRIMARY KEY, 
+def createTournamentsTable(connection):
+    execute(connection, DatabaseQueryType.Commit,
+        '''CREATE TABLE IF NOT EXISTS tournaments (id INT PRIMARY KEY, 
         probId INT, probRev INT, time INT, standings TEXT)''')
 
 class Tournament:
@@ -261,8 +279,8 @@ class Tournament:
     def getList(self):
         return [self.id, self.probId, self.probRev, self.time, json.dumps(self.standings)]
 
-    def save(self, cursor):
-        saveList(cursor, 'tournaments', self.getList())
+    def save(self, connection):
+        saveList(connection, 'tournaments', self.getList())
 
     def print(self):
         print("id:", self.id)
@@ -274,8 +292,8 @@ class Tournament:
 def tournamentFromList(lst):
     return Tournament(lst[0], lst[1], lst[2], lst[3], json.loads(lst[4]))
 
-def getTournament(cursor, id):
-    lst = getFromDatabase(cursor, 'tournaments', id)
+def getTournament(connection, id):
+    lst = getFromDatabase(connection, 'tournaments', id)
     if (lst is None):
         return None
     return tournamentFromList(lst)
@@ -284,8 +302,9 @@ def getTournament(cursor, id):
 #message
 #saving: [id, userId, time, content]
 
-def createMessagesTable(cursor):
-    execute(cursor, '''CREATE TABLE IF NOT EXISTS messages (id INT PRIMARY KEY, 
+def createMessagesTable(connection):
+    execute(connection, DatabaseQueryType.Commit,
+        '''CREATE TABLE IF NOT EXISTS messages (id INT PRIMARY KEY, 
         userId INT, time INT, content TEXT)''')
 
 class Message:
@@ -298,8 +317,8 @@ class Message:
     def getList(self):
         return [self.id, self.userId, self.time, self.content]
 
-    def save(self, cursor):
-        saveList(cursor, 'messages', self.getList())
+    def save(self, connection):
+        saveList(connection, 'messages', self.getList())
 
     def print(self):
         print("id:", self.id)
@@ -310,8 +329,8 @@ class Message:
 def messageFromList(lst):
     return Message(lst[0], lst[1], lst[2], lst[3])
 
-def getMessage(cursor, id):
-    lst = getFromDatabase(cursor, 'messages', id)
+def getMessage(connection, id):
+    lst = getFromDatabase(connection, 'messages', id)
     if (lst is None):
         return None
     return messageFromList(lst)
@@ -319,33 +338,33 @@ def getMessage(cursor, id):
 
 #getSumissionLists
 
-def getProblemName(cursor, probId):
-    execute(cursor, 'SELECT name FROM problems WHERE id=?', [probId])
-    return cursor.fetchone()[0]
+def getProblemName(connection, probId):
+    return execute(connection, DatabaseQueryType.Fetchone0,
+        'SELECT name FROM problems WHERE id=?', [probId])
 
-def getSubDict(cursor, subId, probName):
-    execute(cursor, 'SELECT type FROM submissions WHERE id=?', [subId])
-    status = cursor.fetchone()[0]
+def getSubDict(connection, subId, probName):
+    status = execute(connection, DatabaseQueryType.Fetchone0,
+        'SELECT type FROM submissions WHERE id=?', [subId])
     return {'id' : subId, 'probName' : probName, 'type' : visualize(status)}
 
-def getSubmissionListUP(cursor, userId, probId):
+def getSubmissionListUP(connection, userId, probId):
     result = []
-    user = getUser(cursor, userId)
-    probName = getProblemName(cursor, probId)
+    user = getUser(connection, userId)
+    probName = getProblemName(connection, probId)
     if (probId in user.submissions):
         for subId in user.submissions[probId]:
-            result.append(getSubDict(cursor, subId, probName))
+            result.append(getSubDict(connection, subId, probName))
 
     return result
 
-def getSubmissionListU(cursor, userId):
+def getSubmissionListU(connection, userId):
     result = []
-    user = getUser(cursor, userId)
+    user = getUser(connection, userId)
     for item in user.submissions.items():
         probId = item[0]
-        probName = getProblemName(cursor, probId)
+        probName = getProblemName(connection, probId)
         subList = item[1]
         for subId in subList:
-            result.append(getSubDict(cursor, subId, probName))
+            result.append(getSubDict(connection, subId, probName))
 
     return result
