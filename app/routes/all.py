@@ -32,11 +32,11 @@ def problemset_id(strId):
     retcode = mainChanger.applyChange(request)
 
     if retcode > 0:
-        pass # message needed: success
+        flash("Submission type successfully changed", "message green") # message needed: success
         return redirect("/problemset/" + strId)
-
-    if retcode < 0:
-        pass # message needed fail
+    if retcode <= 0 and request.args.get("ChSubId") != None:
+        flash("Incorrect submission id", "message red") # message needed fail
+        return redirect("/problemset/" + strId)
 
     form = ProblemsetID()
     success, paths, problem, subList, tourList = problemsetId(strId)
