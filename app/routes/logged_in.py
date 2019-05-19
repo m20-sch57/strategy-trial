@@ -33,7 +33,7 @@ def submissions():
     if ret > 0:
         flash("Submission type successfully changed", "message green")
         return redirect("/submissions")
-    if ret == 0:
+    elif request.args.get("chSubId"):
         flash("Incorrect submission id", "message red")
         return redirect("/submissions")
     userId = info()['id']

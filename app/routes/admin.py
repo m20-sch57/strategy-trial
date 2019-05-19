@@ -64,10 +64,10 @@ def usersList():
     if (not isAdmin()):
         flash("You don't have permission to do this!", 'message red')
         return redirect("/home")
-    success, message = changeType(request)
+    redir, message = changeType(request)
     if message != None:
         flash(message[0], message[1])
-    if success:
+    if redir:
         return redirect("/users_list")
     lst = useCasesAPI.getAllUsers()
     return render_template("users_list.html.j2", title = "List of users", info = Info, lst = lst)

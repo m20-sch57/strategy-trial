@@ -8,9 +8,9 @@ def changeType(request) -> list:
     try:
         userId = int(strUserId)
     except:
-        return [0, ("Id must be an integer", 'message red')]
+        return [1, ("Id must be an integer", 'message red')]
     Info = info()
     if Info["id"] == userId:
-        return [0, ("You don't want to change your type to default!", 'message red')]
+        return [1, ("You don't want to change your type to default!", 'message red')]
     return [1, useCasesAPI.changeUserType(userId)]
 

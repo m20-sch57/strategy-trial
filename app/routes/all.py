@@ -30,11 +30,10 @@ def problemset():
 @app.route("/problemset/<strId>", methods = ["GET", "POST"])
 def problemset_id(strId):
     retcode = mainChanger.applyChange(request)
-
     if retcode > 0:
         flash("Submission type successfully changed", "message green") # message needed: success
         return redirect("/problemset/" + strId)
-    if retcode <= 0 and request.args.get("ChSubId") != None:
+    elif request.args.get("chSubId") != None:
         flash("Incorrect submission id", "message red") # message needed fail
         return redirect("/problemset/" + strId)
 
