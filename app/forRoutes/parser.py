@@ -13,17 +13,16 @@ def addText(text, i, symbol, counter):
     add = ''
     j = text[i+1:].find(anti(symbol))
     if j != -1:
-        if text[i:i+j+1].find('<') == -1:
-            if symbol == '[':
-                add = '<a href="http://' + text[i+1:i+j+1] + '">' + text[i+1:i+j+1] + '</a>'
-            if symbol == '__':
-                add = '<u>' + text[i+2:i+j+1] + '</u>'
-                j += 1
-            if symbol == '**':
-                add = '<b>' + text[i+2:i+j+1] + '</b>'
-                j += 1
-        else:
-            add = '[SOMETHING IS WRONG]'
+        if symbol == '[':
+            if text[i+1:i+9] == 'https://':
+                i += 8
+            add = '<a href="https://' + text[i+1:i+j+1] + '">' + text[i+1:i+j+1] + '</a>'
+        if symbol == '__':
+            add = '<u>' + text[i+2:i+j+1] + '</u>'
+            j += 1
+        if symbol == '**':
+            add = '<b>' + text[i+2:i+j+1] + '</b>'
+            j += 1
     else:
         add = text[i]
     counter += j + 1

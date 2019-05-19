@@ -5,7 +5,7 @@
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/chat.css') }}">
         <div class="container">
             {% if pageCnt %}
-                <span align="center"><h2>Page {{ page }}</h2></span>
+                <span align="center"><h2 align="center" class="chatpage">Page {{ page }}</h2></span><br>
 
                 {% if page != 0 %}
                     <a class="button27" href=/chat?page={{ page - 1 }}>Newer</a>
@@ -18,16 +18,14 @@
                 <br>
             {% endif %}
             {% for msg in messages %}
-                <p>
-                    <span class="username">{{ msg.username }}</span>
-                    <snan class="date">{{ msg.strTime }}</snan><br>
-                    <code><pre>{{msg.content}}</pre></code>
-                </p>
+                <span class="username">{{ msg.username }}</span>
+                <snan class="date">{{ msg.strTime }}</snan><br>
+                <code><pre class="problem">{{msg.content}}</pre></code>
             {% endfor %}
             {% if info.logged_in %}
                 <form action="" method="post">
                     {{ form.hidden_tag() }}
-                    <p>
+                    <px>
                         {{ form.contentField }}
                     </p>
                     <p>
@@ -35,7 +33,8 @@
                     </p>
                 </form>
             {% else %}
-                <h3><a href="/login">Log in</a> or <a href="/sign_up"> sign up</a> to send your message</h3>
+                <hr><br>
+                <span class="login"><a href="/login" class="button_submit">Log in</a> or <a href="/sign_up" class="button_submit"> sign up</a> to send your message</span>
             {% endif %}
         </div>
     </div>
