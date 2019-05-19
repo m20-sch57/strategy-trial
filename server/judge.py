@@ -10,13 +10,13 @@ import subprocess
 shellRoute = "shell.py"
 
 def runStrategy(classes, game, gameState, playerId: int, strategyPath, importPathes):
-    print(game.gameStateRep)
+    #print(game.gameStateRep)
     partialGameState = game.gameStateRep(gameState, playerId)
-    print(partialGameState.__dir__(), partialGameState.toString())
+    #print(partialGameState.__dir__(), partialGameState.toString())
     result = [StrategyVerdict.Ok]
     process = subprocess.Popen(["python3", shellRoute], bufsize=-1, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
     inp = '\n'.join([strategyPath, ' '.join(importPathes), partialGameState.toString(), str(playerId)])
-    print(inp)
+    #print(inp)
     """
         gameState must have method toString that converts object to string WITHOUT '\n' and fromString that converts string without '\n' to object.
         turn --- the same
@@ -28,7 +28,7 @@ def runStrategy(classes, game, gameState, playerId: int, strategyPath, importPat
         process.kill()
         result[0] = StrategyVerdict.TimeLimitExceeded
         return result
-    print(err)
+    #print(err)
     if process.returncode != 0:
         return [StrategyVerdict.Failed]
     turn = classes.Turn()
@@ -77,7 +77,7 @@ def run(gamePath, classesPath, strategyPathes, importPathes, saveLogs = False):
     GamePath = BuildPath(importPathes[0], gamePath)
     classes = importlib.import_module(ClassesPath)
     game = importlib.import_module(GamePath)
-    print(classes, game, sys.path)
+    #print(classes, game, sys.path)
     result = InvocationResult()
     logs = None
     if (saveLogs):
@@ -96,7 +96,7 @@ def run(gamePath, classesPath, strategyPathes, importPathes, saveLogs = False):
         return result
     '''
     fullGameState = game.FullGameState()
-    print(fullGameState, fullGameState.__dict__)
+    #print(fullGameState, fullGameState.__dict__)
     whoseTurn = 0
     for i in range(game.TurnLimit):
         turnList = runStrategy(classes, game, fullGameState, whoseTurn, strategyPathes[whoseTurn], importPathes)
