@@ -4,6 +4,7 @@ from enum import IntEnum
 from server.storage import storage
 from server.commonFunctions import readFile
 import os, shutil, glob, json
+import shutil
 
 SaveFolder = 'tmp'
 
@@ -32,14 +33,25 @@ MaxSourceSize = 256000
 class SourceSizeException(Exception):
     pass
 
+def getFilePathes(prefixPath):
+    return [filename
+            for filename in 
+            glob.iglob(os.path.join(prefixPath, '**', '*'), recursive = True)
+            if (os.path.isfile(filename))
+    ]
+
 def readFiles(readPath, outPath):
     res = []
-    for filename in glob.iglob(os.path.join(readPath, '**', '*'), recursive = True):
+    for filename in getFilePathes(readPath):
         if (os.path.getsize(filename) > MaxSourceSize):
             raise SourceSizeException
         rel = os.path.relpath(filename, readPath)
         res.append([os.path.join(outPath, rel), readFile(filename)])
     return res
+
+def copyFiles(readPath, outPath):
+    for filename in getFilePathes(readPath):
+        shutil.copy(filename, os.path.join(outPath, *os.path.split(filename)[2:]))
 
 def parseArchive(archivePath, probId = -1):
     if (not os.path.isfile(archivePath)):
@@ -85,12 +97,15 @@ def parseArchive(archivePath, probId = -1):
             os.path.join('problems', str(probId)))
         sources2 = readFiles(os.path.join(problemPath, 'templates'),
             os.path.join('app', 'templates', 'problems', str(probId)))
-        sources3 = readFiles(os.path.join(problemPath, 'static'),
-            os.path.join('app', 'static', 'problems', str(probId)))
     except SourceSizeException:
         return {'ok' : 0, 'error' : 'Source file is too large'}
+    except UnicodeDecodeError:
+        return {'ok' : 0, 'error' : "Can't decode files"}
 
-    sources = sources1 + sources2 + sources3
+    copyFiles(os.path.join(problemPath, 'static'),
+        os.path.join('app', 'static', 'problems', str(probId)))
+
+    sources = sources1 + sources2
 
     if (name == "" or (name != problem.rules.name and storage.getProblemByName(name) != None)):
         return {"ok": 0, "error": "You can't add problem with same name"}
