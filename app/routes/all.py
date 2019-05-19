@@ -30,7 +30,13 @@ def problemset():
 
 @app.route("/problemset/<strId>", methods = ["GET", "POST"])
 def problemset_id(strId):
-    mainChanger.applyChange(request)
+    retcode = mainChanger.applyChange(request)
+    if retcode > 0:
+        flash("Submission type successfully changed", "message green") # message needed: success
+        return redirect("/problemset/" + strId)
+    elif request.args.get("chSubId") != None:
+        flash("Incorrect submission id", "message red") # message needed fail
+        return redirect("/problemset/" + strId)
 
     form = ProblemsetID()
     success, paths, problem, subList, tourList = problemsetId(strId)

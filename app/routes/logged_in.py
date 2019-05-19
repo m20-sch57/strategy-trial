@@ -29,8 +29,13 @@ def logout():
 
 @app.route("/submissions")
 def submissions():
-    mainChanger.applyChange(request)
-    
+    ret = mainChanger.applyChange(request)
+    if ret > 0:
+        flash("Submission type successfully changed", "message green")
+        return redirect("/submissions")
+    elif request.args.get("chSubId"):
+        flash("Incorrect submission id", "message red")
+        return redirect("/submissions")
     userId = info()['id']
     if userId == -1:
         flash("You haven't logged in, so you can't see your submissions", 'message red')

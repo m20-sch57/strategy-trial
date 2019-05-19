@@ -6,5 +6,6 @@ def applyChange(request):
     try:
         chSubId = int(request.args.get('chSubId'))
         ret = useCasesAPI.changeMainSubmission(Info['id'], chSubId)
+        return ret
     except:
-        pass
+        return -1
