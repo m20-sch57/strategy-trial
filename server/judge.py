@@ -11,7 +11,7 @@ def runStrategy(classes, game, gameState, playerId: int, strategyPath, importPat
     result = [StrategyVerdict.Ok]
     shellRoute = "shell.py"
     process = subprocess.Popen(["python3", shellRoute], bufsize=-1, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-    inp = [strategyPathes, importPathes, partialGameState.toString(), str(playerId)].join('\n')
+    inp = '\n'.join([strategyPath, ' '.join(importPathes), partialGameState.toString(), str(playerId)])
     """
         gameState must have method toString that converts object to string WITHOUT '\n' and fromString that converts string without '\n' to object.
         turn --- the same
@@ -24,13 +24,15 @@ def runStrategy(classes, game, gameState, playerId: int, strategyPath, importPat
         result[0] = StrategyVerdict.TimeLimitExceeded
         return result
     if process.returncode != 0:
-        result[0] = StrategyVerdict.Failed
-    turn = classes.Turn()
+        return [StrategyVerdict.Failed]
+    turn = classes.Turn(0, 0)
     turn.fromString(out)
-    if err != "":
-        result[0] = StrategyVerdict.PresentationError
+#    if err != "":
+#        result[0] = StrategyVerdict.PresentationError
     result.append(turn)
     return result
+
+PlayesCount = 2
 
 def strategyFailResults(game, strategyId : int, verdict) -> list:
     results = [Result() for i in range(PlayesCount)]

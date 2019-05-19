@@ -4,7 +4,7 @@ class GameState:
 
     def toString(self) -> str:
         a = list(self.a[0] + self.a[1] + self.a[2])
-        return a.join()
+        return ' '.join(a)
 
     def fromString(self, s: str) -> None:
         a = s.split()
@@ -16,7 +16,7 @@ class Turn:
         self.r, self.c = r, c
 
     def toString(self) -> str:
-        return str(self.r) + ' ' + str(c)
+        return str(self.r) + ' ' + str(self.c)
 
     def fromString(self, s: str) -> None:
         self.r, self.c = map(int, s.split())
