@@ -29,4 +29,17 @@ textarea {
   border-radius: 4px;
   background-color: #f8f8f8;
   resize: none;
+  font-size: 14;
 }
+
+::-webkit-scrollbar {
+
+width: 0px;
+
+}
+
+.someinf {
+  font-size: 12;
+  color: #5E5E5E;
+}
+

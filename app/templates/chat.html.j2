@@ -23,9 +23,19 @@
                 <code><pre class="problem">{{msg.content}}</pre></code>
             {% endfor %}
             {% if info.logged_in %}
+            <hr><details>
+                <summary class="login">Some information</summary>
+                <hr>
+                <table class="someinf">
+                <tr><td><span>You can:</span></td><td></td></tr>
+                <tr><td><span>• make links </span></td><td><span>- [example.net] (if it's https), [http://example.net] or [https://example.net]</span></td></tr>
+                <tr><td><span>• make bold text </span></td><td><span>- __<b>boldtext</b>__</span></td></tr>
+                <tr><td><span>• make underlined text </span></td><td><span>- **<u>underlinedtext</u>** </span></td></tr></table>
+                </details>
+            <hr>
                 <form action="" method="post">
                     {{ form.hidden_tag() }}
-                    <px>
+                    <p>
                         {{ form.contentField }}
                     </p>
                     <p>
