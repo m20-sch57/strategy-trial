@@ -3,6 +3,8 @@ import os
 from server.commonFunctions import readFile, printToFile
 from server.structures import SecurityError
 
+ForgeCookieMessage = "You are trying to forge cookies!"
+
 def key_to_str(key: rsa.PrivateKey) -> str:
     return ' '.join(map(str, [key.n, key.e, key.d, key.p, key.q]))
 
@@ -24,8 +26,8 @@ def decrypt(hashed: str) -> str:
     try:
         message = str(rsa.decrypt(bytes.fromhex(hashed), key))[2:-1]
     except rsa.pkcs1.DecryptionError:
-        raise SecurityError("You are forging cookies! YOU GOT BAN!!!")
+        raise SecurityError(ForgeCookieMessage)
     except ValueError:
-        raise SecurityError("You are forging cookies! YOU GOT BAN!!!")
+        raise SecurityError(ForgeCookieMessage)
     return message
 
