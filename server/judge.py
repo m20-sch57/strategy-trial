@@ -73,8 +73,6 @@ def BuildPath(path: str, moduleName: str) -> str:
 def run(gamePath, classesPath, strategyPathes, importPathes, saveLogs = False):
     for path in importPathes:
         sys.path.append(path)
-    classes = {}
-    game = {}
     ClassesPath = BuildPath(importPathes[0], classesPath)
     GamePath = BuildPath(importPathes[0], gamePath)
     classes = importlib.import_module(ClassesPath)
