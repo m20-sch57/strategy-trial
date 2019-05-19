@@ -2,15 +2,20 @@ from server.gameStuff import StrategyVerdict
 from server.gameStuff import TurnState
 from server.gameStuff import Result
 from server.gameStuff import InvocationResult
-from server.stringStuff import *
+import sys
 
 import subprocess
 
-def runStrategy(game, gameState, playerId: int, logs):
+def runStrategy(classes, game, gameState, playerId: int, logs):
     partialGameState = game.gameStateRep(gameState, playerId)
     result = [StrategyVerdict.Ok]
-    process = subprocess.Popen(["python3", "shell.py"], bufsize=-1, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-    inp = partialGameState.toString() + '\n' + playerId.toString()
+    shellRoute = "shell.py"
+    process = subprocess.Popen(["python3", shellRoute], bufsize=-1, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    inp = // partialGameState.toString(), str(playerId)
+    """
+        gameState must have method to string that converts ab object to string WITHOUT '\n'
+        turn --- the same
+    """
     try:
         out, err = process.communicate(input=inp, timeout=game.TimeLimit)
     except subprocess.TimeoutExpired:
@@ -43,7 +48,7 @@ def removePathes(importPathes):
     for path in importPathes:
         sys.path.remove(path)
 
-def endJudge(pools, logs, results, importPathes):
+def endJudge(logs, results, importPathes):
     removePathes(importPathes)
     updateLogs(logs, results)
 
@@ -80,21 +85,21 @@ def run(gamePath, classesPath, strategyPathes, importPathes, saveLogs = False):
         turnList = runStrategy(classes, game, fullGameState, whoseTurn, logs)
         if (turnList[0] != StrategyVerdict.Ok):
             result.results = strategyFailResults(game, whoseTurn, turnList[0])
-            endJudge(pools, logs, result.results, importPathes)
+            endJudge(logs, result.results, importPathes)
             return result
         turnResult = game.makeTurn(fullGameState, whoseTurn, turnList[1], logs)
         if (turnResult[0] == TurnState.Incorrect):
             result.results = strategyFailResults(game, whoseTurn, StrategyVerdict.IncorrectTurn)
-            endJudge(pools, logs, result.results, importPathes)
+            endJudge(logs, result.results, importPathes)
             return result
         if (turnResult[0] == TurnState.Last):
             result.results = turnResult[1]
-            endJudge(pools, logs, result.results, importPathes)
+            endJudge(logs, result.results, importPathes)
             return result
         fullGameState = turnResult[1]
         whoseTurn = turnResult[2]
     result.results = [Result() for i in range(PlayesCount)]
-    endJudge(pools, logs, result.results, importPathes)
+    endJudge(logs, result.results, importPathes)
     return resul
 
 if __name__ == '__main__':
