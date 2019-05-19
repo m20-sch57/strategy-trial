@@ -13,7 +13,7 @@ class Turn:
     def __init__(self, trust: int=0):
         self.trust = trust
 
-    def toString(self);
+    def toString(self):
         return str(self.trust)
 
     def fromString(self, s):
