@@ -19,7 +19,7 @@ import server.useCasesAPI as useCasesAPI
 StrategyCnt = 10
 
 import server.parser as parser
-shutil.make_archive('tic_tac_toe', 'zip', 'tic_tac_toe')
+shutil.make_archive('tic_tac_toe', 'zip', 'tic_tac_toe_exp')
 shutil.make_archive('trust_evolution', 'zip', 'trust_evolution')
 shutil.make_archive("FourInRow", "zip", "FourInRow")
 parsingResult = parser.parseArchive('tic_tac_toe.zip')
