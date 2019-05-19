@@ -7,12 +7,16 @@ import importlib
 
 import subprocess
 
-def runStrategy(classes, game, gameState, playerId: int, strategyPath, importPathes, logs):
+shellRoute = "shell.py"
+
+def runStrategy(classes, game, gameState, playerId: int, strategyPath, importPathes):
+    print(game.gameStateRep)
     partialGameState = game.gameStateRep(gameState, playerId)
+    print(partialGameState.__dir__(), partialGameState.toString())
     result = [StrategyVerdict.Ok]
-    shellRoute = "shell.py"
     process = subprocess.Popen(["python3", shellRoute], bufsize=-1, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
     inp = '\n'.join([strategyPath, ' '.join(importPathes), partialGameState.toString(), str(playerId)])
+    print(inp)
     """
         gameState must have method toString that converts object to string WITHOUT '\n' and fromString that converts string without '\n' to object.
         turn --- the same
@@ -24,6 +28,7 @@ def runStrategy(classes, game, gameState, playerId: int, strategyPath, importPat
         process.kill()
         result[0] = StrategyVerdict.TimeLimitExceeded
         return result
+    print(err)
     if process.returncode != 0:
         return [StrategyVerdict.Failed]
     turn = classes.Turn()
@@ -62,21 +67,19 @@ def badStrategy(game, i, verdict, result, logs, importPathes):
 '''
 
 def BuildPath(path: str, moduleName: str) -> str:
-    ans = ""
-    for i in path.split('/'):
-        ans += i + '.'
-    ans += moduleName
+    ans = '.'.join(path.split('/') + [moduleName])
     return ans
 
 def run(gamePath, classesPath, strategyPathes, importPathes, saveLogs = False):
     for path in importPathes:
         sys.path.append(path)
-    classes = None
-    game = None
+    classes = {}
+    game = {}
     ClassesPath = BuildPath(importPathes[0], classesPath)
     GamePath = BuildPath(importPathes[0], gamePath)
     classes = importlib.import_module(ClassesPath)
     game = importlib.import_module(GamePath)
+    print(classes, game, sys.path)
     result = InvocationResult()
     logs = None
     if (saveLogs):
@@ -95,9 +98,10 @@ def run(gamePath, classesPath, strategyPathes, importPathes, saveLogs = False):
         return result
     '''
     fullGameState = game.FullGameState()
+    print(fullGameState, fullGameState.__dict__)
     whoseTurn = 0
     for i in range(game.TurnLimit):
-        turnList = runStrategy(classes, game, fullGameState, whoseTurn, strategyPathes[whoseTurn], importPathes, logs)
+        turnList = runStrategy(classes, game, fullGameState, whoseTurn, strategyPathes[whoseTurn], importPathes)
         if (turnList[0] != StrategyVerdict.Ok):
             result.results = strategyFailResults(game, whoseTurn, turnList[0])
             endJudge(logs, result.results, importPathes)
