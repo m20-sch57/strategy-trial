@@ -3,6 +3,7 @@ from server.gameStuff import TurnState
 from server.gameStuff import Result
 from server.gameStuff import InvocationResult
 import sys
+import importlib
 
 import subprocess
 
@@ -25,7 +26,7 @@ def runStrategy(classes, game, gameState, playerId: int, strategyPath, importPat
         return result
     if process.returncode != 0:
         return [StrategyVerdict.Failed]
-    turn = classes.Turn(0, 0)
+    turn = classes.Turn()
     turn.fromString(out)
 #    if err != "":
 #        result[0] = StrategyVerdict.PresentationError
@@ -53,17 +54,29 @@ def removePathes(importPathes):
 def endJudge(logs, results, importPathes):
     removePathes(importPathes)
     updateLogs(logs, results)
-
+'''
 def badStrategy(game, i, verdict, result, logs, importPathes):
     removePathes(importPathes)
     result.results = strategyFailResults(game, i, verdict)
     updateLogs(logs, result.results)
+'''
+
+def BuildPath(path: str, moduleName: str) -> str:
+    ans = ""
+    for i in path.split('/'):
+        ans += i + '.'
+    ans += moduleName
+    return ans
 
 def run(gamePath, classesPath, strategyPathes, importPathes, saveLogs = False):
     for path in importPathes:
         sys.path.append(path)
-    classes = __import__(classesPath)
-    game = __import__(gamePath)
+    classes = None
+    game = None
+    ClassesPath = BuildPath(importPathes[0], classesPath)
+    GamePath = BuildPath(importPathes[0], gamePath)
+    classes = importlib.import_module(ClassesPath)
+    game = importlib.import_module(GamePath)
     result = InvocationResult()
     logs = None
     if (saveLogs):
@@ -102,7 +115,7 @@ def run(gamePath, classesPath, strategyPathes, importPathes, saveLogs = False):
         whoseTurn = turnResult[2]
     result.results = [Result() for i in range(PlayesCount)]
     endJudge(logs, result.results, importPathes)
-    return resul
+    return result
 
 if __name__ == '__main__':
     gamePath = input()

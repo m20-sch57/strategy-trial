@@ -12,7 +12,7 @@ class GameState:
         return None
 
 class Turn:
-    def __init__(self, r, c):
+    def __init__(self, r=0, c=0):
         self.r, self.c = r, c
 
     def toString(self) -> str:
