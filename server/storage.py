@@ -6,18 +6,16 @@ DatabasePath = 'database.db'
 class Storage:
     def __init__(self):
         self.connection = sqlite3.connect(DatabasePath, check_same_thread=False)
-        self.cursor = self.connection.cursor()
-        structures.createUsersTable(self.cursor)
-        structures.createProblemsTable(self.cursor)
-        structures.createSubmissionsTable(self.cursor)
-        structures.createTournamentsTable(self.cursor)
-        structures.createMessagesTable(self.cursor)
+        structures.createUsersTable(self.connection)
+        structures.createProblemsTable(self.connection)
+        structures.createSubmissionsTable(self.connection)
+        structures.createTournamentsTable(self.connection)
+        structures.createMessagesTable(self.connection)
         self.connection.commit()
 
     def getSize(self, tableName):
-        self.cursor.execute('SELECT COUNT (*) FROM ' + tableName)
-        size = self.cursor.fetchone()
-        return size[0]
+        return structures.execute(self.connection, structures.DatabaseQueryType.Fetchone0,
+            'SELECT COUNT (*) FROM ' + tableName)
 
     def getUsersCount(self):
         return self.getSize('users')
@@ -40,61 +38,61 @@ class Storage:
             obj.id = size
 
     def getUser(self, id):
-        return structures.getUser(self.cursor, id)
+        return structures.getUser(self.connection, id)
 
     def getProblem(self, id):
-        return structures.getProblem(self.cursor, id)
+        return structures.getProblem(self.connection, id)
 
     def getSubmission(self, id):
-        return structures.getSubmission(self.cursor, id)
+        return structures.getSubmission(self.connection, id)
 
     def getTournament(self, id):
-        return structures.getTournament(self.cursor, id)
+        return structures.getTournament(self.connection, id)
 
     def getMessage(self, id):
-        return structures.getMessage(self.cursor, id)
+        return structures.getMessage(self.connection, id)
 
     def getUserByName(self, username):
-        return structures.getUserByName(self.cursor, username)
+        return structures.getUserByName(self.connection, username)
 
     def getProblemByName(self, name):
-        return structures.getProblemByName(self.cursor, name)
+        return structures.getProblemByName(self.connection, name)
 
     def getAllUsers(self):
-        return structures.getAllUsers(self.cursor)
+        return structures.getAllUsers(self.connection)
 
     def saveUser(self, user):
         self.updateId(user, 'users')
-        user.save(self.cursor)
+        user.save(self.connection)
         self.connection.commit()
         return user.id
 
     def saveProblem(self, problem):
         self.updateId(problem, 'problems')
-        problem.save(self.cursor)
+        problem.save(self.connection)
         self.connection.commit()
         return problem.id
 
     def saveSubmission(self, submission):
         self.updateId(submission, 'submissions')
-        submission.save(self.cursor)
+        submission.save(self.connection)
         self.connection.commit()
         return submission.id
 
     def saveTournament(self, tournament):
         self.updateId(tournament, 'tournaments')
-        tournament.save(self.cursor)
+        tournament.save(self.connection)
         self.connection.commit()
         return tournament.id
 
     def saveMessage(self, message):
         self.updateId(message, 'messages')
-        message.save(self.cursor)
+        message.save(self.connection)
         self.connection.commit()
         return message.id
 
     def getProblemset(self):
-        response = structures.getProblemset(self.cursor)
+        response = structures.getProblemset(self.connection)
         dictResponse = [
             {'id' : response[i][0], 'name' : response[i][1]}
             for i in range(len(response))
@@ -102,16 +100,16 @@ class Storage:
         return dictResponse
 
     def getSubmissionListU(self, userId):
-        return structures.getSubmissionListU(self.cursor, userId)
+        return structures.getSubmissionListU(self.connection, userId)
 
     def getSubmissionListUP(self, userId, probId):
-        return structures.getSubmissionListUP(self.cursor, userId, probId)
+        return structures.getSubmissionListUP(self.connection, userId, probId)
 
     def getCertainField(self, tableName, id, fieldName):
-        return structures.getCertainField(self.cursor, tableName, id, fieldName)
+        return structures.getCertainField(self.connection, tableName, id, fieldName)
 
     def getSubDict(subId, probName):
-        return structures.getSubDict(self.cursor, subId, probName)
+        return structures.getSubDict(self.connection, subId, probName)
 
 class Status:
     def __init__(self):
