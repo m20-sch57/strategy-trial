@@ -6,6 +6,7 @@ from app.forRoutes.problemsetId import problemsetId
 from app.forRoutes.upload import Upload
 from app.forRoutes.messagePost import sendMessage
 from app.forRoutes.changeChatPage import getPageId
+from app.forRoutes.parser import easyParser
 from app.forms import MessageForm, ProblemsetID
 from server.storage import storage
 from server.commonFunctions import stringTime
@@ -63,7 +64,7 @@ def showSource(subId):
     Info = info()
     title = "Code #" + subId
     if (Info['logged_in'] == 1 and Info['id'] == submission.userId):
-        code = useCasesAPI.getSubmissionCode(subId).split('\n')
+        code = [easyParser(line) for line in useCasesAPI.getSubmissionCode(subId).split('\n')]
         return render_template('source.html.j2', id = subId, code = code, info = info(), title = title)
     return render_template('message.html.j2', text = "You can't see this source :)", info = info())
 
