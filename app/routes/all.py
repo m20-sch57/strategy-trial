@@ -154,7 +154,7 @@ def test():
 @app.route("/reset")
 def reset():
     resp = make_response(redirect("/home"))
-    flash("Cookies successsully reseted", "message green")
+    flash("Cookies successsully reset", "message green")
     resp.set_cookie("all", encrypt("0 Guest -1 " + str(randint(0, 100000))))
     return resp
 
