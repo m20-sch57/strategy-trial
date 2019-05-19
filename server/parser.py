@@ -35,6 +35,8 @@ class SourceSizeException(Exception):
 def readFiles(readPath, outPath):
     res = []
     for filename in glob.iglob(os.path.join(readPath, '**', '*'), recursive = True):
+        if (not os.path.isfile(filename)):
+            continue
         if (os.path.getsize(filename) > MaxSourceSize):
             raise SourceSizeException
         rel = os.path.relpath(filename, readPath)
