@@ -6,14 +6,14 @@ import sys
 
 import subprocess
 
-def runStrategy(classes, game, gameState, playerId: int, logs):
+def runStrategy(classes, game, gameState, playerId: int, strategyPath, importPathes, logs):
     partialGameState = game.gameStateRep(gameState, playerId)
     result = [StrategyVerdict.Ok]
     shellRoute = "shell.py"
     process = subprocess.Popen(["python3", shellRoute], bufsize=-1, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-    inp = // partialGameState.toString(), str(playerId)
+    inp = [strategyPathes, importPathes, partialGameState.toString(), str(playerId)].join('\n')
     """
-        gameState must have method to string that converts ab object to string WITHOUT '\n'
+        gameState must have method toString that converts object to string WITHOUT '\n' and fromString that converts string without '\n' to object.
         turn --- the same
     """
     try:
@@ -82,7 +82,7 @@ def run(gamePath, classesPath, strategyPathes, importPathes, saveLogs = False):
     fullGameState = game.FullGameState()
     whoseTurn = 0
     for i in range(game.TurnLimit):
-        turnList = runStrategy(classes, game, fullGameState, whoseTurn, logs)
+        turnList = runStrategy(classes, game, fullGameState, whoseTurn, strategyPathes[whoseTurn], importPathes, logs)
         if (turnList[0] != StrategyVerdict.Ok):
             result.results = strategyFailResults(game, whoseTurn, turnList[0])
             endJudge(logs, result.results, importPathes)
