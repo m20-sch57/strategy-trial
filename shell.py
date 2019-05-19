@@ -1,6 +1,7 @@
 #print("s")
 
 import sys
+import importlib
 
 strategyPath, importPathesStr, GameStr, PlayerIdStr = input(), input(), input(), input()
 
@@ -11,8 +12,8 @@ for path in importPathes:
     sys.path.append(path)
 #print("p")
 
-classes = __import__("classes")
-strategy = __import__(strategyPath)
+classes = importlib.import_module("classes")
+strategy = importlib.import_module(strategyPath)
 #print("i")
 
 game = classes.GameState()
