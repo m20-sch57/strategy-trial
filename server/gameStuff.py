@@ -1,5 +1,6 @@
 from enum import IntEnum
 from server.commonFunctions import jsonParser
+import json
 
 class TurnState(IntEnum):
     Correct = 0
@@ -47,4 +48,15 @@ def resultFromStr(s: str):
     return Result(dictionary['verdict'], dictionary['score'])
 
 class InvocationResult:
-    pass
+    def __init__(self):
+        self.results = list()
+        self.logs = None
+
+    def toString(self):
+        return json.dumps({"results": json.dumps(self.results), "logs": self.logs.toString()})
+
+    def fromString(self, s):
+        dictt = json.loads(s)
+        self.results = dictt["results"]
+        self.logs = 
+

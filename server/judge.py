@@ -1,10 +1,10 @@
-from server.gameStuff import StrategyVerdict
-from server.gameStuff import TurnState
-from server.gameStuff import Result
-from server.gameStuff import InvocationResult
+from gameStuff import StrategyVerdict
+from gameStuff import TurnState
+from gameStuff import Result
+from gameStuff import InvocationResult
+
 import sys
 import importlib
-
 import subprocess
 
 shellRoute = "shell.py"
@@ -70,7 +70,7 @@ def BuildPath(path: str, moduleName: str) -> str:
     ans = '.'.join(path.split('/') + [moduleName])
     return ans
 
-def run(gamePath, classesPath, strategyPathes, importPathes, saveLogs = False):
+def run(gamePath, classesPath, strategyPathes, importPathes, saveLogs = 0):
     for path in importPathes:
         sys.path.append(path)
     ClassesPath = BuildPath(importPathes[0], classesPath)
@@ -119,12 +119,13 @@ def run(gamePath, classesPath, strategyPathes, importPathes, saveLogs = False):
     endJudge(logs, result.results, importPathes)
     return result
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     gamePath = input()
     classesPath = input()
     st1 = input()
     st2 = input()
-    res = run(gamePath, classesPath, [st1, st2])
-    for x in res:
-        print(x)
+    importPathes = list(input().split())
+    savelogs = int(input())
+    res = run(gamePath, classesPath, [st1, st2], importPathes, logs)
+    print(res.toString())
 
