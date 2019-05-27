@@ -1,7 +1,5 @@
-from problems.prob0.game import *
-
-def Strategy(a: GameState, b: int) -> Turn:
+def Strategy(game, a, b):
     for i in range(3):
         for j in range(3):
             if (a.a[i][j] == '.'):
-                return Turn(i, j);
+                return game.Turn(i, j);

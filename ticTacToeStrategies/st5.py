@@ -1,4 +1,2 @@
-from problems.prob0.game import *
-
-def Strategy(a: GameState, b: int) -> Turn:
+def Strategy(game, a, b):
     print(1 / 0)

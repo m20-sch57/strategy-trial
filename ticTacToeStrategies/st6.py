@@ -1,6 +1,4 @@
-from problems.prob0.game import *
-
-def Strategy(a: GameState, b: int) -> Turn:
+def Strategy(game, a, b):
     x = 56
     for i in range(10):
         x = (x * 228) % 1337

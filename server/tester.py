@@ -82,7 +82,7 @@ def tournament(problemId):
                 invocationResult = judge.run(
                     getGameModule(problem),
                     [getStrategyModule(subs[i]), getStrategyModule(subs[j])],
-                    saveLogs = saveLogs
+                    saveLogs = False
                 )
                 print(invocationResult.results[0].goodStr())
                 print(invocationResult.results[1].goodStr())
