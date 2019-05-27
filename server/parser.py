@@ -2,7 +2,7 @@ from server.structures import Problem, Rules
 from zipfile import ZipFile, BadZipFile
 from enum import IntEnum
 from server.storage import storage
-from server.commonFunctions import readFile
+from server.commonFunctions import readFile, problemFolder
 import os, shutil, glob, json
 import shutil
 
@@ -92,18 +92,18 @@ def parseArchive(archivePath, probId = -1):
 
     try:
         downloads = readFiles(os.path.join(problemPath, 'downloads'),
-            os.path.join('app', 'downloads', str(probId)))
+            os.path.join('app', 'downloads', problemFolder(probId)))
         sources1 = readFiles(os.path.join(problemPath, 'sources'),
-            os.path.join('problems', str(probId)))
+            os.path.join('problems', problemFolder(probId)))
         sources2 = readFiles(os.path.join(problemPath, 'templates'),
-            os.path.join('app', 'templates', 'problems', str(probId)))
+            os.path.join('app', 'templates', 'problems', problemFolder(probId)))
     except SourceSizeException:
         return {'ok' : 0, 'error' : 'Source file is too large'}
     except UnicodeDecodeError:
         return {'ok' : 0, 'error' : "Can't decode files"}
 
     copyFiles(os.path.join(problemPath, 'static'),
-        os.path.join('app', 'static', 'problems', str(probId)))
+        os.path.join('app', 'static', 'problems', problemFolder(probId)))
 
     sources = sources1 + sources2
 

@@ -27,3 +27,6 @@ def unixTime():
 def stringTime(unixTime):
     return datetime.utcfromtimestamp(unixTime).strftime(
         '%d %b %Y %I.%M %p')
+
+def problemFolder(probId):
+    return "prob" + str(probId)

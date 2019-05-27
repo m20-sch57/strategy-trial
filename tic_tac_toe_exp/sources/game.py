@@ -1,4 +1,5 @@
 from server.gameStuff import *
+from server.commonFunctions import problemFolder
 from app import app
 from flask import render_template
 from copy import deepcopy
@@ -55,10 +56,10 @@ class Logs:
 
     def show(self, probId, baseParams):
         with app.app_context():
-            logPath = os.path.join('problems', str(probId), 'logs.html.j2')
+            logPath = os.path.join('problems', problemFolder(probId), 'logs.html.j2')
             data = render_template(logPath, fieldLog = self.fieldLog,
                 res1 = self.results[0].goodStr(), res2 = self.results[1].goodStr(),
-                strId = str(probId), **baseParams
+                problemFolder = problemFolder(probId), **baseParams
             )
         return data
 
