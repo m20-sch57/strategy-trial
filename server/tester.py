@@ -24,8 +24,9 @@ def loadProblemDownloads(problem):
 def getName(submission):
     return "sub" + str(submission.id)
 
-def getModuleName(submission):
-    return getName(submission)
+def getStrategyModule(submission):
+    return '.'.join(['problems', str(submission.probId),
+        'strategies', getName(submission)])
 
 def getFilename(submission):
     return getName(submission) + ".py"
@@ -36,11 +37,8 @@ def loadSubmission(submission, problem):
     print(filename)
     printToFile(submission.code, filename)
 
-def getProblemPath(probId):
-    return os.path.join('problems', str(probId))
-
-def getProblemStrategiesPath(probId):
-    return os.path.join(getProblemPath(probId), 'strategies')
+def getGameModule(problem):
+    return '.'.join(['problems', str(problem.id), 'game'])
 
 def testStrategies(id1, id2, saveLogs = False):
     sub1 = storage.getSubmission(id1)
@@ -57,10 +55,8 @@ def testStrategies(id1, id2, saveLogs = False):
     loadSubmission(sub2, problem)
 
     invocationResult = judge.run(
-        'game',
-        'classes',
-        [getModuleName(sub1), getModuleName(sub2)],
-        [getProblemPath(problemId), getProblemStrategiesPath(problemId)],
+        getGameModule(problem),
+        [getStrategyModule(sub1), getStrategyModule(sub2)],
         saveLogs = saveLogs
     )
     return invocationResult
@@ -85,10 +81,9 @@ def tournament(problemId):
             if (i != j):
                 print("judging ", i, j)
                 invocationResult = judge.run(
-                    'game',
-                    'classes',
-                    [getModuleName(subs[i]), getModuleName(subs[j])],
-                    [getProblemPath(problemId), getProblemStrategiesPath(problemId)]
+                    getGameModule(problem),
+                    [getStrategyModule(subs[i]), getStrategyModule(subs[j])],
+                    saveLogs = saveLogs
                 )
                 print(invocationResult.results[0].goodStr())
                 print(invocationResult.results[1].goodStr())

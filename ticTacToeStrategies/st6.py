@@ -1,4 +1,4 @@
-from classes import *
+from problems.0.game import *
 
 def Strategy(a: GameState, b: int) -> Turn:
     x = 56

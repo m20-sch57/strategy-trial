@@ -1,4 +1,4 @@
-from classes import *
+from problems.0.game import *
 
 def check(a: GameState, i: int, j: int) -> bool:
     return a.a[i][j] == '.'

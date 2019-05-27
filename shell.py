@@ -3,27 +3,22 @@
 import sys
 import importlib
 
-strategyPath, importPathesStr, GameStr, PlayerIdStr = input(), input(), input(), input()
+strategyPath, gameModule, GameStr, PlayerIdStr = input(), input(), input(), input()
 
-importPathes = importPathesStr.split()
-#print("ip")
-
-for path in importPathes:
-    sys.path.append(path)
 #print("p")
 
-classes = importlib.import_module("classes")
+game = importlib.import_module(gameModule)
 strategy = importlib.import_module(strategyPath)
 #print("i")
 
-game = classes.GameState()
-game.fromString(GameStr)
+gameState = game.GameState()
+gameState.fromString(GameStr)
 #print("cg")
 
 playerId = str(PlayerIdStr)
 #print("ci")
 
-turn = strategy.Strategy(game, playerId)
+turn = strategy.Strategy(gameState, playerId)
 #if type(turn) != classes.Turn:
 #    raise TypeError("Invalid Type")
 #print("r")

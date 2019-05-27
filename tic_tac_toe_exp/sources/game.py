@@ -1,16 +1,37 @@
-from classes import *
 from server.gameStuff import *
 from app import app
 from flask import render_template
 from copy import deepcopy
 import os.path
-from module import check
-from module import lineCheck
-from module import FieldSize
 
+FieldSize = 3
 MaxScore = 100
 TimeLimit = 1
 TurnLimit = 100
+
+class GameState:
+    def __init__(self):
+        self.a = [['.', '.', '.'], ['.', '.', '.'], ['.', '.', '.']]
+
+    def toString(self) -> str:
+        a = list(self.a[0] + self.a[1] + self.a[2])
+        return ' '.join(a)
+
+    def fromString(self, s: str) -> None:
+        a = s.split()
+        self.a = [a[0:3], a[3:6], a[6:9]]
+        return None
+
+class Turn:
+    def __init__(self, r=0, c=0):
+        self.r, self.c = r, c
+
+    def toString(self) -> str:
+        return str(self.r) + ' ' + str(self.c)
+
+    def fromString(self, s: str) -> None:
+        self.r, self.c = map(int, s.split())
+        return None
 
 class FullGameState:
     def __init__(self):
@@ -46,9 +67,36 @@ def gameStateRep(full: FullGameState, playerId: int) -> GameState:
     result.a = full.a
     return result
 
+def lineCheck(arr, x0, y0, dx, dy):
+    res = arr[x0][y0]
+    for i in range(FieldSize - 1):
+        if (arr[x0 + dx][y0 + dy] != arr[x0][y0]):
+            return '.'
+        x0 += dx
+        y0 += dy
+    return res
 
+def check(full: FullGameState):
+    winner = '.'
+    for i in range(FieldSize):
+        winner = lineCheck(full.a, i, 0, 0, 1)
+        if (winner != '.'):
+            return winner
 
+    for i in range(FieldSize):
+        winner = lineCheck(full.a, 0, i, 1, 0)
+        if (winner != '.'):
+            return winner
 
+    winner = lineCheck(full.a, 0, 0, 1, 1)
+    if (winner != '.'):
+        return winner
+
+    winner = lineCheck(full.a, 0, FieldSize - 1, 1, -1)
+    if (winner != '.'):
+        return winner
+
+    return '.'
 
 def makeTurn(gameState: FullGameState, playerId: int, turn: Turn, logs = None) -> list:
     charList = ['X', 'O']
