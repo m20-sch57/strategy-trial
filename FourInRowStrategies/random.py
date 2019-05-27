@@ -1,6 +1,5 @@
-from classes import *
 import random
 
-def Strategy(a: GameState, b: int) -> Turn:
-    return Turn(random.randint(0, 6))
+def Strategy(game, a, b):
+    return game.Turn(random.randint(0, 6))
 

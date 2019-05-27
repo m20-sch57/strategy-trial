@@ -1,7 +1,5 @@
-from classes import *
-
-def Strategy(game: GameState, b: int) -> Turn:
+def Strategy(game, a, b):
     for i in range(7):
-        if game.field[i][-1] == '.':
-            return Turn(i)
+        if a.field[i][-1] == '.':
+            return game.Turn(i)
 
