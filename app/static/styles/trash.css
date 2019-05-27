@@ -48,20 +48,6 @@ h1, h2, h3, h4, h5, a, div, p
     color: #ffffff;
     border-collapse: collapse;
     width: 60%;
-
-}
-
-.roundred
-{
-    border: 1px;   
-    border-radius: 10px;
-    font-size: 14px;
-    padding: 6px;
-    background-color: #D7B679;
-    color: #3C1610;
-    border-collapse: collapse;
-    width: 30%;
-    text-decoration: none;
 }
 
 .button_submit
@@ -74,6 +60,12 @@ h1, h2, h3, h4, h5, a, div, p
     color: #3C1610;
     border-collapse: collapse;
     text-decoration: none;
+}
+
+.button_submit:hover
+{
+    background-color: #462D20;
+    color: #ffffff;
 }
 
 .message
@@ -91,7 +83,7 @@ h1, h2, h3, h4, h5, a, div, p
 
 .login
 {
-    color: #00008B; font-style: italic
+    color: #8A7651;
 }
 
 a.button27 {
@@ -136,7 +128,8 @@ a.button27:hover {
     font-family: monospace;
 }
 
-.inputfile {
+.inputfile 
+{
     width: 0.1px;
     height: 0.1px;
     opacity: 0;
@@ -144,3 +137,12 @@ a.button27:hover {
     position: absolute;
     z-index: -1;
 }
+
+.chatpage 
+{
+    border: 1px; 
+    padding: 10px;
+    color: #ffffff;
+    background: linear-gradient(to right, #8181f7, #D7BD28);
+}
+

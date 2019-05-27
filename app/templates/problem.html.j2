@@ -9,8 +9,8 @@
             <div class="headblue"> Files to download:</div>
             <p></p>
             <table class="green_table">
+                <th></th>
                 {% for path in paths %}
-                    <th></th>
                     <tr>
                         <td><a href=/{{"download?path=" + path}} target="_blank">{{ path.split('/')[-1] }}</a></td>
                     </tr>
@@ -53,12 +53,12 @@
             </table>
 
             {% else %}
-                <h3>In order to send strategy you have to <a href="/login" class="roundred">log in</a> or <a href="/sign_up" class="roundred"> sign up</a></h3>
+                <span class="login">In order to send strategy you have to <a href="/login" class="button_submit">log in</a> or <a href="/sign_up" class="button_submit"> sign up</a></span>
             {% endif %}
         </td>
         <td valign="top", align="left">
         <div class="headblue">Test strategies:</div>
-        <h2><a class="roundred" href=/{{ "problemset" + "/" + problem.id|string + "/run" }}>Test strategies</a></h2>
+        <h2><a class="button_submit" href=/{{ "problemset" + "/" + problem.id|string + "/run" }}>Test strategies</a></h2>
           
         <div class="headblue">Tournaments:</div><br>
         <table class="green_table">
@@ -78,7 +78,7 @@
         {% endif %}
 
         {% if info.admin == 1 %}
-            <h2><a class="roundred" href=/{{ "add_tournament?probId" + "=" + problem.id|string }}>Run tournament...</a></h2>
+            <h2><a class="button_submit" href=/{{ "add_tournament?probId" + "=" + problem.id|string }}>Run tournament...</a></h2>
         {% endif %}
         </td>
     </tr>
