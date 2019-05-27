@@ -1,4 +1,4 @@
-from problems.0.game import *
+from problems.prob0.game import *
 
 def Strategy(a: GameState, b: int) -> Turn:
     for i in range(3):

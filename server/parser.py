@@ -2,7 +2,7 @@ from server.structures import Problem, Rules
 from zipfile import ZipFile, BadZipFile
 from enum import IntEnum
 from server.storage import storage
-from server.commonFunctions import readFile, problemFolder
+from server.commonFunctions import readFile, problemFolder, splitPath, createFile
 import os, shutil, glob, json
 import shutil
 
@@ -51,7 +51,9 @@ def readFiles(readPath, outPath):
 
 def copyFiles(readPath, outPath):
     for filename in getFilePathes(readPath):
-        shutil.copy(filename, os.path.join(outPath, *os.path.split(filename)[2:]))
+        aimPath = os.path.join(outPath, *splitPath(filename)[2:])
+        createFile(aimPath)
+        shutil.copy(filename, aimPath)
 
 def parseArchive(archivePath, probId = -1):
     if (not os.path.isfile(archivePath)):

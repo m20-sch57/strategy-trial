@@ -13,7 +13,7 @@ def runStrategy(game, gameModule, gameState, playerId: int, strategyModule):
     partialGameState = game.gameStateRep(gameState, playerId)
     result = [StrategyVerdict.Ok]
     process = subprocess.Popen(["python3", shellRoute], bufsize=-1, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-    inp = '\n'.join([strategyModule, partialGameState.toString(), str(playerId)])
+    inp = '\n'.join([strategyModule, gameModule, partialGameState.toString(), str(playerId)])
     """
         gameState must have method toString that converts object to string WITHOUT '\n' and fromString that converts string without '\n' to object.
         turn --- the same
@@ -26,6 +26,8 @@ def runStrategy(game, gameModule, gameState, playerId: int, strategyModule):
         result[0] = StrategyVerdict.TimeLimitExceeded
         return result
     if process.returncode != 0:
+        print(out)
+        print(err)
         return [StrategyVerdict.Failed]
     turn = game.Turn()
     turn.fromString(out)
@@ -50,6 +52,8 @@ def endJudge(logs, results):
     updateLogs(logs, results)
 
 def run(gameModule, strategyModules, saveLogs = False):
+    print(gameModule)
+    print(strategyModules)
     game = importlib.import_module(gameModule)
     result = InvocationResult()
     logs = None

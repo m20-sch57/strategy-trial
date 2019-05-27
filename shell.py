@@ -1,7 +1,8 @@
 #print("s")
-
 import sys
 import importlib
+
+sys.stderr.write("spam\n")
 
 strategyPath, gameModule, GameStr, PlayerIdStr = input(), input(), input(), input()
 
@@ -18,7 +19,7 @@ gameState.fromString(GameStr)
 playerId = str(PlayerIdStr)
 #print("ci")
 
-turn = strategy.Strategy(gameState, playerId)
+turn = strategy.Strategy(game, gameState, int(playerId))
 #if type(turn) != classes.Turn:
 #    raise TypeError("Invalid Type")
 #print("r")
