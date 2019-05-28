@@ -26,21 +26,24 @@ def addText(text, i, symbol):
         if symbol == '**':
             add = '<b>' + text[i+2:i+j+1] + '</b>'
             j += 1
+        if symbol == '``':
+            add = '<code><pre>' + text[i+2:i+j+1] + '</pre></code>'
     else:
         add = text[i]
     return [add, i + j + 1]
 
 def parser(text):
     len_text, i = len(text), 0
+    text = easyParser(text)
     newtext = ''
     while i < len_text:
         if text[i] == '<':
             newtext += '&lt;'
         elif text[i] == '>':
             newtext += '&gt;'
-        elif text[i] == '[' or (i + 1 < len_text and (text[i] + text[i+1] in ['**', '__'])):
+        elif text[i] == '[' or (i + 1 < len_text and (text[i] + text[i+1] in ['**', '__', '``'])):
             symbol = text[i]
-            if text[i] in ['*', '_']:
+            if text[i] in ['*', '_', '`']:
                 symbol += text[i]
             list_n = addText(text, i, symbol)
             newtext += list_n[0]

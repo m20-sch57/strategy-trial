@@ -20,7 +20,12 @@
             {% for msg in messages %}
                 <span class="username">{{ msg.username }}</span>
                 <snan class="date">{{ msg.strTime }}</snan><br>
-                <code><pre class="problem">{{msg.content}}</pre></code>
+                <code><div class="scroll-clear problem">
+                {% autoescape false %}
+                    {{ msg.content.split('\n') | join(' <br> ') }}
+                {% endautoescape %}
+                </div></code>
+                <br>
             {% endfor %}
             {% if info.logged_in %}
             <hr><details>
