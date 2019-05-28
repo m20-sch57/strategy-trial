@@ -2,7 +2,7 @@ from server.structures import ProblemState, StrategyState, UserType
 from server.structures import User, Rules, Problem, Submission, Tournament
 from server.storage import storage
 from server.gameStuff import StrategyVerdict, Result, InvocationResult
-from server.commonFunctions import printToFile, unixTime
+from server.commonFunctions import printToFile, unixTime, problemFolder
 import os
 import server.judge as judge
 import sys
@@ -15,7 +15,6 @@ def loadSources(sources):
         printToFile(source[1], path)
 
 def loadProblem(problem):
-    problempath = os.path.join('problems', str(problem.id))
     loadSources(problem.rules.sources)
 
 def loadProblemDownloads(problem):
@@ -24,23 +23,21 @@ def loadProblemDownloads(problem):
 def getName(submission):
     return "sub" + str(submission.id)
 
-def getModuleName(submission):
-    return getName(submission)
+def getStrategyModule(submission):
+    return '.'.join(['problems', problemFolder(submission.probId),
+        'strategies', getName(submission)])
 
 def getFilename(submission):
     return getName(submission) + ".py"
 
 def loadSubmission(submission, problem):
-    filename = os.path.join('problems', str(problem.id),
+    filename = os.path.join('problems', problemFolder(problem.id),
         'strategies', getFilename(submission))
     print(filename)
     printToFile(submission.code, filename)
 
-def getProblemPath(probId):
-    return os.path.join('problems', str(probId))
-
-def getProblemStrategiesPath(probId):
-    return os.path.join(getProblemPath(probId), 'strategies')
+def getGameModule(problem):
+    return '.'.join(['problems', problemFolder(problem.id), 'game'])
 
 def testStrategies(id1, id2, saveLogs = False):
     sub1 = storage.getSubmission(id1)
@@ -57,10 +54,8 @@ def testStrategies(id1, id2, saveLogs = False):
     loadSubmission(sub2, problem)
 
     invocationResult = judge.run(
-        'game',
-        'classes',
-        [getModuleName(sub1), getModuleName(sub2)],
-        [getProblemPath(problemId), getProblemStrategiesPath(problemId)],
+        getGameModule(problem),
+        [getStrategyModule(sub1), getStrategyModule(sub2)],
         saveLogs = saveLogs
     )
     return invocationResult
@@ -85,10 +80,9 @@ def tournament(problemId):
             if (i != j):
                 print("judging ", i, j)
                 invocationResult = judge.run(
-                    'game',
-                    'classes',
-                    [getModuleName(subs[i]), getModuleName(subs[j])],
-                    [getProblemPath(problemId), getProblemStrategiesPath(problemId)]
+                    getGameModule(problem),
+                    [getStrategyModule(subs[i]), getStrategyModule(subs[j])],
+                    saveLogs = False
                 )
                 print(invocationResult.results[0].goodStr())
                 print(invocationResult.results[1].goodStr())

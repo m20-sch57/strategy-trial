@@ -1,4 +1,2 @@
-from classes import *
-
-def Strategy(a: GameState, b: int) -> Turn:
-    return Turn(1)
+def Strategy(game, a, b):
+    return game.Turn(1)

@@ -1,4 +1,3 @@
-from classes import *
 import random
 
 FieldSize = 3
@@ -12,7 +11,7 @@ def lineCheck(arr, x0, y0, dx, dy):
         y0 += dy
     return res
 
-def check(full: GameState):
+def check(full):
     winner = '.'
     for i in range(FieldSize):
         winner = lineCheck(full.a, i, 0, 0, 1)
@@ -34,25 +33,25 @@ def check(full: GameState):
 
     return '.'
 
-def Strategy(a: GameState, b: int) -> Turn:
+def Strategy(game, a, b):
     charList = ['X', 'O']
     for x in range(50):
         i, j = random.randint(0, 2), random.randint(0, 2)
         if (a.a[i][j] == '.'):
             a.a[i][j] = charList[b]
             if (check(a) == charList[b]):
-                return Turn(i, j)
+                return game.Turn(i, j)
             a.a[i][j] = '.'
     for x in range(50):
         i, j = random.randint(0, 2), random.randint(0, 2)
         if (a.a[i][j] == '.'):
             a.a[i][j] = charList[1 - b]
             if (check(a) == charList[1 - b]):
-                return Turn(i, j)
+                return game.Turn(i, j)
             a.a[i][j] = '.'
     if (a.a[1][1] == '.'):
-        return Turn(1, 1)
+        return game.Turn(1, 1)
     while True:
         i, j = random.randint(0, 2), random.randint(0, 2)
         if (a.a[i][j] == '.'):
-            return Turn(i, j);
+            return game.Turn(i, j);

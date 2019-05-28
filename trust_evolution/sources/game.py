@@ -1,9 +1,29 @@
-from classes import *
 from server.gameStuff import *
 from app import app
 from flask import render_template
 from copy import deepcopy
+from server.commonFunctions import problemFolder
 import os.path
+import json
+
+class GameState:
+    turns = [[], []]
+
+    def toString(self):
+        return str(json.dumps(self.turns))
+
+    def fromString(self, s):
+        self.turns = json.loads(s)
+
+class Turn:
+    def __init__(self, trust: int=0):
+        self.trust = trust
+
+    def toString(self):
+        return str(self.trust)
+
+    def fromString(self, s):
+        self.trust = int(s)
 
 InitCoinsCnt = 20
 
@@ -19,11 +39,11 @@ class Logs:
 
     def show(self, probId, baseParams):
         with app.app_context():
-            logPath = os.path.join('problems', str(probId), 'logs.html.j2')
+            logPath = os.path.join('problems', problemFolder(probId), 'logs.html.j2')
             data = render_template(logPath, 
                 turns = self.finalState.turns, coins = [x - InitCoinsCnt for x in self.finalState.coins],
                 res1 = self.results[0].goodStr(), res2 = self.results[1].goodStr(),
-                strId = str(probId), **baseParams
+                strId = problemFolder(probId), **baseParams
             )
         return data
 

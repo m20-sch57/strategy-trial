@@ -1,2 +1,2 @@
-def Strategy(a, b):
+def Strategy(game, a, b):
     return 5

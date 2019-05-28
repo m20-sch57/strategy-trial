@@ -1,1 +1,1 @@
-from classes import *
+from problems.prob0.game import *

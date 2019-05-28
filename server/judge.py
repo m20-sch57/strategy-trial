@@ -9,14 +9,11 @@ import subprocess
 
 shellRoute = "shell.py"
 
-def runStrategy(classes, game, gameState, playerId: int, strategyPath, importPathes):
-    #print(game.gameStateRep)
+def runStrategy(game, gameModule, gameState, playerId: int, strategyModule):
     partialGameState = game.gameStateRep(gameState, playerId)
-    #print(partialGameState.__dir__(), partialGameState.toString())
     result = [StrategyVerdict.Ok]
     process = subprocess.Popen(["python3", shellRoute], bufsize=-1, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-    inp = '\n'.join([strategyPath, ' '.join(importPathes), partialGameState.toString(), str(playerId)])
-    #print(inp)
+    inp = '\n'.join([strategyModule, gameModule, partialGameState.toString(), str(playerId)])
     """
         gameState must have method toString that converts object to string WITHOUT '\n' and fromString that converts string without '\n' to object.
         turn --- the same
@@ -28,13 +25,12 @@ def runStrategy(classes, game, gameState, playerId: int, strategyPath, importPat
         process.kill()
         result[0] = StrategyVerdict.TimeLimitExceeded
         return result
-    #print(err)
     if process.returncode != 0:
+        print(out)
+        print(err)
         return [StrategyVerdict.Failed]
-    turn = classes.Turn()
+    turn = game.Turn()
     turn.fromString(out)
-#    if err != "":
-#        result[0] = StrategyVerdict.PresentationError
     result.append(turn)
     return result
 
@@ -52,79 +48,38 @@ def updateLogs(logs, results):
     if (logs is not None):
         logs.processResults(results)
 
-def removePathes(importPathes):
-    for path in importPathes:
-        sys.path.remove(path)
-
-def endJudge(logs, results, importPathes):
-    removePathes(importPathes)
+def endJudge(logs, results):
     updateLogs(logs, results)
-'''
-def badStrategy(game, i, verdict, result, logs, importPathes):
-    removePathes(importPathes)
-    result.results = strategyFailResults(game, i, verdict)
-    updateLogs(logs, result.results)
-'''
 
-def BuildPath(path: str, moduleName: str) -> str:
-    ans = '.'.join(path.split('/') + [moduleName])
-    return ans
-
-def run(gamePath, classesPath, strategyPathes, importPathes, saveLogs = False):
-    for path in importPathes:
-        sys.path.append(path)
-    ClassesPath = BuildPath(importPathes[0], classesPath)
-    GamePath = BuildPath(importPathes[0], gamePath)
-    classes = importlib.import_module(ClassesPath)
-    game = importlib.import_module(GamePath)
-    #print(classes, game, sys.path)
+def run(gameModule, strategyModules, saveLogs = False):
+    print(gameModule)
+    print(strategyModules)
+    game = importlib.import_module(gameModule)
     result = InvocationResult()
     logs = None
     if (saveLogs):
         logs = game.Logs()
         result.logs = logs
-    '''
-    strategies = []
-    for i in range(len(strategyPathes)):
-        try:
-            strategies.append(__import__(strategyPathes[i]))
-        except Exception:
-            badStrategy(game, i, StrategyVerdict.ImportFail, result, logs, importPathes)
-            return result
-        if ("Strategy" not in dir(strategies[i])):
-            badStrategy(game, i, StrategyVerdict.PresentationError, result, logs, importPathes)
-        return result
-    '''
     fullGameState = game.FullGameState()
-    #print(fullGameState, fullGameState.__dict__)
     whoseTurn = 0
     for i in range(game.TurnLimit):
-        turnList = runStrategy(classes, game, fullGameState, whoseTurn, strategyPathes[whoseTurn], importPathes)
+        turnList = runStrategy(game, gameModule, fullGameState, whoseTurn, strategyModules[whoseTurn])
         if (turnList[0] != StrategyVerdict.Ok):
             result.results = strategyFailResults(game, whoseTurn, turnList[0])
-            endJudge(logs, result.results, importPathes)
+            endJudge(logs, result.results)
             return result
         turnResult = game.makeTurn(fullGameState, whoseTurn, turnList[1], logs)
         if (turnResult[0] == TurnState.Incorrect):
             result.results = strategyFailResults(game, whoseTurn, StrategyVerdict.IncorrectTurn)
-            endJudge(logs, result.results, importPathes)
+            endJudge(logs, result.results)
             return result
         if (turnResult[0] == TurnState.Last):
             result.results = turnResult[1]
-            endJudge(logs, result.results, importPathes)
+            endJudge(logs, result.results)
             return result
         fullGameState = turnResult[1]
         whoseTurn = turnResult[2]
     result.results = [Result() for i in range(PlayesCount)]
-    endJudge(logs, result.results, importPathes)
+    endJudge(logs, result.results)
     return result
-
-if __name__ == '__main__':
-    gamePath = input()
-    classesPath = input()
-    st1 = input()
-    st2 = input()
-    res = run(gamePath, classesPath, [st1, st2])
-    for x in res:
-        print(x)
 
