@@ -1,56 +1,70 @@
 #[website.net] - Website page
 #__text__ - underlined text
 #**text** - bold text
+#`code` - code
 
-stringlong = 70
-def anti(symbol):
-    if symbol == '[':
-        return ']'
+Link_text = ['">']
+def something_else_you_need(el):
+    global Link_text
+    if el_d['[']['bool'] and el != ']':
+        Link_text[0] += el
+    elif el != ']':
+        Link_text[0] = '">'
     else:
-        return symbol
+        Link_text[0] += '</a>'
 
-def addText(text, i, symbol):
-    add = ''
-    j = text[i+1:].find(anti(symbol))
-    if j != -1:
-        if symbol == '[':
-            if text[i+1:i+9] == 'https://':
-                add += '<a href="https://' + text[i+9:i+j+1] + '">' + text[i+1:i+j+1] + '</a>'
-            elif text[i+1:i+8] == 'http://':
-                add += '<a href="http://' + text[i+8:i+j+1] + '">' + text[i+1:i+j+1] + '</a>'
-            else:
-                add = '<a href="https://' + text[i+1:i+j+1] + '">' + text[i+1:i+j+1] + '</a>'
-        if symbol == '__':
-            add = '<u>' + text[i+2:i+j+1] + '</u>'
-            j += 1
-        if symbol == '**':
-            add = '<b>' + text[i+2:i+j+1] + '</b>'
-            j += 1
-        if symbol == '``':
-            add = '<code><pre>' + text[i+2:i+j+1] + '</pre></code>'
-    else:
-        add = text[i]
-    return [add, i + j + 1]
+el_d = {
+'_': {'ocb': 'b', 'mean': ['<u>', '</u>'], 'anti': '_', 'bool': False, 'f': ['_', 2]}, 
+'*': {'ocb': 'b', 'mean': ['<b>', '</b>'], 'anti': '*', 'bool': False, 'f': ['*', 2]}, 
+'`': { 'ocb': 'b', 'mean': ['<pre><code>', '</code></pre>'], 'anti': '`', 'bool': False, 'f': ['`', 1]}, 
+'[': { 'ocb': 'o', 'mean': ['<a href="'], 'anti': ']', 'bool': False, 'f': ['[', 1]},
+']': { 'ocb': 'c', 'mean': Link_text , 'anti': '[', 'f': [']', 1]}}
+
+def use_parser(el):
+    if (el_d['`']['bool'] and el != '`') or (el_d['[']['bool'] and el != ']'):
+        return False
+    return True
 
 def parser(text):
-    len_text, i = len(text), 0
     text = easyParser(text)
     newtext = ''
-    while i < len_text:
-        if text[i] == '<':
-            newtext += '&lt;'
-        elif text[i] == '>':
-            newtext += '&gt;'
-        elif text[i] == '[' or (i + 1 < len_text and (text[i] + text[i+1] in ['**', '__', '``'])):
-            symbol = text[i]
-            if text[i] in ['*', '_', '`']:
-                symbol += text[i]
-            list_n = addText(text, i, symbol)
-            newtext += list_n[0]
-            i = list_n[1]
+    i = 0
+    while i < len(text):
+        something_else_you_need(text[i])
+        if text[i] in el_d and use_parser(text[i]):
+            el = text[i]
+            q, plus = True, el_d[el]['f'][1]
+            for j in range(plus):
+                if not(i + j < len(text) and text[i + j] == el_d[el]['f'][0]):
+                    q = False
+            if q:
+                if el_d[el]['ocb'] == 'b':
+                    if el_d[el]['bool']:
+                        newtext += el_d[el]['mean'][1]
+                    else:
+                        newtext += el_d[el]['mean'][0]
+                    el_d[el]['bool'] = not el_d[el]['bool']
+                elif el_d[el]['ocb'] == 'o':
+                    if not el_d[el]['bool']:
+                        newtext += el_d[el]['mean'][0]
+                        el_d[el]['bool'] = True
+                elif el_d[el]['ocb'] == 'c':
+                    if el_d[el_d[el]['anti']]['bool']:
+                        newtext += el_d[el]['mean'][0]
+                        el_d[el_d[el]['anti']]['bool'] = False
+                i += plus
+            else:
+                newtext += text[i]
+                i += 1
         else:
             newtext += text[i]
-        i += 1
+            i += 1
+        
+    for el in el_d:
+        if el_d[el]['ocb'] in ['o', 'b']:
+            if el_d[el]['bool']:
+                newtext += el_d[el_d[el]['anti']]['mean'][-1]
+                el_d[el]['bool'] = False
     return newtext
 
 def easyParser(text):
