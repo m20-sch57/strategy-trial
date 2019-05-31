@@ -4,13 +4,15 @@
 #`code` - code
 
 Link_text = ['">']
-def something_else_you_need(el):
+def something_else_you_need(el, i, l):
     global Link_text
     if el_d['[']['bool'] and el != ']':
         Link_text[0] += el
     elif el != ']':
         Link_text[0] = '">'
     else:
+        Link_text[0] += '</a>'
+    if i >= l:
         Link_text[0] += '</a>'
 
 #ocb - open (o) symbol, close (c) or both (b)
@@ -23,7 +25,7 @@ el_d = {
 '*': {'ocb': 'b', 'mean': ['<b>', '</b>'], 'anti': '*', 'bool': False, 'num': 2}, 
 '`': { 'ocb': 'b', 'mean': ['<pre><code>', '</code></pre>'], 'anti': '`', 'bool': False, 'num': 1}, 
 '[': { 'ocb': 'o', 'mean': ['<a href="'], 'anti': ']', 'bool': False, 'num': 1},
-']': { 'ocb': 'c', 'mean': Link_text , 'anti': '[', 'num': 1}}
+']': { 'ocb': 'c', 'mean': Link_text , 'anti': '[', 'num': 1, 'bool': False}}
 
 def use_parser(el):
     if (el_d['`']['bool'] and el != '`') or (el_d['[']['bool'] and el != ']'):
@@ -35,7 +37,7 @@ def parser(text):
     newtext = ''
     i = 0
     while i < len(text):
-        something_else_you_need(text[i])
+        something_else_you_need(text[i], i, len(text))
         if text[i] in el_d and use_parser(text[i]):
             el = text[i]
             q, plus = True, el_d[el]['num']
@@ -68,6 +70,7 @@ def parser(text):
     for el in el_d:
         if el_d[el]['ocb'] in ['o', 'b']:
             if el_d[el]['bool']:
+                something_else_you_need('', i, len(text))
                 newtext += el_d[el_d[el]['anti']]['mean'][-1]
                 el_d[el]['bool'] = False
     return newtext
