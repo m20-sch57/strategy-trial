@@ -9,7 +9,10 @@
 }
 
 .problem {
+    padding: 5px;
+    font-family: monospace;
     overflow: auto;
+    word-wrap: break-word;
 }
 
 .username {
@@ -32,11 +35,11 @@ textarea {
   font-size: 14;
 }
 
-::-webkit-scrollbar {
+/*::-webkit-scrollbar {
 
 width: 0px;
 
-}
+}*/
 
 .someinf {
   font-size: 12;
