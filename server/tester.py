@@ -9,13 +9,15 @@ import sys
 
 #TODO: same name of modules
 
-def loadSources(sources):
+def loadSources(sources, LoadToTest=False):
     for source in sources:
         path = source[0]
         printToFile(source[1], path)
+        if LoadToTest and "app" != path[:3]: #TODO better
+            printToFile(source[1], os.path.join("/home", "test", path)) #TODO the same
 
 def loadProblem(problem):
-    loadSources(problem.rules.sources)
+    loadSources(problem.rules.sources, True)
 
 def loadProblemDownloads(problem):
     loadSources(problem.rules.downloads)
@@ -31,10 +33,11 @@ def getFilename(submission):
     return getName(submission) + ".py"
 
 def loadSubmission(submission, problem):
-    filename = os.path.join('problems', problemFolder(problem.id),
-        'strategies', getFilename(submission))
-    print(filename)
-    printToFile(submission.code, filename)
+    for prefix in [["."], ["/home", "test"]]: #TODO "test" -> username, '/' -> os.sep
+        filename = os.path.join(*prefix, 'problems', problemFolder(problem.id),
+            'strategies', getFilename(submission))
+        print(filename)
+        printToFile(submission.code, filename)
 
 def getGameModule(problem):
     return '.'.join(['problems', problemFolder(problem.id), 'game'])

@@ -8,11 +8,12 @@ import importlib
 import subprocess
 
 shellRoute = "shell.py"
+runRoute = "server/scripts/run.sh"
 
 def runStrategy(game, gameModule, gameState, playerId: int, strategyModule):
     partialGameState = game.gameStateRep(gameState, playerId)
     result = [StrategyVerdict.Ok]
-    process = subprocess.Popen(["python3", shellRoute], bufsize=-1, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    process = subprocess.Popen(["bash", runRoute], bufsize=-1, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
     inp = '\n'.join([strategyModule, gameModule, partialGameState.toString(), str(playerId)])
     """
         gameState must have method toString that converts object to string WITHOUT '\n' and fromString that converts string without '\n' to object.
