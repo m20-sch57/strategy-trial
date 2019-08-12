@@ -3,12 +3,14 @@ from server.gameStuff import TurnState
 from server.gameStuff import Result
 from server.gameStuff import InvocationResult
 import sys
+import os
 import importlib
 
 import subprocess
 
 shellRoute = "shell.py"
 runRoute = "server/scripts/run.sh"
+initRoute = "server/scripts/init.sh"
 
 def runStrategy(game, gameModule, gameState, playerId: int, strategyModule):
     partialGameState = game.gameStateRep(gameState, playerId)
@@ -20,7 +22,7 @@ def runStrategy(game, gameModule, gameState, playerId: int, strategyModule):
         turn --- the same
     """
     try:
-        out, err = process.communicate(input=inp, timeout=game.TimeLimit)
+        out, err = process.communicate(input=inp, timeout=game.TimeLimit+1000)
     except subprocess.TimeoutExpired:
         out, err = process.communicate()
         process.kill()
@@ -52,10 +54,16 @@ def updateLogs(logs, results):
 def endJudge(logs, results):
     updateLogs(logs, results)
 
+def getProbFolder(ModulePath: str) -> str:
+    sPath = ModulePath.split('.')
+    return sPath[1] #TODO better than this
+
 def run(gameModule, strategyModules, saveLogs = False):
     print(gameModule)
     print(strategyModules)
     game = importlib.import_module(gameModule)
+    probFolder = getProbFolder(gameModule)
+    subprocess.run(["bash", initRoute, probFolder])
     result = InvocationResult()
     logs = None
     if (saveLogs):

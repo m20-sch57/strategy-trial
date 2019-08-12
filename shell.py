@@ -5,6 +5,7 @@ import importlib
 sys.stderr.write("spam\n")
 
 strategyPath, gameModule, GameStr, PlayerIdStr = input(), input(), input(), input()
+sys.stderr.write('\n'.join((sys.path))+'\n')
 
 #print("p")
 
@@ -27,3 +28,4 @@ turn = strategy.Strategy(game, gameState, int(playerId))
 print(turn.toString())
 #print("e")
 
+sys.stderr.write("finished\n")
