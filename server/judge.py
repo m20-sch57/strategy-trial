@@ -15,7 +15,9 @@ initRoute = "server/scripts/init.sh"
 def runStrategy(game, gameModule, gameState, playerId: int, strategyModule):
     partialGameState = game.gameStateRep(gameState, playerId)
     result = [StrategyVerdict.Ok]
-    process = subprocess.Popen(["bash", runRoute], bufsize=-1, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    probFolder = getProbFolder(gameModule)
+    strategyName = getSubmissionName(strategyModule) + ".py"
+    process = subprocess.Popen(["bash", runRoute, probFolder, strategyName, str(game.TimeLimit)], bufsize=-1, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
     inp = '\n'.join([strategyModule, gameModule, partialGameState.toString(), str(playerId)])
     """
         gameState must have method toString that converts object to string WITHOUT '\n' and fromString that converts string without '\n' to object.
@@ -33,6 +35,7 @@ def runStrategy(game, gameModule, gameState, playerId: int, strategyModule):
         print(err)
         return [StrategyVerdict.Failed]
     turn = game.Turn()
+    print(out)
     turn.fromString(out)
     result.append(turn)
     return result
@@ -54,11 +57,15 @@ def updateLogs(logs, results):
 def endJudge(logs, results):
     updateLogs(logs, results)
 
+def getSubmissionName(strategyModule: str) -> str:
+    sPath = strategyModule.split('.')
+    return sPath[-1] #TODO better than this
+
 def getProbFolder(ModulePath: str) -> str:
     sPath = ModulePath.split('.')
     return sPath[1] #TODO better than this
 
-def run(gameModule, strategyModules, saveLogs = False):
+def run(gameModule, classesModule, strategyModules, saveLogs = False):
     print(gameModule)
     print(strategyModules)
     game = importlib.import_module(gameModule)
@@ -72,7 +79,7 @@ def run(gameModule, strategyModules, saveLogs = False):
     fullGameState = game.FullGameState()
     whoseTurn = 0
     for i in range(game.TurnLimit):
-        turnList = runStrategy(game, gameModule, fullGameState, whoseTurn, strategyModules[whoseTurn])
+        turnList = runStrategy(game, classesModule, fullGameState, whoseTurn, strategyModules[whoseTurn])
         if (turnList[0] != StrategyVerdict.Ok):
             result.results = strategyFailResults(game, whoseTurn, turnList[0])
             endJudge(logs, result.results)
