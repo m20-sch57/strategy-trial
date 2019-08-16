@@ -5,7 +5,6 @@ import importlib
 sys.stderr.write("spam\n")
 
 strategyPath, gameModule, GameStr, PlayerIdStr = input(), input(), input(), input()
-sys.stderr.write('\n'.join((sys.path))+'\n')
 
 #print("p")
 
@@ -25,7 +24,11 @@ turn = strategy.Strategy(game, gameState, int(playerId))
 #    raise TypeError("Invalid Type")
 #print("r")
 
-print(turn.toString())
+try:
+    ans = turn.toString()
+except:
+    sys.exit(57)
+print(ans)
 #print("e")
 
 sys.stderr.write("finished\n")

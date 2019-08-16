@@ -24,19 +24,25 @@ def runStrategy(game, gameModule, gameState, playerId: int, strategyModule):
         turn --- the same
     """
     try:
-        out, err = process.communicate(input=inp, timeout=game.TimeLimit+1000)
+        out, err = process.communicate(input=inp, timeout=game.TimeLimit+1000) #TODO better
     except subprocess.TimeoutExpired:
-        out, err = process.communicate()
         process.kill()
-        result[0] = StrategyVerdict.TimeLimitExceeded
+        out, err = process.communicate()
+        result[0] = StrategyVerdict.TimeLimitExceeded # Do not work correctly
         return result
     if process.returncode != 0:
+        print("Ret code:", process.returncode)
         print(out)
         print(err)
         return [StrategyVerdict.Failed]
     turn = game.Turn()
-    print(out)
-    turn.fromString(out)
+    print("Out:", out)
+    print("Err:", err)
+    try:
+        turn.fromString(out)
+    except:
+        result[0] = StrategyVerdict.PresentationError
+        return result
     result.append(turn)
     return result
 

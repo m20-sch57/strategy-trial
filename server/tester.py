@@ -90,6 +90,7 @@ def tournament(problemId):
                 print("judging ", i, j)
                 invocationResult = judge.run(
                     getGameModule(problem),
+                    getClassesModule(problem),
                     [getStrategyModule(subs[i]), getStrategyModule(subs[j])],
                     saveLogs = False
                 )
