@@ -13,6 +13,8 @@ runRoute = "server/scripts/run.sh"
 initRoute = "server/scripts/init.sh"
 
 def runStrategy(game, gameModule, gameState, playerId: int, strategyModule):
+    print("------------------------")
+    print("turn of", playerId)
     partialGameState = game.gameStateRep(gameState, playerId)
     result = [StrategyVerdict.Ok]
     probFolder = getProbFolder(gameModule)
@@ -30,6 +32,9 @@ def runStrategy(game, gameModule, gameState, playerId: int, strategyModule):
         out, err = process.communicate()
         result[0] = StrategyVerdict.TimeLimitExceeded # Do not work correctly
         return result
+    if 128 - process.returncode < 0:
+        print("Ret code:", process.returncode)
+        return [StrategyVerdict.TimeLimitExceeded]
     if process.returncode != 0:
         print("Ret code:", process.returncode)
         print(out)
