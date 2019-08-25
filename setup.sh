@@ -32,9 +32,9 @@ if [ $ret -ne 0 ]; then
     useradd test || exit 1
     echo setup: Created user test.
 fi
-chown $1 /home/test/*
-chgrp $GROUP /home/test/*
-passwd -d test
-passwd -n 256000 test
+chown $1 /home/test/* || exit 1
+chgrp $GROUP /home/test/* || exit 1
+passwd -d test || exit 1
+passwd -n 256000 test || exit 1
 echo setup: Success
 exit 0
