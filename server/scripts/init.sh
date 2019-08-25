@@ -1,3 +1,5 @@
+#!/bin/bash
+
 cp shell.py /home/test/shell.py
 chmod o+rx /home/test/problems/
 chmod o+rx '/home/test/problems/'$1'/'
