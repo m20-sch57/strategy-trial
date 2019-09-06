@@ -133,3 +133,6 @@ FourInRow.zip
 
 # log files
 strategy-trial.log
+
+# file with id of process
+id
