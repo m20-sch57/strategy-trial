@@ -39,6 +39,9 @@ def loadSubmission(submission, problem):
 def getGameModule(problem):
     return '.'.join(['problems', problemFolder(problem.id), 'game'])
 
+def getClassesModule(problem):
+    return '.'.join(["problems", problemFolder(problem.id), "classes"])
+
 def testStrategies(id1, id2, saveLogs = False):
     sub1 = storage.getSubmission(id1)
     sub2 = storage.getSubmission(id2)
@@ -55,6 +58,7 @@ def testStrategies(id1, id2, saveLogs = False):
 
     invocationResult = judge.run(
         getGameModule(problem),
+        getClassesModule(problem),
         [getStrategyModule(sub1), getStrategyModule(sub2)],
         saveLogs = saveLogs
     )
@@ -81,6 +85,7 @@ def tournament(problemId):
                 print("judging ", i, j)
                 invocationResult = judge.run(
                     getGameModule(problem),
+                    getClassesModule(problem),
                     [getStrategyModule(subs[i]), getStrategyModule(subs[j])],
                     saveLogs = False
                 )
