@@ -25,8 +25,8 @@ Then you need to set the permitions:
     `/home/dba/*` except `shell.py`: group dba, `shell.py`: group test.
     This can be made by chgrp comand.
     Also you need to disable writing and reading to group and others (except `shell.py`). For example:
-    ```
+```
         chmod o-rwx /home/dba -R
         chmod g-rw /home/dba -R
         chmod g+r /home/dba/shell.py
-    ```
+```
