@@ -22,9 +22,8 @@ You can unpack tar archieve using tar command. Example:
 ```
 Then you need to set the permitions:
     Owner: dba
-    `/home/dba/*` except `shell.py` and `problems/`: group dba, `shell.py` and `problems/`: group test.
+    `/home/dba/*` except `shell.py`: group dba, `shell.py`: group test.
     This can be made by chgrp comand.
-
     Also you need to disable writing and reading to group and others (except `shell.py`). For example:
     ```
         chmod o-rwx /home/dba -R

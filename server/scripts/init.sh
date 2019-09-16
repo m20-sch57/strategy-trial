@@ -1,5 +1,6 @@
 #!/bin/bash
 
+chgrp test problems -R
 chmod o-rwx "/home/dba/problems" -R
 chmod g-rw "/home/dba/problems" -R
 chmod g+x "/home/dba/problems" -R
