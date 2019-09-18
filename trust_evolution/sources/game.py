@@ -65,7 +65,7 @@ TurnLimit = 100
 GameEnd = 5
 
 def makeTurn(gameState: FullGameState, playerId: int, turn: Turn, logs = None) -> list:
-    if (turn.trust < 0 or turn.trust > 1):
+    if (type(turn.trust) == int or turn.trust < 0 or turn.trust > 1):
         return [TurnState.Incorrect]
     gameState.turns[playerId].append(turn.trust)
     if (turn.trust == 1):
