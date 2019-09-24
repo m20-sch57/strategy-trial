@@ -27,9 +27,14 @@ class Turn:
 
 InitCoinsCnt = 20
 
+class FullGameState:
+    def __init__(self):
+        self.turns = [[], []]
+        self.coins = [InitCoinsCnt, InitCoinsCnt]
+
 class Logs:
     def __init__(self):
-        pass
+        self.finalState = FullGameState();
 
     def processResults(self, results):
         self.results = results
@@ -47,11 +52,6 @@ class Logs:
             )
         return data
 
-class FullGameState:
-    def __init__(self):
-        self.turns = [[], []]
-        self.coins = [InitCoinsCnt, InitCoinsCnt]
-
 def gameStateRep(full: FullGameState, playerId: int) -> GameState:
     result = GameState()
     result.turns = deepcopy(full.turns)
@@ -65,7 +65,7 @@ TurnLimit = 100
 GameEnd = 5
 
 def makeTurn(gameState: FullGameState, playerId: int, turn: Turn, logs = None) -> list:
-    if (type(turn.trust) == int or turn.trust < 0 or turn.trust > 1):
+    if (type(turn.trust) != int or turn.trust < 0 or turn.trust > 1):
         return [TurnState.Incorrect]
     gameState.turns[playerId].append(turn.trust)
     if (turn.trust == 1):

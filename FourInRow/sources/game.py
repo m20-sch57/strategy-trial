@@ -81,20 +81,20 @@ TurnLimit = 100
 
 def lineCheck(gameState: FullGameState, x: int, y: int, dx: int, dy: int) -> str: # x - column, y - row
     ans = gameState.field[x][y]
-    for i in range(4):
-        if (gameState.field[x][y] != ans):
-            return '.'
+    for i in range(3):
         x += dx
         y += dy
         if ((x < 0 or x > 6 or y < 0 or y > 5)):
+            return '.'
+        if (gameState.field[x][y] != ans):
             return '.'
     return ans
 
 def check(gameState: FullGameState) -> str:
     winner = '.'
-    DIR = [[1, 0], [1, 1], [0, 1]]
-    for i in range(4):
-        for j in range(3):
+    DIR = [[1, 0], [1, 1], [0, 1], [1, -1]]
+    for i in range(7):
+        for j in range(6):
             for Dir in DIR:
                 winner = lineCheck(gameState, i, j, Dir[0], Dir[1])
                 if winner != '.':

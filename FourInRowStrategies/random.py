@@ -1,5 +1,7 @@
 import random
 
 def Strategy(game, a, b):
-    return game.Turn(random.randint(0, 6))
-
+    while True:
+        c = random.randint(0, 6)
+        if a.field[c][-1] == '.':
+            return game.Turn(c)
