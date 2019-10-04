@@ -7,6 +7,7 @@ This can be made by useradd comand. Example:
 useradd -M test
 useradd -m dba
 ```
+Users will be created with their primary groups dba and test respectively. You need to add user dba to group test.
 Then you need to enable user dba to substitute user test (via su).
 For this you can either delete password for user test (very insecure) or changing the file /etc/pam.d/su:
 you need to add this two lines right below the `pam_rootok.so`
