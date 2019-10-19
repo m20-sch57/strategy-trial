@@ -11,6 +11,6 @@ scheduler = BackgroundScheduler()
 scheduler.add_job(func=update, trigger="interval", seconds=1)
 scheduler.start()
 
-app.run(host = "0.0.0.0")
+app.run(host="0.0.0.0", port="5057")
 
 atexit.register(lambda: scheduler.shutdown())

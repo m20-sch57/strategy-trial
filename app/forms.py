@@ -10,8 +10,8 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Sign In')
 
 class SignUp(FlaskForm):
-    name = StringField('Name')
-    secondname = StringField('Second name')
+    name = StringField('Name*')
+    secondname = StringField('Second name*')
     username = StringField('Username*', validators = [DataRequired()])
     password = PasswordField('Password*', validators = [DataRequired()])
     passwordRet = PasswordField("Retype password*", validators = [DataRequired()])
