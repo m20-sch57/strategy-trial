@@ -134,5 +134,6 @@ FourInRow.zip
 # log files
 strategy-trial.log
 
-# file with id of process
-pid
+# file with id of processes
+strategy-trial.all.pid
+strategy-trial.logger.pid
