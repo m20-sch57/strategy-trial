@@ -1,2 +1,5 @@
-python3 -u strategy_html_pages.py &> strategy-trial.log &
-echo `ps -ax | grep "python3 -u strategy_html_pages.py"` > pid
+#!/bin/bash
+#cat _strategy-trial.log strategy-trial.log > _strategy-trial.log
+python3 -u /home/dba/strategy_html_pages.py 2>&1 | logger -p user.info &
+echo $! > /home/dba/strategy-trial.logger.pid
+pgrep -P $$ > /home/dba/strategy-trial.all.pid
